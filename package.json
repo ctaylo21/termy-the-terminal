@@ -1,0 +1,109 @@
+{
+  "name": "termy-the-terminal",
+  "version": "0.0.0-development",
+  "description": "Web-based terminal powered by React.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctaylo21/termy.git"
+  },
+  "keywords": [
+    "es6",
+    "react",
+    "terminal",
+    "javascript",
+    "mocha",
+    "chai",
+    "sinon",
+    "webpack",
+    "babel",
+    "istanbul",
+    "eslint"
+  ],
+  "author": "Caleb Taylor <caleb89taylor@gmail.com>",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "webpack-dev-server --open --config webpack/dev.js",
+    "build": "webpack --progress --config webpack/prod.js",
+    "test": "cross-env NODE_ENV=test npx nyc mocha-webpack",
+    "precommit": "lint-staged",
+    "cm": "git-cz",
+    "tdd": "mocha-webpack --watch",
+    "tdd:web": "webpack-dev-server --open --config webpack/test.js",
+    "lint": "eslint ./src --ext .jsx",
+    "stats": "webpack --progress --config webpack/stats.js",
+    "semantic-release": "semantic-release"
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false,
+    "exclude": [
+      "test"
+    ]
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-istanbul": "^5.1.0",
+    "babel-preset-react": "^6.24.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "clean-webpack-plugin": "^1.0.0",
+    "commitizen": "^3.0.5",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.3",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^1.3.1",
+    "jsdom": "13.1.0",
+    "jsdom-global": "3.0.2",
+    "lint-staged": "^8.1.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "mocha": "^5.2.0",
+    "mocha-webpack": "^2.0.0-beta.0",
+    "node-sass": "^4.11.0",
+    "nyc": "^13.1.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "path": "^0.12.7",
+    "sass-loader": "^7.1.0",
+    "semantic-release": "^15.13.3",
+    "sinon": "^7.2.2",
+    "webpack": "^4.28.1",
+    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.2.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/ctaylo21/termy/issues"
+  },
+  "homepage": "https://github.com/ctaylo21/termy#readme",
+  "directories": {
+    "test": "test"
+  }
+}

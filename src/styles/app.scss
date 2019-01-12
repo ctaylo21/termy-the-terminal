@@ -1,0 +1,10 @@
+@import 'vars';
+$theme-font: verdana, sans-serif;
+
+body {
+  font: $theme-font;
+  background-color: $themeColor-Light;
+  h1, p {
+      color: $themeColor-Dark
+  }
+}
