@@ -4,6 +4,9 @@
     "browser": true,
     "mocha": true
   },
+  "rules": {
+    "no-plusplus": 0
+  },
   "globals": {
     "assert": true,
     "sinon": true
