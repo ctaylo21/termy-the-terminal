@@ -1,10 +1,32 @@
+@import 'reset-css';
 @import './styles/vars';
-$theme-font: verdana, sans-serif;
 
 body {
-  font: $theme-font;
-  background-color: $themeColor-Light;
-  h1, p {
-      color: $themeColor-Dark
+  color: map-get($themeDark, fontColor);
+  font-family: $fontFamily;
+  font-size: $fontSize;
+}
+
+#terminal-container {
+  background-color: map-get($themeDark, background);
+
+  #history-container {
+    height: 350px;
+    padding: 1em;
+  }
+
+  #input-container {
+    input {
+      background: none;
+      border: none;
+      color: map-get($themeDark, fontColor);
+      font-family: $fontFamily;
+      font-size: $fontSize;
+      outline: none;
+      -webkit-appearance: none;
+
+      margin: 0;
+      width: 100%;
+    }
   }
 }

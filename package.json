@@ -94,7 +94,8 @@
     "@babel/runtime": "^7.2.0",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "reset-css": "^4.0.1"
   },
   "config": {
     "commitizen": {
