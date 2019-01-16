@@ -16,6 +16,8 @@ body {
   }
 
   #input-container {
+    display: flex;
+
     input {
       background: none;
       border: none;
@@ -25,8 +27,12 @@ body {
       outline: none;
       -webkit-appearance: none;
 
-      margin: 0;
-      width: 100%;
+      flex-grow: 100;
+      margin: 0 10px;
+    }
+
+    #inputPromptChar {
+      color: map-get($themeDark, green);
     }
   }
 }

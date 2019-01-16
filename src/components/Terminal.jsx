@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import History from './History';
 import Input from './Input';
 
@@ -26,11 +27,16 @@ export default class Terminal extends Component {
 
   render() {
     const { history } = this.state;
+    const { inputPrompt } = this.props;
     return (
       <>
         <History history={history} />
-        <Input handleKeyPress={this.handleKeyPress} />
+        <Input prompt={inputPrompt} handleKeyPress={this.handleKeyPress} />
       </>
     );
   }
 }
+
+Terminal.propTypes = {
+  inputPrompt: PropTypes.string.isRequired,
+};

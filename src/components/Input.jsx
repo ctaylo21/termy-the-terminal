@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Input({ handleKeyPress }) {
+function Input({ handleKeyPress, prompt }) {
   return (
     <div id="input-container">
+      <span>{prompt}</span>
       <input type="text" onKeyPress={handleKeyPress} />
     </div>
   );
@@ -11,6 +12,7 @@ function Input({ handleKeyPress }) {
 
 Input.propTypes = {
   handleKeyPress: PropTypes.func.isRequired,
+  prompt: PropTypes.string.isRequired,
 };
 
 export default Input;
