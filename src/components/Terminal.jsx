@@ -9,6 +9,7 @@ export default class Terminal extends Component {
     this.currentCommandId = 0;
     this.state = {
       history: [],
+      inputValue: '',
     };
   }
 
@@ -19,19 +20,21 @@ export default class Terminal extends Component {
         id: this.currentCommandId++,
         value: event.target.value,
       });
+
       this.setState({
         history: updatedHistory,
+        inputValue: '',
       });
     }
   }
 
   render() {
-    const { history } = this.state;
+    const { history, inputValue } = this.state;
     const { inputPrompt } = this.props;
     return (
       <>
         <History history={history} />
-        <Input prompt={inputPrompt} handleKeyPress={this.handleKeyPress} />
+        <Input inputPrompt={inputPrompt} handleKeyPress={this.handleKeyPress} inputValue={inputValue} />
       </>
     );
   }
