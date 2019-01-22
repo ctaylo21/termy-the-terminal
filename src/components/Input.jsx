@@ -1,18 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import InputPrompt from './InputPrompt';
 
-function Input({ handleKeyPress, prompt }) {
+function Input({
+  currentPath,
+  handleChange,
+  handleSubmit,
+  inputValue,
+  promptChar,
+}) {
   return (
     <div id="input-container">
-      <span>{prompt}</span>
-      <input type="text" onKeyPress={handleKeyPress} />
+      <form onSubmit={handleSubmit}>
+        <InputPrompt path={currentPath} promptChar={promptChar} />
+        <input type="text" value={inputValue} onChange={handleChange} />
+      </form>
     </div>
   );
 }
 
 Input.propTypes = {
-  handleKeyPress: PropTypes.func.isRequired,
-  prompt: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired,
+  promptChar: PropTypes.string.isRequired,
 };
 
 export default Input;

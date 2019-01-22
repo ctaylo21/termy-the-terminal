@@ -15,7 +15,7 @@ body {
     padding: 1em;
   }
 
-  #input-container {
+  #input-container > form {
     display: flex;
 
     input {
