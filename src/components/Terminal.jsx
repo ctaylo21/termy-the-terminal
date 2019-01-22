@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import History from './History';
 import Input from './Input';
 
@@ -8,38 +7,52 @@ export default class Terminal extends Component {
     super(props);
     this.currentCommandId = 0;
     this.state = {
+      promptChar: '→',
+      currentPath: '/home/user',
       history: [],
       inputValue: '',
     };
   }
 
-  handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      const { history } = this.state;
-      const updatedHistory = history.concat({
-        id: this.currentCommandId++,
-        value: event.target.value,
-      });
+  handleChange = (event) => {
+    this.setState({
+      inputValue: event.target.value,
+    });
+  }
 
-      this.setState({
-        history: updatedHistory,
-        inputValue: '',
-      });
-    }
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const { history, inputValue } = this.state;
+    const updatedHistory = history.concat({
+      id: this.currentCommandId++,
+      value: inputValue,
+    });
+
+    this.setState({
+      history: updatedHistory,
+      inputValue: '',
+    });
   }
 
   render() {
-    const { history, inputValue } = this.state;
-    const { inputPrompt } = this.props;
+    const {
+      currentPath,
+      history,
+      inputValue,
+      promptChar,
+    } = this.state;
     return (
       <>
         <History history={history} />
-        <Input inputPrompt={inputPrompt} handleKeyPress={this.handleKeyPress} inputValue={inputValue} />
+        <Input
+          currentPath={currentPath}
+          handleChange={this.handleChange}
+          handleSubmit={this.handleSubmit}
+          inputValue={inputValue}
+          promptChar={promptChar}
+        />
       </>
     );
   }
 }
-
-Terminal.propTypes = {
-  inputPrompt: PropTypes.string.isRequired,
-};
