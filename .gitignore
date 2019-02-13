@@ -1,10 +1,6 @@
 # Depdency directory
 node_modules
 
-# Code coverage for Istanbul
-coverage
-.nyc_output
-
 # Webpack compiled bundle directory
 dist
 

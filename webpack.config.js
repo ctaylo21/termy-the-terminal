@@ -1,20 +1,16 @@
-/* eslint-disable import/no-extraneous-dependencies */
-const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
 module.exports = {
-  mode: 'development',
   devtool: 'inline-source-map',
-  entry: './src/index.jsx',
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
+        test: /\.tsx?$/,
+        use: 'ts-loader',
       },
       {
         test: /\.(s*)css$/,
@@ -22,16 +18,23 @@ module.exports = {
       },
     ],
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
+  output: {
+    filename: 'index.js',
   },
   plugins: [
     new CleanWebpackPlugin(['dist'], {
-      root: path.resolve(__dirname, '../'),
+      root: path.resolve(__dirname, './'),
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/templates/index.html'),
+      title: 'Jet Cougar',
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
       chunkFilename: '[id].css',
+      filename: '[name].css',
     }),
   ],
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json'],
+  },
 };
