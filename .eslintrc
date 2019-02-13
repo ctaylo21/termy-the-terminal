@@ -8,8 +8,7 @@
     "no-plusplus": 0
   },
   "globals": {
-    "assert": true,
-    "sinon": true
+    "expect": true
   },
   "parserOptions": {
     "ecmaFeatures": {
