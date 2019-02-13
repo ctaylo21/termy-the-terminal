@@ -1,0 +1,9 @@
+{
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rules": {
+    "member-access": [true, "no-public"]
+  },
+  "linterOptions": {
+    "exclude": ["node_modules", "dist"]
+  }
+}
