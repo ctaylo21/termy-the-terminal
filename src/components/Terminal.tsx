@@ -20,6 +20,7 @@ export default class Terminal extends Component<object, IState> {
   };
 
   handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    debugger;
     this.setState({
       inputValue: event.target.value,
     });
@@ -29,10 +30,14 @@ export default class Terminal extends Component<object, IState> {
     event.preventDefault();
 
     const { history, inputValue } = this.state;
+
     const updatedHistory = history.concat({
       id: this.state.currentCommandId,
+      result: 'Incmmand',
       value: inputValue,
     });
+
+    debugger;
 
     this.setState({
       currentCommandId: this.state.currentCommandId++,

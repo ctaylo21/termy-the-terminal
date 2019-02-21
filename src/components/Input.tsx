@@ -21,7 +21,12 @@ export const Input: React.FC<IProps> = props => {
     <div id="input-container">
       <form onSubmit={handleSubmit}>
         <InputPrompt path={currentPath} promptChar={promptChar} />
-        <input type="text" value={inputValue} onChange={handleChange} />
+        <input
+          aria-label="terminal-input"
+          type="text"
+          value={inputValue}
+          onChange={handleChange}
+        />
       </form>
     </div>
   );
