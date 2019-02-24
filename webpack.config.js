@@ -27,7 +27,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/templates/index.html'),
-      title: 'Jet Cougar',
+      title: 'Termy',
     }),
     new MiniCssExtractPlugin({
       chunkFilename: '[id].css',
