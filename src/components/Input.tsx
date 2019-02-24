@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import { InputPrompt } from './InputPrompt';
 
-interface IProps {
+interface InputProps {
   currentPath: string;
   inputValue: string;
   promptChar: string;
@@ -9,7 +9,7 @@ interface IProps {
   handleSubmit(event: FormEvent<HTMLFormElement>): void;
 }
 
-export const Input: React.FC<IProps> = props => {
+export const Input: React.FC<InputProps> = (props): JSX.Element => {
   const {
     currentPath,
     handleChange,

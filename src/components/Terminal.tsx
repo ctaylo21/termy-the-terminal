@@ -1,17 +1,17 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
-import { History, IHistoryItem } from './History';
+import { History, HistoryItem } from './History';
 import Input from './Input';
 
-interface IState {
+interface TerminalState {
   currentCommandId: number;
   currentPath: string;
-  history: IHistoryItem[];
+  history: HistoryItem[];
   inputValue: string;
   promptChar: string;
 }
 
-export default class Terminal extends Component<object, IState> {
-  readonly state: IState = {
+export default class Terminal extends Component<object, TerminalState> {
+  public readonly state: TerminalState = {
     currentCommandId: 0,
     currentPath: '/home/user',
     history: [],
@@ -19,13 +19,13 @@ export default class Terminal extends Component<object, IState> {
     promptChar: '→',
   };
 
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  private handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     this.setState({
       inputValue: event.target.value,
     });
   };
 
-  handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  private handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const { history, inputValue } = this.state;
@@ -37,13 +37,13 @@ export default class Terminal extends Component<object, IState> {
     });
 
     this.setState({
-      currentCommandId: this.state.currentCommandId++,
+      currentCommandId: this.state.currentCommandId + 1,
       history: updatedHistory,
       inputValue: '',
     });
   };
 
-  render() {
+  public render(): JSX.Element {
     const { currentPath, history, inputValue, promptChar } = this.state;
     return (
       <>

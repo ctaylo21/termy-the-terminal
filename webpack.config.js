@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-var-requires: 0 */
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');

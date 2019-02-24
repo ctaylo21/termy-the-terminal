@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface IProps {
+interface InputPromptProps {
   path: string;
   promptChar: string;
 }
 
-export const InputPrompt: React.FC<IProps> = props => {
+export const InputPrompt: React.FC<InputPromptProps> = (props): JSX.Element => {
   const { path, promptChar } = props;
 
   return (
