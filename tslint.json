@@ -1,7 +1,8 @@
 {
   "extends": ["tslint:latest", "tslint-config-prettier"],
   "rules": {
-    "member-access": [true, "no-public"]
+    "member-access": [true, "no-public"],
+    "no-implicit-dependencies": [true, "dev"]
   },
   "linterOptions": {
     "exclude": ["node_modules", "dist"]

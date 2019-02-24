@@ -29,8 +29,10 @@ export default class Terminal extends Component<object, IState> {
     event.preventDefault();
 
     const { history, inputValue } = this.state;
+
     const updatedHistory = history.concat({
       id: this.state.currentCommandId,
+      result: 'Invalid command',
       value: inputValue,
     });
 
