@@ -8,7 +8,7 @@ test('invalid command', () => {
   const { getByLabelText } = render(<Terminal />);
   const input = getByLabelText('terminal-input');
 
-  fireEvent.change(input, { target: { value: 'invalid-command' } });
+  fireEvent.change(input, { target: { value: 'cd home' } });
   fireEvent.submit(input);
 
   const history = getByLabelText('terminal-history');

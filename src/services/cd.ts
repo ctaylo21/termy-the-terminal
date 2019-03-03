@@ -1,18 +1,6 @@
-import { get, has } from 'lodash';
-
-export interface File {
-  type: 'FILE';
-  children: null;
-}
-
-export interface Folder {
-  type: 'FOLDER';
-  children?: FileSystem | null;
-}
-
-export interface FileSystem {
-  [key: string]: Folder | File;
-}
+import get from 'lodash/get';
+import has from 'lodash/has';
+import { FileSystem } from '../components/Terminal';
 
 /**
  * Takes a valid Unix path and converts it into a format

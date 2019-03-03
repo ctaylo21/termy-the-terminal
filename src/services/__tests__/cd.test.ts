@@ -1,4 +1,5 @@
-import cd, { FileSystem } from './cd';
+import cd from '../cd';
+import { FileSystem } from '../../components/Terminal';
 
 describe('cd suite', () => {
   describe('valid cases', () => {

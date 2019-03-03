@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "jest",
+    "coverage": "npm test -- --collect-coverage",
     "start": "webpack-dev-server --open --mode=development",
     "build": "webpack --mode=production",
     "predeploygh": "npm run build",
@@ -33,10 +34,10 @@
   },
   "author": "Caleb Taylor <caleb89taylor@gmail.com>",
   "dependencies": {
-    "@types/lodash": "^4.14.121",
+    "@types/lodash-es": "^4.17.2",
     "@types/react": "^16.7.20",
     "@types/react-dom": "^16.0.11",
-    "lodash": "^4.17.11",
+    "lodash-es": "^4.17.11",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "tslib": "^1.9.3"
