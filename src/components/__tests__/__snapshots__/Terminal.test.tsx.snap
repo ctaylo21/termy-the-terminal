@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`invalid command 1`] = `"<li>invalid-command : Invalid command</li>"`;
+
+exports[`should cd one level 1`] = `"<li>cd test : Error - that path does not exist.</li>"`;

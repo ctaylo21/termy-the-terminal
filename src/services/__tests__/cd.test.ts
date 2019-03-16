@@ -11,7 +11,7 @@ describe('cd suite', () => {
         },
       };
 
-      expect(cd(fileSystem, '/', 'home')).toBe(true);
+      expect(cd(fileSystem, '/', 'home')).toBe('/home');
     });
 
     test('multi-level cd', () => {
@@ -32,7 +32,9 @@ describe('cd suite', () => {
         },
       };
 
-      expect(cd(fileSystem, '/', 'home/folder1/folder2')).toBe(true);
+      expect(cd(fileSystem, '/', 'home/folder1/folder2')).toBe(
+        '/home/folder1/folder2',
+      );
     });
   });
 
@@ -44,7 +46,7 @@ describe('cd suite', () => {
           type: 'FOLDER',
         },
       };
-      expect(cd(fileSystem, 'path', '')).toBe(false);
+      expect(cd(fileSystem, 'path', '')).toBe('');
     });
 
     test('nested cd to a file', () => {
@@ -65,7 +67,7 @@ describe('cd suite', () => {
         },
       };
 
-      expect(cd(fileSystem, 'path', 'home/folder1/file1')).toBe(false);
+      expect(cd(fileSystem, 'path', 'home/folder1/file1')).toBe('');
     });
   });
 });

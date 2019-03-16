@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History, HistoryItem } from './History';
 import Input from './Input';
-import cd from './services/cd';
+import { cd } from '../services';
 
 export interface File {
   type: 'FILE';
@@ -25,10 +25,14 @@ interface TerminalState {
   promptChar: string;
 }
 
-export default class Terminal extends Component<object, TerminalState> {
+interface TerminalProps {
+  fileSystem: FileSystem;
+}
+
+export class Terminal extends Component<TerminalProps, TerminalState> {
   public readonly state: TerminalState = {
     currentCommandId: 0,
-    currentPath: '/home/user',
+    currentPath: '/',
     history: [],
     inputValue: '',
     promptChar: '→',
@@ -43,21 +47,36 @@ export default class Terminal extends Component<object, TerminalState> {
   private handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const commands = event.target; //.value.split(' ');
-    console.log(event.target);
+    const commandArgs = this.state.inputValue.split(' ');
 
     const { history, inputValue } = this.state;
 
     let result = '';
-    /* switch (commands[0]) {
+    switch (commandArgs[0]) {
+      case 'cd':
+        const cdResult = cd(
+          this.props.fileSystem,
+          this.state.currentPath,
+          commandArgs[1],
+        );
+
+        if (cdResult) {
+          result = 'cd success';
+          this.setState({
+            currentPath: cdResult,
+          });
+        } else {
+          result = 'Error - that path does not exist.';
+        }
+        break;
       default:
         result = 'Invalid command';
         break;
-    }*/
+    }
 
     const updatedHistory = history.concat({
       id: this.state.currentCommandId,
-      result: result,
+      result,
       value: inputValue,
     });
 

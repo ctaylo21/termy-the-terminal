@@ -29,9 +29,9 @@ export default function cd(
   fileSystem: FileSystem,
   currentPath: string,
   path: string,
-): boolean {
+): string {
   if (!path) {
-    return false;
+    return '';
   }
 
   const formattedPath = convertPath(path);
@@ -41,8 +41,8 @@ export default function cd(
     has(fileSystem, formattedPath) &&
     get(fileSystem, formattedPath).type !== 'FILE'
   ) {
-    return true;
+    return currentPath + path;
   }
 
-  return false;
+  return '';
 }
