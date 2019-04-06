@@ -26,6 +26,49 @@ function convertPathToInternalFormat(pathStr: string): string {
 }
 
 /**
+ * Takes a unix path that may contain ".." and return a new
+ * string that respects the ".." path segments i.e.
+ * /home/user/.. => /home
+ *
+ * @param pathStr {string} - unix-formatted path
+ * @returns {string} - new path after taking ".." into account
+ */
+function handleDotDotInPath(pathStr: string): string {
+  let currentDotDots = 0;
+  let pathArr = pathStr.split('/').filter(path => path.length > 0);
+  for (let i = pathArr.length - 1; i >= 0; i--) {
+    if (pathArr[i] === '..') {
+      currentDotDots++;
+    } else {
+      if (currentDotDots > 0) {
+        pathArr.splice(i, 1);
+        currentDotDots--;
+      }
+    }
+  }
+
+  return pathArr.filter(path => path !== '..').join('/');
+}
+
+/**
+ * Takes an path formatted for internal use and converts it to an
+ * external format. i.e.
+ * home.children.user => /home/user
+ *
+ * @param pathStr {string} - internally formatted path
+ * @returns {string} - path string formatted for terminal use
+ */
+function convertInternalPathToExternal(pathStr: string): string {
+  return (
+    '/' +
+    pathStr
+      .split('.')
+      .filter(path => path !== 'children')
+      .join('/')
+  );
+}
+
+/**
  * Given a fileysystem, validates if changing directories from a given path
  * to a new path is possible, and returns the new path if so.
  *
@@ -48,15 +91,19 @@ export default function cd(
     const normalizedCurrentPath =
       currentPath === '/' ? currentPath : `${currentPath}/`;
 
-    const internalCdPath = convertPathToInternalFormat(
-      normalizedCurrentPath + pathToCd,
+    let internalCdPath = convertPathToInternalFormat(
+      handleDotDotInPath(normalizedCurrentPath + pathToCd),
     );
+
+    if (!internalCdPath) {
+      resolve('/');
+    }
 
     if (
       has(fileSystem, internalCdPath) &&
       get(fileSystem, internalCdPath).type !== 'FILE'
     ) {
-      resolve(`${normalizedCurrentPath}${pathToCd}`);
+      resolve(convertInternalPathToExternal(internalCdPath));
     }
 
     reject('Path does not exist.');

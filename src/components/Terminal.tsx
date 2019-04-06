@@ -75,7 +75,6 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         break;
     }
 
-    console.log('why', result);
     const updatedHistory = history.concat({
       id: this.state.currentCommandId,
       result,
