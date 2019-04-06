@@ -4,17 +4,17 @@ import { FileSystem } from '../components/Terminal';
 
 /**
  * Takes a valid Unix path and converts it into a format
- * that matches the internal data structure. Doesn't handle
- * leading "/" on path. Leaves ".." path piece alone.
+ * that matches the internal data structure. Including replacing "/"
+ * with ".children" and removing leading slash
  *
- * usr/home/test becomes usr/_children/_home/_children/test
- * usr/home/../.. becomes usr/_children/_home/_children/../..
+ * usr/home/test becomes usr.children.home.children.test
  *
  * @param {string} pathStr - path string to convert
  * @returns {string} - converted string
  */
-function convertPath(pathStr: string): string {
+function convertPathToInternalFormat(pathStr: string): string {
   return pathStr
+    .replace(/^\/+/g, '')
     .split('/')
     .map((elem, index, arr) => {
       if (elem !== '..' && index !== arr.length - 1) {
@@ -25,24 +25,40 @@ function convertPath(pathStr: string): string {
     .join('.');
 }
 
+/**
+ * Given a fileysystem, validates if changing directories from a given path
+ * to a new path is possible, and returns the new path if so.
+ *
+ * @param fileSystem {object} - filesystem to cd upon
+ * @param currentPath {string} - current path within filesystem
+ * @param pathToCd  {string} - path to change to
+ * @returns Promise<string> - resolves with new path if successful, rejects if not
+ */
 export default function cd(
   fileSystem: FileSystem,
   currentPath: string,
-  path: string,
-): string {
-  if (!path) {
-    return '';
-  }
+  pathToCd: string,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (!pathToCd) {
+      reject('Path can not be empty.');
+    }
 
-  const formattedPath = convertPath(path);
+    // If current path is anything other than the root, add trailing slash
+    const normalizedCurrentPath =
+      currentPath === '/' ? currentPath : `${currentPath}/`;
 
-  // Check if path exists in file system AND final item in path isn't a file
-  if (
-    has(fileSystem, formattedPath) &&
-    get(fileSystem, formattedPath).type !== 'FILE'
-  ) {
-    return currentPath + path;
-  }
+    const internalCdPath = convertPathToInternalFormat(
+      normalizedCurrentPath + pathToCd,
+    );
 
-  return '';
+    if (
+      has(fileSystem, internalCdPath) &&
+      get(fileSystem, internalCdPath).type !== 'FILE'
+    ) {
+      resolve(`${normalizedCurrentPath}${pathToCd}`);
+    }
+
+    reject('Path does not exist.');
+  });
 }

@@ -44,7 +44,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     });
   };
 
-  private handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  private handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const commandArgs = this.state.inputValue.split(' ');
@@ -54,26 +54,28 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     let result = '';
     switch (commandArgs[0]) {
       case 'cd':
-        const cdResult = cd(
-          this.props.fileSystem,
-          this.state.currentPath,
-          commandArgs[1],
-        );
+        try {
+          const newPath = await cd(
+            this.props.fileSystem,
+            this.state.currentPath,
+            commandArgs[1],
+          );
 
-        if (cdResult) {
           result = 'cd success';
           this.setState({
-            currentPath: cdResult,
+            currentPath: newPath,
           });
-        } else {
-          result = 'Error - that path does not exist.';
+        } catch (cdException) {
+          result = cdException;
         }
+
         break;
       default:
         result = 'Invalid command';
         break;
     }
 
+    console.log('why', result);
     const updatedHistory = history.concat({
       id: this.state.currentCommandId,
       result,

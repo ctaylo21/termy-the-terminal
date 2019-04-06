@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cd suite invalid cases empty path 1`] = `"Path can not be empty."`;
+
+exports[`cd suite invalid cases nested cd to a file 1`] = `"Path does not exist."`;

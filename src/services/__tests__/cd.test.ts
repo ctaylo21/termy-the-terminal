@@ -3,38 +3,65 @@ import { FileSystem } from '../../components/Terminal';
 
 describe('cd suite', () => {
   describe('valid cases', () => {
-    test('1 level path', () => {
-      const fileSystem: FileSystem = {
-        home: {
-          children: null,
-          type: 'FOLDER',
-        },
-      };
+    describe('from root', () => {
+      test('1 level path', () => {
+        const fileSystem: FileSystem = {
+          home: {
+            children: null,
+            type: 'FOLDER',
+          },
+        };
 
-      expect(cd(fileSystem, '/', 'home')).toBe('/home');
-    });
+        return expect(cd(fileSystem, '/', 'home')).resolves.toEqual('/home');
+      });
 
-    test('multi-level cd', () => {
-      const fileSystem: FileSystem = {
-        home: {
-          children: {
-            folder1: {
-              type: 'FOLDER',
-              children: {
-                folder2: {
-                  type: 'FOLDER',
-                  children: null,
+      test('multi-level cd', () => {
+        const fileSystem: FileSystem = {
+          home: {
+            children: {
+              folder1: {
+                type: 'FOLDER',
+                children: {
+                  folder2: {
+                    type: 'FOLDER',
+                    children: null,
+                  },
                 },
               },
             },
+            type: 'FOLDER',
           },
-          type: 'FOLDER',
-        },
-      };
+        };
 
-      expect(cd(fileSystem, '/', 'home/folder1/folder2')).toBe(
-        '/home/folder1/folder2',
-      );
+        return expect(
+          cd(fileSystem, '/', 'home/folder1/folder2'),
+        ).resolves.toEqual('/home/folder1/folder2');
+      });
+    });
+
+    describe('from nested path', () => {
+      test('1 level cd', () => {
+        const fileSystem: FileSystem = {
+          home: {
+            children: {
+              folder1: {
+                type: 'FOLDER',
+                children: {
+                  folder2: {
+                    type: 'FOLDER',
+                    children: null,
+                  },
+                },
+              },
+            },
+            type: 'FOLDER',
+          },
+        };
+
+        return expect(cd(fileSystem, '/home', 'folder1')).resolves.toEqual(
+          '/home/folder1',
+        );
+      });
     });
   });
 
@@ -46,7 +73,7 @@ describe('cd suite', () => {
           type: 'FOLDER',
         },
       };
-      expect(cd(fileSystem, 'path', '')).toBe('');
+      return expect(cd(fileSystem, 'path', '')).rejects.toMatchSnapshot();
     });
 
     test('nested cd to a file', () => {
@@ -67,7 +94,9 @@ describe('cd suite', () => {
         },
       };
 
-      expect(cd(fileSystem, 'path', 'home/folder1/file1')).toBe('');
+      return expect(
+        cd(fileSystem, 'path', 'home/folder1/file1'),
+      ).rejects.toMatchSnapshot();
     });
   });
 });

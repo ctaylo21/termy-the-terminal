@@ -14,7 +14,7 @@ export const History: React.FC<HistoryProps> = (props): JSX.Element => {
   const { history } = props;
   const commandList = history.map(command => (
     <li key={command.id}>
-      {command.value} : {command.result}
+      {command.value}: {command.result}
     </li>
   ));
 
