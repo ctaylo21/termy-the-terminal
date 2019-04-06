@@ -23,10 +23,10 @@ const testSystem: FileSystem = {
   },
 };
 
-describe('cd suite', () => {
-  describe('valid cases', () => {
-    describe('from root', () => {
-      test('1 level path', () => {
+describe('cd suite', (): void => {
+  describe('valid cases', (): void => {
+    describe('from root', (): void => {
+      test('1 level path', (): Promise<Promise<string>> => {
         const fileSystem: FileSystem = {
           home: {
             children: null,
@@ -37,41 +37,43 @@ describe('cd suite', () => {
         return expect(cd(fileSystem, '/', 'home')).resolves.toEqual('/home');
       });
 
-      test('multi-level cd', () => {
+      test('multi-level cd', (): Promise<Promise<string>> => {
         return expect(
           cd(testSystem, '/', 'home/folder1/folder2'),
         ).resolves.toEqual('/home/folder1/folder2');
       });
 
-      test('.. above root level', () => {
+      test('.. above root level', (): Promise<Promise<string>> => {
         return expect(cd(testSystem, '/', '..')).resolves.toEqual('/');
       });
     });
 
-    describe('from nested path', () => {
-      test('1 level cd', () => {
+    describe('from nested path', (): void => {
+      test('1 level cd', (): Promise<Promise<string>> => {
         return expect(cd(testSystem, '/home', 'folder1')).resolves.toEqual(
           '/home/folder1',
         );
       });
 
-      test('.. 1 level to root', () => {
+      test('.. 1 level to root', (): Promise<Promise<string>> => {
         return expect(cd(testSystem, '/home', '..')).resolves.toEqual('/');
       });
 
-      test('.. 1 level', () => {
+      test('.. 1 level', (): Promise<Promise<string>> => {
         return expect(
           cd(testSystem, '/home/folder1/folder2', '..'),
         ).resolves.toEqual('/home/folder1');
       });
 
-      test('.. multiple levels', () => {
+      test('.. multiple levels', (): Promise<Promise<string>> => {
         return expect(
           cd(testSystem, '/home/folder1/folder2', '../..'),
         ).resolves.toEqual('/home');
       });
 
-      test('.. multiple levels in separate paths', () => {
+      test('.. multiple levels in separate paths', (): Promise<
+        Promise<string>
+      > => {
         return expect(
           cd(testSystem, '/home/folder1/folder2', '../folder2/../../'),
         ).resolves.toEqual('/home');
@@ -79,8 +81,8 @@ describe('cd suite', () => {
     });
   });
 
-  describe('invalid cases', () => {
-    test('empty path', () => {
+  describe('invalid cases', (): void => {
+    test('empty path', (): Promise<Promise<string>> => {
       const fileSystem: FileSystem = {
         home: {
           children: null,
@@ -90,7 +92,7 @@ describe('cd suite', () => {
       return expect(cd(fileSystem, 'path', '')).rejects.toMatchSnapshot();
     });
 
-    test('nested cd to a file', () => {
+    test('nested cd to a file', (): Promise<Promise<string>> => {
       return expect(
         cd(testSystem, 'path', 'home/folder1/folder2/file1'),
       ).rejects.toMatchSnapshot();

@@ -5,7 +5,7 @@ import exampleFileSystem from '../../data/exampleFileSystem';
 
 afterEach(cleanup);
 
-test('invalid command', () => {
+test('invalid command', (): void => {
   const { getByLabelText } = render(
     <Terminal fileSystem={exampleFileSystem} />,
   );
@@ -19,7 +19,7 @@ test('invalid command', () => {
   expect(history.innerHTML).toMatchSnapshot();
 });
 
-test('should cd one level', () => {
+test('should cd one level', async (): Promise<void> => {
   const { getByLabelText, getByTestId } = render(
     <Terminal fileSystem={exampleFileSystem} />,
   );
@@ -30,10 +30,8 @@ test('should cd one level', () => {
   fireEvent.change(input, { target: { value: 'cd test' } });
   fireEvent.submit(input);
 
-  const history = getByLabelText('terminal-history');
+  const history = await getByLabelText('terminal-history');
 
   expect(history.innerHTML).toMatchSnapshot();
   expect(currentPath.innerHTML).toEqual('/');
 });
-
-test('should cd successfully', () => {});

@@ -38,13 +38,15 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     promptChar: '→',
   };
 
-  private handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  private handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     this.setState({
       inputValue: event.target.value,
     });
   };
 
-  private handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  private handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
 
     const commandArgs = this.state.inputValue.split(' ');
