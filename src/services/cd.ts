@@ -84,7 +84,7 @@ export default function cd(
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     if (!pathToCd) {
-      reject('Path can not be empty.');
+      reject('path can not be empty.');
     }
 
     // If current path is anything other than the root, add trailing slash
@@ -106,6 +106,6 @@ export default function cd(
       resolve(convertInternalPathToExternal(internalCdPath));
     }
 
-    reject('Path does not exist.');
+    reject('path does not exist.');
   });
 }
