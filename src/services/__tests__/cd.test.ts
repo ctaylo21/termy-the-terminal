@@ -63,12 +63,12 @@ describe('cd suite', () => {
         return expect(
           cd(testSystem, '/home/folder1/folder2', '..'),
         ).resolves.toEqual('/home/folder1');
+      });
 
-        test('.. multiple levels', () => {
-          return expect(
-            cd(testSystem, '/home/folder1/folder2', '../..'),
-          ).resolves.toEqual('/home');
-        });
+      test('.. multiple levels', () => {
+        return expect(
+          cd(testSystem, '/home/folder1/folder2', '../..'),
+        ).resolves.toEqual('/home');
       });
 
       test('.. multiple levels in separate paths', () => {
