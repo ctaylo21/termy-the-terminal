@@ -17,6 +17,7 @@ export const Input: React.FC<InputProps> = (props): JSX.Element => {
     inputValue,
     promptChar,
   } = props;
+
   return (
     <div id="input-container">
       <form onSubmit={handleSubmit}>

@@ -1,11 +1,13 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
+  env: {
+    jest: true,
+  },
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
     'prettier/@typescript-eslint',
-    'plugin:jest/recommended',
   ],
   parserOptions: {
     ecmaVersion: 2018,

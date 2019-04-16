@@ -26,7 +26,7 @@ const testSystem: FileSystem = {
 describe('cd suite', (): void => {
   describe('valid cases', (): void => {
     describe('from root', (): void => {
-      test('1 level path', (): Promise<Promise<string>> => {
+      test('1 level path', async (): Promise<string> => {
         const fileSystem: FileSystem = {
           home: {
             children: null,
@@ -37,35 +37,35 @@ describe('cd suite', (): void => {
         return expect(cd(fileSystem, '/', 'home')).resolves.toEqual('/home');
       });
 
-      test('multi-level cd', (): Promise<Promise<string>> => {
+      test('multi-level cd', async (): Promise<string> => {
         return expect(
           cd(testSystem, '/', 'home/folder1/folder2'),
         ).resolves.toEqual('/home/folder1/folder2');
       });
 
-      test('.. above root level', (): Promise<Promise<string>> => {
+      test('.. above root level', async (): Promise<string> => {
         return expect(cd(testSystem, '/', '..')).resolves.toEqual('/');
       });
     });
 
     describe('from nested path', (): void => {
-      test('1 level cd', (): Promise<Promise<string>> => {
+      test('1 level cd', async (): Promise<string> => {
         return expect(cd(testSystem, '/home', 'folder1')).resolves.toEqual(
           '/home/folder1',
         );
       });
 
-      test('.. 1 level to root', (): Promise<Promise<string>> => {
+      test('.. 1 level to root', async (): Promise<string> => {
         return expect(cd(testSystem, '/home', '..')).resolves.toEqual('/');
       });
 
-      test('.. 1 level', (): Promise<Promise<string>> => {
+      test('.. 1 level', async (): Promise<string> => {
         return expect(
           cd(testSystem, '/home/folder1/folder2', '..'),
         ).resolves.toEqual('/home/folder1');
       });
 
-      test('.. multiple levels', (): Promise<Promise<string>> => {
+      test('.. multiple levels', async (): Promise<string> => {
         return expect(
           cd(testSystem, '/home/folder1/folder2', '../..'),
         ).resolves.toEqual('/home');
@@ -82,7 +82,7 @@ describe('cd suite', (): void => {
   });
 
   describe('invalid cases', (): void => {
-    test('empty path', (): Promise<Promise<string>> => {
+    test('empty path', async (): Promise<string> => {
       const fileSystem: FileSystem = {
         home: {
           children: null,
@@ -92,7 +92,7 @@ describe('cd suite', (): void => {
       return expect(cd(fileSystem, 'path', '')).rejects.toMatchSnapshot();
     });
 
-    test('nested cd to a file', (): Promise<Promise<string>> => {
+    test('nested cd to a file', async (): Promise<string> => {
       return expect(
         cd(testSystem, 'path', 'home/folder1/folder2/file1'),
       ).rejects.toMatchSnapshot();
