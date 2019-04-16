@@ -92,6 +92,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
   public render(): JSX.Element {
     const { currentPath, history, inputValue, promptChar } = this.state;
+
     return (
       <>
         <History history={history} />
