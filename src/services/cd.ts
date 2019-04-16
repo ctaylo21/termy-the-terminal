@@ -16,12 +16,14 @@ function convertPathToInternalFormat(pathStr: string): string {
   return pathStr
     .replace(/^\/+/g, '')
     .split('/')
-    .map((elem, index, arr) => {
-      if (elem !== '..' && index !== arr.length - 1) {
-        elem += '.children';
-      }
-      return elem;
-    })
+    .map(
+      (elem, index, arr): string => {
+        if (elem !== '..' && index !== arr.length - 1) {
+          elem += '.children';
+        }
+        return elem;
+      },
+    )
     .join('.');
 }
 
@@ -35,7 +37,7 @@ function convertPathToInternalFormat(pathStr: string): string {
  */
 function handleDotDotInPath(pathStr: string): string {
   let currentDotDots = 0;
-  let pathArr = pathStr.split('/').filter(path => path.length > 0);
+  let pathArr = pathStr.split('/').filter((path): boolean => path.length > 0);
   for (let i = pathArr.length - 1; i >= 0; i--) {
     if (pathArr[i] === '..') {
       currentDotDots++;
@@ -47,7 +49,7 @@ function handleDotDotInPath(pathStr: string): string {
     }
   }
 
-  return pathArr.filter(path => path !== '..').join('/');
+  return pathArr.filter((path): boolean => path !== '..').join('/');
 }
 
 /**
@@ -63,7 +65,7 @@ function convertInternalPathToExternal(pathStr: string): string {
     '/' +
     pathStr
       .split('.')
-      .filter(path => path !== 'children')
+      .filter((path): boolean => path !== 'children')
       .join('/')
   );
 }
@@ -82,30 +84,32 @@ export default function cd(
   currentPath: string,
   pathToCd: string,
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
-    if (!pathToCd) {
-      reject('path can not be empty.');
-    }
+  return new Promise(
+    (resolve, reject): void => {
+      if (!pathToCd) {
+        reject('path can not be empty.');
+      }
 
-    // If current path is anything other than the root, add trailing slash
-    const normalizedCurrentPath =
-      currentPath === '/' ? currentPath : `${currentPath}/`;
+      // If current path is anything other than the root, add trailing slash
+      const normalizedCurrentPath =
+        currentPath === '/' ? currentPath : `${currentPath}/`;
 
-    let internalCdPath = convertPathToInternalFormat(
-      handleDotDotInPath(normalizedCurrentPath + pathToCd),
-    );
+      let internalCdPath = convertPathToInternalFormat(
+        handleDotDotInPath(normalizedCurrentPath + pathToCd),
+      );
 
-    if (!internalCdPath) {
-      resolve('/');
-    }
+      if (!internalCdPath) {
+        resolve('/');
+      }
 
-    if (
-      has(fileSystem, internalCdPath) &&
-      get(fileSystem, internalCdPath).type !== 'FILE'
-    ) {
-      resolve(convertInternalPathToExternal(internalCdPath));
-    }
+      if (
+        has(fileSystem, internalCdPath) &&
+        get(fileSystem, internalCdPath).type !== 'FILE'
+      ) {
+        resolve(convertInternalPathToExternal(internalCdPath));
+      }
 
-    reject('path does not exist.');
-  });
+      reject('path does not exist.');
+    },
+  );
 }

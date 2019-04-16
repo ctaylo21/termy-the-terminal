@@ -10,7 +10,7 @@ import exampleFileSystem from '../../data/exampleFileSystem';
 
 afterEach(cleanup);
 
-describe('cd', (): void => {
+describe('general', (): void => {
   test('invalid command', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
@@ -25,6 +25,27 @@ describe('cd', (): void => {
     );
 
     expect(history.innerHTML).toMatchSnapshot();
+  });
+});
+
+describe('cd', (): void => {
+  test('should handle invalid cd', async (): Promise<void> => {
+    const { getByLabelText, getByTestId } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+    const currentPath = getByTestId('input-prompt-path');
+
+    fireEvent.change(input, { target: { value: 'cd invalid' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(currentPath.innerHTML).toEqual('/');
   });
 
   test('should cd one level', async (): Promise<void> => {

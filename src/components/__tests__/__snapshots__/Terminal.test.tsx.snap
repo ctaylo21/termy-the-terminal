@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`cd invalid command 1`] = `"<li>invalid-command: Invalid command</li>"`;
-
 exports[`cd should cd one level 1`] = `"<li>cd home: cd success</li>"`;
 
+exports[`cd should handle invalid cd 1`] = `"<li>cd invalid: path does not exist.</li>"`;
+
 exports[`cd should multiple levels with .. 1`] = `"<li>cd home/../home/user/../user/test: cd success</li>"`;
+
+exports[`general invalid command 1`] = `"<li>invalid-command: Invalid command</li>"`;
