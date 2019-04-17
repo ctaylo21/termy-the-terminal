@@ -2,6 +2,7 @@ import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History, HistoryItem } from './History';
 import Input from './Input';
 import { cd } from '../services';
+import './Terminal.scss';
 
 export interface File {
   type: 'FILE';
