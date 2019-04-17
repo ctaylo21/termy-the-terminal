@@ -23,8 +23,8 @@ module.exports = {
     filename: 'index.js',
   },
   plugins: [
-    new CleanWebpackPlugin(['dist'], {
-      root: path.resolve(__dirname, './'),
+    new CleanWebpackPlugin({
+      verbose: true,
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/templates/index.html'),

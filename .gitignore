@@ -7,3 +7,6 @@ dist
 # Tern files
 .tern-port
 .tern-project
+
+# coverage folder
+coverage

@@ -21,7 +21,10 @@
     "strict": true,
     "pretty": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "lodash/*": ["node_modules/@types/lodash-es/*"]
+    }
   },
   "include": ["src", "typings"]
 }

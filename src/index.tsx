@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { Terminal } from './components/Terminal';
+import exampleFileSystem from './data/exampleFileSystem';
 
-ReactDOM.render(<App />, document.getElementById('terminal-container'));
+ReactDOM.render(
+  <Terminal fileSystem={exampleFileSystem} />,
+  document.getElementById('terminal-container'),
+);

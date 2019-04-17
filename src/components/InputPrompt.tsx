@@ -10,7 +10,7 @@ export const InputPrompt: React.FC<InputPromptProps> = (props): JSX.Element => {
 
   return (
     <>
-      <span id="inputPromptPath">{path}</span>
+      <span data-testid="input-prompt-path">{path}</span>
       &nbsp;
       <span id="inputPromptChar">{promptChar}</span>
     </>
