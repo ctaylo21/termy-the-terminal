@@ -25,6 +25,11 @@ module.exports = {
   // Make calling deprecated APIs throw helpful error messages
   errorOnDeprecated: true,
 
+  // A map from regular expressions to module names that allow to stub out resources with a single module
+  moduleNameMapper: {
+    '\\.(scss|jpg|png|svg)$': '<rootDir>/node_modules/jest-css-modules',
+  },
+
   // Automatically clear mock calls and instances between every test
   // clearMocks: true,
 
@@ -75,9 +80,6 @@ module.exports = {
   // moduleDirectories: [
   //   "node_modules"
   // ],
-
-  // A map from regular expressions to module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
