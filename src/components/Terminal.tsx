@@ -71,7 +71,9 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         } catch (cdException) {
           result = cdException;
         }
-
+        break;
+      case 'pwd':
+        result = this.state.currentPath;
         break;
       default:
         result = 'Invalid command';

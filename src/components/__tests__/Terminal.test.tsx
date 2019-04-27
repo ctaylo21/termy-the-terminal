@@ -88,3 +88,57 @@ describe('cd', (): void => {
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
 });
+
+describe('pwd', (): void => {
+  test('should correctly return current directory', async (): Promise<void> => {
+    const { getByLabelText, getByTestId } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+    const currentPath = getByTestId('input-prompt-path');
+
+    fireEvent.change(input, { target: { value: 'pwd' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(currentPath.innerHTML).toEqual('/');
+  });
+
+  test('should correctly return directory after cd', async (done): Promise<
+    void
+  > => {
+    const { getByLabelText, getByTestId } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+    const currentPath = getByTestId('input-prompt-path');
+
+    fireEvent.change(input, { target: { value: 'cd home/user/test' } });
+    fireEvent.submit(input);
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'pwd' } });
+        fireEvent.submit(input);
+
+        try {
+          const history = await waitForElement(
+            (): HTMLElement => getByLabelText('terminal-history'),
+          );
+
+          expect(history.innerHTML).toMatchSnapshot();
+          expect(currentPath.innerHTML).toEqual('/home/user/test');
+          done();
+        } catch (e) {
+          done.fail(e);
+        }
+      },
+    );
+  });
+});

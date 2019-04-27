@@ -7,3 +7,7 @@ exports[`cd should handle invalid cd 1`] = `"<li>cd invalid: path does not exist
 exports[`cd should multiple levels with .. 1`] = `"<li>cd home/../home/user/../user/test: cd success</li>"`;
 
 exports[`general invalid command 1`] = `"<li>invalid-command: Invalid command</li>"`;
+
+exports[`pwd should correctly return current directory 1`] = `"<li>pwd: /</li>"`;
+
+exports[`pwd should correctly return directory after cd 1`] = `"<li>cd home/user/test: cd success</li><li>pwd: /home/user/test</li>"`;

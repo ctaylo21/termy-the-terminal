@@ -26,3 +26,7 @@ ReactDOM.render(
 ### CD
 
 `cd` - Supports changing directory, including use `..` to move up a level
+
+### PWD
+
+`pwd` - Prints current directory to the console
