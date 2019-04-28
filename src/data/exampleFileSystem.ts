@@ -1,5 +1,3 @@
-import { FileSystem } from '../components/Terminal';
-
 const exampleFileSystem: FileSystem = {
   home: {
     type: 'FOLDER',
@@ -13,7 +11,22 @@ const exampleFileSystem: FileSystem = {
           },
         },
       },
+      videos: {
+        type: 'FOLDER',
+        children: {
+          video1: {
+            type: 'FILE',
+          },
+        },
+      },
+      file1: {
+        type: 'FILE',
+      },
     },
+  },
+  docs: {
+    type: 'FOLDER',
+    children: null,
   },
 };
 

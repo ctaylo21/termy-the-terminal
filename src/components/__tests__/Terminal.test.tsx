@@ -24,7 +24,9 @@ describe('general', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>invalid-command: Invalid command</li>"`,
+    );
   });
 });
 
@@ -44,7 +46,9 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>cd invalid: path does not exist.</li>"`,
+    );
     expect(currentPath.innerHTML).toEqual('/');
   });
 
@@ -63,7 +67,9 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>cd home: cd success</li>"`,
+    );
     expect(currentPath.innerHTML).toEqual('/home');
   });
 
@@ -84,7 +90,9 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>cd home/../home/user/../user/test: cd success</li>"`,
+    );
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
 });
@@ -105,7 +113,7 @@ describe('pwd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toMatchInlineSnapshot(`"<li>pwd: /</li>"`);
     expect(currentPath.innerHTML).toEqual('/');
   });
 
@@ -132,13 +140,81 @@ describe('pwd', (): void => {
             (): HTMLElement => getByLabelText('terminal-history'),
           );
 
-          expect(history.innerHTML).toMatchSnapshot();
+          expect(history.innerHTML).toMatchInlineSnapshot(
+            `"<li>cd home/user/test: cd success</li><li>pwd: /home/user/test</li>"`,
+          );
           expect(currentPath.innerHTML).toEqual('/home/user/test');
           done();
         } catch (e) {
           done.fail(e);
         }
       },
+    );
+  });
+});
+
+describe('ls', (): void => {
+  test('should list all content from current directory', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    fireEvent.change(input, { target: { value: 'ls' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>ls: {\\"home\\":{\\"type\\":\\"FOLDER\\"},\\"docs\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
+    );
+  });
+
+  test('should correctly return contents for given directory', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'ls home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>ls home: {\\"user\\":{\\"type\\":\\"FOLDER\\"},\\"videos\\":{\\"type\\":\\"FOLDER\\"},\\"file1\\":{\\"type\\":\\"FILE\\"}}</li>"`,
+    );
+  });
+
+  test('should handle invalid directory for ls', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'ls invalid' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>ls invalid: Target folder does not exist</li>"`,
     );
   });
 });

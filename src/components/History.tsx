@@ -1,15 +1,5 @@
 import React from 'react';
 
-export interface HistoryItem {
-  id: number;
-  result: string;
-  value: string;
-}
-
-interface HistoryProps {
-  history: HistoryItem[];
-}
-
 export const History: React.FC<HistoryProps> = (props): JSX.Element => {
   const { history } = props;
   const commandList = history.map(

@@ -4,8 +4,10 @@
 
 ## Table of Contents
 
-- [Usage](#usage)
-- [Commands](#commands)
+- [Termy the Terminal](#termy-the-terminal)
+  - [Table of Contents](#table-of-contents)
+  - [Usage](#usage)
+  - [Commands](#commands)
 
 ## Usage
 
@@ -23,10 +25,32 @@ ReactDOM.render(
 
 ## Commands
 
-### CD
+- `cd directory` - Supports changing directory, including use `..` to move up a level
 
-`cd` - Supports changing directory, including use `..` to move up a level
+   To switch the current working directory based upon your current directory
 
-### PWD
+   ```
+   cd user/test
+   ```
 
-`pwd` - Prints current directory to the console
+   To switch directories using an absolute path, just prefix directory path with `/`
+
+   ```
+   cd /home/user/test
+   ```
+
+- `pwd` - Prints current directory to the console
+
+- `ls [DIRECTORY]` - Lists information about files and directories within the file system
+
+   When used with no arguments, the ls command will list all contents of current working directory
+
+   ```
+   ls
+   ```
+
+   To list files in a specific directory, pass the path to the directory to the ls command
+   ```
+   ls /home
+   ```
+
