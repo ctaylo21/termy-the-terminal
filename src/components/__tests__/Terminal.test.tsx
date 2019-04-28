@@ -178,7 +178,7 @@ describe('ls', (): void => {
     );
   });
 
-  test('should correctly return contents for given directory', async (): Promise<
+  test('should correctly return contents for given relative directory from root', async (): Promise<
     void
   > => {
     const { getByLabelText } = render(
@@ -196,6 +196,61 @@ describe('ls', (): void => {
 
     expect(history.innerHTML).toMatchInlineSnapshot(
       `"<li>ls home: {\\"user\\":{\\"type\\":\\"FOLDER\\"},\\"videos\\":{\\"type\\":\\"FOLDER\\"},\\"file1\\":{\\"type\\":\\"FILE\\"}}</li>"`,
+    );
+  });
+
+  test('should correctly return contents for given relative directory from nested path', async (done): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    let input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    input = await getByLabelText('terminal-input');
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'ls user' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+
+        expect(history.innerHTML).toMatchInlineSnapshot(
+          `"<li>cd home: cd success</li><li>ls user: {\\"test\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
+        );
+        done();
+      },
+    );
+  });
+
+  test('should correctly return contents for absolute path from nested path', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    fireEvent.change(input, { target: { value: 'ls /home/user' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>ls /home/user: {\\"test\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
     );
   });
 
