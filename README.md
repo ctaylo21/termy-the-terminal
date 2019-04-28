@@ -25,11 +25,11 @@ ReactDOM.render(
 
 ## Commands
 
-`cd` - Supports changing directory, including use `..` to move up a level
+- `cd` - Supports changing directory, including use `..` to move up a level
 
-`pwd` - Prints current directory to the console
+- `pwd` - Prints current directory to the console
 
-`ls [FILES]` - Lists information about files and directories within the file system
+- `ls [FILES]` - Lists information about files and directories within the file system
 
    When used with no arguments, the ls command will list all contents of current working directory
 
