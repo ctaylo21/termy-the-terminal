@@ -8,9 +8,6 @@
   - [Table of Contents](#table-of-contents)
   - [Usage](#usage)
   - [Commands](#commands)
-    - [cd](#cd)
-    - [pwd](#pwd)
-    - [ls](#ls)
 
 ## Usage
 
@@ -28,26 +25,20 @@ ReactDOM.render(
 
 ## Commands
 
-### cd
-
 `cd` - Supports changing directory, including use `..` to move up a level
-
-### pwd
 
 `pwd` - Prints current directory to the console
 
-### ls
-
 `ls [FILES]` - Lists information about files and directories within the file system
 
-  When used with no arguments, the ls command will list all contents of current working directory
+   When used with no arguments, the ls command will list all contents of current working directory
 
-  ```
-  ls
-  ```
+   ```
+   ls
+   ```
 
-  To list files in a specific directory, pass the path to the directory to the ls command
-  ```
-  ls /home
-  ```
+   To list files in a specific directory, pass the path to the directory to the ls command
+   ```
+   ls /home
+   ```
 
