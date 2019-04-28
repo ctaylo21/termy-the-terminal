@@ -51,7 +51,10 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         break;
       case 'ls':
         try {
-          const test = await ls(this.props.fileSystem, this.state.currentPath);
+          const test = await ls(
+            this.props.fileSystem,
+            commandArgs[1] || this.state.currentPath,
+          );
           result = JSON.stringify(test);
         } catch (e) {}
         break;
@@ -75,7 +78,6 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
   public render(): JSX.Element {
     const { currentPath, history, inputValue, promptChar } = this.state;
-
     return (
       <>
         <History history={history} />

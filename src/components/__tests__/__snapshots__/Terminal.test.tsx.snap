@@ -8,7 +8,9 @@ exports[`cd should multiple levels with .. 1`] = `"<li>cd home/../home/user/../u
 
 exports[`general invalid command 1`] = `"<li>invalid-command: Invalid command</li>"`;
 
-exports[`ls should list all directories 1`] = `"<li>ls: {\\"home\\":{\\"type\\":\\"FOLDER\\"}}</li>"`;
+exports[`ls should correctly return ls for given path 1`] = `"<li>ls home: {\\"user\\":{\\"type\\":\\"FOLDER\\"},\\"videos\\":{\\"type\\":\\"FOLDER\\"}}</li>"`;
+
+exports[`ls should list all directories 1`] = `"<li>ls: {\\"home\\":{\\"type\\":\\"FOLDER\\"},\\"docs\\":{\\"type\\":\\"FOLDER\\"}}</li>"`;
 
 exports[`pwd should correctly return current directory 1`] = `"<li>pwd: /</li>"`;
 

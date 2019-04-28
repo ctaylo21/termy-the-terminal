@@ -163,4 +163,21 @@ describe('ls', (): void => {
 
     expect(history.innerHTML).toMatchSnapshot();
   });
+
+  test('should correctly return ls for given path', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'ls home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+  });
 });

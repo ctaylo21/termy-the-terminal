@@ -11,7 +11,19 @@ const exampleFileSystem: FileSystem = {
           },
         },
       },
+      videos: {
+        type: 'FOLDER',
+        children: {
+          video1: {
+            type: 'FILE',
+          },
+        },
+      },
     },
+  },
+  docs: {
+    type: 'FOLDER',
+    children: null,
   },
 };
 
