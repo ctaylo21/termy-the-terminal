@@ -1,5 +1,3 @@
-import { FileSystem } from '../components/Terminal';
-
 const exampleFileSystem: FileSystem = {
   home: {
     type: 'FOLDER',

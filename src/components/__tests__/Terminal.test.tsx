@@ -142,3 +142,25 @@ describe('pwd', (): void => {
     );
   });
 });
+
+describe('ls', (): void => {
+  test('should list all directories', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    fireEvent.change(input, { target: { value: 'ls' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+  });
+});

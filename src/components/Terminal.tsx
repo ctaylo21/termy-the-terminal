@@ -1,34 +1,8 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
-import { History, HistoryItem } from './History';
+import { History } from './History';
 import Input from './Input';
-import { cd } from '../services';
+import { cd, ls } from '../services';
 import './Terminal.scss';
-
-export interface File {
-  type: 'FILE';
-  children: null;
-}
-
-export interface Folder {
-  type: 'FOLDER';
-  children?: FileSystem | null;
-}
-
-export interface FileSystem {
-  [key: string]: Folder | File;
-}
-
-interface TerminalState {
-  currentCommandId: number;
-  currentPath: string;
-  history: HistoryItem[];
-  inputValue: string;
-  promptChar: string;
-}
-
-interface TerminalProps {
-  fileSystem: FileSystem;
-}
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
   public readonly state: TerminalState = {
@@ -74,6 +48,12 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         break;
       case 'pwd':
         result = this.state.currentPath;
+        break;
+      case 'ls':
+        try {
+          const test = await ls(this.props.fileSystem, this.state.currentPath);
+          result = JSON.stringify(test);
+        } catch (e) {}
         break;
       default:
         result = 'Invalid command';

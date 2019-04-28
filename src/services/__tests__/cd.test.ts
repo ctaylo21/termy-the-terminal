@@ -1,5 +1,4 @@
 import cd from '../cd';
-import { FileSystem } from '../../components/Terminal';
 
 const testSystem: FileSystem = {
   home: {
@@ -12,7 +11,6 @@ const testSystem: FileSystem = {
             children: {
               file1: {
                 type: 'FILE',
-                children: null,
               },
             },
           },

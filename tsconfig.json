@@ -26,5 +26,5 @@
       "lodash/*": ["node_modules/@types/lodash-es/*"]
     }
   },
-  "include": ["src", "typings"]
+  "include": ["src", "typings", "__mocks__"]
 }
