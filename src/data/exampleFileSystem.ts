@@ -19,6 +19,9 @@ const exampleFileSystem: FileSystem = {
           },
         },
       },
+      file1: {
+        type: 'FILE',
+      },
     },
   },
   docs: {

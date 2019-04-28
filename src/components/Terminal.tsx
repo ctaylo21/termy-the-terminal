@@ -56,7 +56,9 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             commandArgs[1] || this.state.currentPath,
           );
           result = JSON.stringify(test);
-        } catch (e) {}
+        } catch (e) {
+          result = e;
+        }
         break;
       default:
         result = 'Invalid command';

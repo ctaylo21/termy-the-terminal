@@ -1,32 +1,5 @@
 import ls from '../ls';
-
-const testSystem: FileSystem = {
-  home: {
-    type: 'FOLDER',
-    children: {
-      folder1: {
-        type: 'FOLDER',
-        children: {
-          folder3: {
-            type: 'FOLDER',
-            children: {
-              file1: {
-                type: 'FILE',
-              },
-            },
-          },
-        },
-      },
-      folder2: {
-        type: 'FOLDER',
-        children: null,
-      },
-      file2: {
-        type: 'FILE',
-      },
-    },
-  },
-};
+import exampleFileSystem from '../../data/exampleFileSystem';
 
 describe('ls suite', (): void => {
   test('should return correct folder object from root', async (): Promise<
@@ -36,26 +9,37 @@ describe('ls suite', (): void => {
       home: {
         type: 'FOLDER',
       },
+      docs: {
+        type: 'FOLDER',
+      },
     };
 
-    return expect(ls(testSystem, '/')).resolves.toEqual(expectedLs);
+    return expect(ls(exampleFileSystem, '/')).resolves.toEqual(expectedLs);
   });
 
   test('should return correct folder object from nested path', async (): Promise<
     object
   > => {
     const expectedLs = {
-      folder1: {
+      user: {
         type: 'FOLDER',
       },
-      folder2: {
+      videos: {
         type: 'FOLDER',
       },
-      file2: {
+      file1: {
         type: 'FILE',
       },
     };
 
-    return expect(ls(testSystem, '/home')).resolves.toEqual(expectedLs);
+    return expect(ls(exampleFileSystem, '/home')).resolves.toEqual(expectedLs);
+  });
+
+  test('should reject if invalid directory given', async (): Promise<
+    LsResultType
+  > => {
+    return expect(
+      ls(exampleFileSystem, '/invalid'),
+    ).rejects.toMatchInlineSnapshot(`"Target folder does not exist"`);
   });
 });

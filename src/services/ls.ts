@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import has from 'lodash/has';
 import { convertPathToInternalFormat } from './utilities/index';
 
 function getTargetFolder(
@@ -6,9 +7,14 @@ function getTargetFolder(
   targetPath: string,
 ): FileSystem | null {
   const internalPath = convertPathToInternalFormat(targetPath);
-  return targetPath === '/'
-    ? fileSystem
-    : (get(fileSystem, internalPath) as TerminalFolder).children;
+
+  if (targetPath === '/') {
+    return fileSystem;
+  } else if (has(fileSystem, internalPath)) {
+    return (get(fileSystem, internalPath) as TerminalFolder).children;
+  }
+
+  throw new Error('Target folder does not exist');
 }
 
 /**
@@ -23,9 +29,15 @@ export default function ls(
   targetPath: string,
 ): Promise<LsResultType> {
   return new Promise(
-    (resolve): void => {
+    (resolve, reject): void => {
       const externalFormatDir: LsResultType = {};
-      const targetFolderContents = getTargetFolder(fileSystem, targetPath);
+
+      let targetFolderContents;
+      try {
+        targetFolderContents = getTargetFolder(fileSystem, targetPath);
+      } catch (e) {
+        reject(e.message);
+      }
 
       for (let key in targetFolderContents) {
         externalFormatDir[key] = {

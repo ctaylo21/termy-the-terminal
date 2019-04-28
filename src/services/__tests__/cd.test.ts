@@ -1,25 +1,5 @@
 import cd from '../cd';
-
-const testSystem: FileSystem = {
-  home: {
-    children: {
-      folder1: {
-        type: 'FOLDER',
-        children: {
-          folder2: {
-            type: 'FOLDER',
-            children: {
-              file1: {
-                type: 'FILE',
-              },
-            },
-          },
-        },
-      },
-    },
-    type: 'FOLDER',
-  },
-};
+import exampleFileSystem from '../../data/exampleFileSystem';
 
 describe('cd suite', (): void => {
   describe('valid cases', (): void => {
@@ -37,35 +17,37 @@ describe('cd suite', (): void => {
 
       test('multi-level cd', async (): Promise<string> => {
         return expect(
-          cd(testSystem, '/', 'home/folder1/folder2'),
-        ).resolves.toEqual('/home/folder1/folder2');
+          cd(exampleFileSystem, '/', 'home/user/test'),
+        ).resolves.toEqual('/home/user/test');
       });
 
       test('.. above root level', async (): Promise<string> => {
-        return expect(cd(testSystem, '/', '..')).resolves.toEqual('/');
+        return expect(cd(exampleFileSystem, '/', '..')).resolves.toEqual('/');
       });
     });
 
     describe('from nested path', (): void => {
       test('1 level cd', async (): Promise<string> => {
-        return expect(cd(testSystem, '/home', 'folder1')).resolves.toEqual(
-          '/home/folder1',
+        return expect(cd(exampleFileSystem, '/home', 'user')).resolves.toEqual(
+          '/home/user',
         );
       });
 
       test('.. 1 level to root', async (): Promise<string> => {
-        return expect(cd(testSystem, '/home', '..')).resolves.toEqual('/');
+        return expect(cd(exampleFileSystem, '/home', '..')).resolves.toEqual(
+          '/',
+        );
       });
 
       test('.. 1 level', async (): Promise<string> => {
         return expect(
-          cd(testSystem, '/home/folder1/folder2', '..'),
-        ).resolves.toEqual('/home/folder1');
+          cd(exampleFileSystem, '/home/user/test', '..'),
+        ).resolves.toEqual('/home/user');
       });
 
       test('.. multiple levels', async (): Promise<string> => {
         return expect(
-          cd(testSystem, '/home/folder1/folder2', '../..'),
+          cd(exampleFileSystem, '/home/folder1/folder2', '../..'),
         ).resolves.toEqual('/home');
       });
 
@@ -73,7 +55,7 @@ describe('cd suite', (): void => {
         Promise<string>
       > => {
         return expect(
-          cd(testSystem, '/home/folder1/folder2', '../folder2/../../'),
+          cd(exampleFileSystem, '/home/folder1/folder2', '../folder2/../../'),
         ).resolves.toEqual('/home');
       });
     });
@@ -87,13 +69,15 @@ describe('cd suite', (): void => {
           type: 'FOLDER',
         },
       };
-      return expect(cd(fileSystem, 'path', '')).rejects.toMatchSnapshot();
+      return expect(cd(fileSystem, 'path', '')).rejects.toMatchInlineSnapshot(
+        `"path can not be empty."`,
+      );
     });
 
     test('nested cd to a file', async (): Promise<string> => {
       return expect(
-        cd(testSystem, 'path', 'home/folder1/folder2/file1'),
-      ).rejects.toMatchSnapshot();
+        cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
+      ).rejects.toMatchInlineSnapshot(`"path does not exist."`);
     });
   });
 });
