@@ -2,8 +2,7 @@ import get from 'lodash/get';
 import has from 'lodash/has';
 import {
   convertInternalPathToExternal,
-  handleDotDotInPath,
-  convertPathToInternalFormat,
+  getInternalPath,
 } from './utilities/index';
 
 /**
@@ -12,32 +11,20 @@ import {
  *
  * @param fileSystem {object} - filesystem to cd upon
  * @param currentPath {string} - current path within filesystem
- * @param pathToCd  {string} - path to change to
+ * @param targetPath  {string} - path to change to
  * @returns Promise<string> - resolves with new path if successful, rejects if not
  */
 export default function cd(
   fileSystem: FileSystem,
   currentPath: string,
-  pathToCd: string,
+  targetPath: string,
 ): Promise<string> {
   return new Promise(
     (resolve, reject): void => {
-      if (!pathToCd) {
+      if (!targetPath) {
         reject('path can not be empty.');
       }
-
-      // If current path is anything other than the root, add trailing slash
-      const normalizedCurrentPath =
-        currentPath === '/' ? currentPath : `${currentPath}/`;
-
-      // If target path is absolute, ignore current path
-      const targetPath = pathToCd.startsWith('/')
-        ? pathToCd
-        : normalizedCurrentPath + pathToCd;
-
-      let internalCdPath = convertPathToInternalFormat(
-        handleDotDotInPath(targetPath),
-      );
+      const internalCdPath = getInternalPath(currentPath, targetPath);
 
       if (!internalCdPath) {
         resolve('/');

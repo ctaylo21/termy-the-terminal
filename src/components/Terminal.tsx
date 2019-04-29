@@ -50,14 +50,12 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         result = this.state.currentPath;
         break;
       case 'ls':
-        const pathToLs = commandArgs[1]
-          ? commandArgs[1].startsWith('/')
-            ? commandArgs[1]
-            : `${this.state.currentPath}/${commandArgs[1]}`
-          : this.state.currentPath;
-
         try {
-          const test = await ls(this.props.fileSystem, pathToLs);
+          const test = await ls(
+            this.props.fileSystem,
+            this.state.currentPath,
+            commandArgs[1],
+          );
           result = JSON.stringify(test);
         } catch (e) {
           result = e;

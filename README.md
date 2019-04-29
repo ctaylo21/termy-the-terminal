@@ -39,6 +39,14 @@ ReactDOM.render(
    cd /home/user/test
    ```
 
+   Supports `..` in path, and anything path "above" root just defaults to root
+
+   (from root)
+   ```
+   cd ..  // -> /
+   cd /home/user/../user // -> /home/user
+   ```
+
 - `pwd` - Prints current directory to the console
 
 - `ls [DIRECTORY]` - Lists information about files and directories within the file system
@@ -54,3 +62,10 @@ ReactDOM.render(
    ls /home
    ```
 
+   Supports `..` in path, and anything path "above" root just defaults to root
+
+   (from root)
+   ```
+   ls ..  // -> contents of /
+   cd /home/user/../user // -> contents of /home/user
+   ```

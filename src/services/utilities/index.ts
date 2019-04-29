@@ -65,3 +65,27 @@ export function convertInternalPathToExternal(pathStr: string): string {
       .join('/')
   );
 }
+
+/**
+ * Takes a current path and a target path, and calculates the combined path and
+ * returns it in internal format. If target path is absolute, currentPath is ignored.
+ *
+ * @param currentPath {string} - current path in system
+ * @param targetPath {string} - target path in system
+ */
+export function getInternalPath(
+  currentPath: string,
+  targetPath: string,
+): string {
+  if (!targetPath) {
+    return currentPath;
+  }
+
+  const normalizedPath = targetPath.startsWith('/')
+    ? targetPath
+    : currentPath === '/'
+      ? `/${targetPath}`
+      : `${currentPath}/${targetPath}`;
+
+  return convertPathToInternalFormat(handleDotDotInPath(normalizedPath));
+}

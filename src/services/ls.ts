@@ -1,14 +1,15 @@
 import get from 'lodash/get';
 import has from 'lodash/has';
-import { convertPathToInternalFormat } from './utilities/index';
+import { getInternalPath } from './utilities/index';
 
 function getTargetFolder(
   fileSystem: FileSystem,
+  currentPath: string,
   targetPath: string,
 ): FileSystem | null {
-  const internalPath = convertPathToInternalFormat(targetPath);
+  const internalPath = getInternalPath(currentPath, targetPath);
 
-  if (targetPath === '/') {
+  if (internalPath === '/' || !internalPath) {
     return fileSystem;
   } else if (has(fileSystem, internalPath)) {
     return (get(fileSystem, internalPath) as TerminalFolder).children;
@@ -21,12 +22,14 @@ function getTargetFolder(
  * Given a fileysystem, lists all items for a given directory
  *
  * @param fileSystem {object} - filesystem to ls upon
+ * @param currentPath {string} - current path within filesystem
  * @param targetPath {string} - path to list contents within
  * @returns Promise<string> - resolves with contents of given path
  */
 export default function ls(
   fileSystem: FileSystem,
-  targetPath: string,
+  currentPath: string,
+  targetPath: string = '',
 ): Promise<LsResultType> {
   return new Promise(
     (resolve, reject): void => {
@@ -34,7 +37,11 @@ export default function ls(
 
       let targetFolderContents;
       try {
-        targetFolderContents = getTargetFolder(fileSystem, targetPath);
+        targetFolderContents = getTargetFolder(
+          fileSystem,
+          currentPath,
+          targetPath,
+        );
       } catch (e) {
         reject(e.message);
       }

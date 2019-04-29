@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.3.1 - 2019-04-28
+
+### Added
+
+  - support for `..` in `ls` command paths
+
+### Changed
+  - refactor internal command args for consistency
+  - abstracted path helpers into utilities
+
 ## 0.3.0 - 2019-04-28
 
 ### Added
