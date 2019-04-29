@@ -30,8 +30,13 @@ export default function cd(
       const normalizedCurrentPath =
         currentPath === '/' ? currentPath : `${currentPath}/`;
 
+      // If target path is absolute, ignore current path
+      const targetPath = pathToCd.startsWith('/')
+        ? pathToCd
+        : normalizedCurrentPath + pathToCd;
+
       let internalCdPath = convertPathToInternalFormat(
-        handleDotDotInPath(normalizedCurrentPath + pathToCd),
+        handleDotDotInPath(targetPath),
       );
 
       if (!internalCdPath) {

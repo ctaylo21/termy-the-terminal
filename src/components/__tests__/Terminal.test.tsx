@@ -95,6 +95,48 @@ describe('cd', (): void => {
     );
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
+
+  test('should support cd with absolute path from nested path', async (done): Promise<
+    void
+  > => {
+    const { getByLabelText, getByTestId } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+    const currentPath = getByTestId('input-prompt-path');
+
+    fireEvent.change(input, {
+      target: { value: 'cd /home/user' },
+    });
+    fireEvent.submit(input);
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'cd /home' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+
+        expect(history.innerHTML).toMatchInlineSnapshot(
+          `"<li>cd /home/user: cd success</li><li>cd /home: cd success</li>"`,
+        );
+        expect(currentPath.innerHTML).toEqual('/home');
+        done();
+      },
+    );
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li>cd /home/user: cd success</li>"`,
+    );
+    expect(currentPath.innerHTML).toEqual('/home/user');
+  });
 });
 
 describe('pwd', (): void => {
