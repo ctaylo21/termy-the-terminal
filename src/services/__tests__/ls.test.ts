@@ -15,6 +15,22 @@ describe('ls suite', (): void => {
     return expect(ls(exampleFileSystem, '/')).resolves.toEqual(expectedLs);
   });
 
+  test('nested path with no directory', async (): Promise<object> => {
+    const expectedLs = {
+      user: {
+        type: 'FOLDER',
+      },
+      videos: {
+        type: 'FOLDER',
+      },
+      file1: {
+        type: 'FILE',
+      },
+    };
+
+    return expect(ls(exampleFileSystem, '/home')).resolves.toEqual(expectedLs);
+  });
+
   test('relative path from root', async (): Promise<object> => {
     const expectedLs = {
       user: {

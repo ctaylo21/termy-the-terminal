@@ -78,7 +78,7 @@ export function getInternalPath(
   targetPath: string,
 ): string {
   if (!targetPath) {
-    return currentPath;
+    return currentPath.replace(/^\/+/g, '');
   }
 
   const normalizedPath = targetPath.startsWith('/')
