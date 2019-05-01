@@ -3,21 +3,28 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.3.2 - 2019-04-30
+
+### Fixed
+
+- Bug where ls with no args from nested path was broken
+
 ## 0.3.1 - 2019-04-28
 
 ### Added
 
-  - support for `..` in `ls` command paths
+- support for `..` in `ls` command paths
 
 ### Changed
-  - refactor internal command args for consistency
-  - abstracted path helpers into utilities
+
+- refactor internal command args for consistency
+- abstracted path helpers into utilities
 
 ## 0.3.0 - 2019-04-28
 
 ### Added
 
- - `ls` command support
+- `ls` command support
 
 ## 0.2.0 - 2019-04-27
 
