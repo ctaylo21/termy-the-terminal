@@ -8,6 +8,7 @@
   font-family: $fontFamily;
   font-size: $fontSize;
   height: 100%;
+  overflow: auto;
   padding: 0 1em;
 
   #history-container {

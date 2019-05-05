@@ -77,7 +77,9 @@ describe('cd suite', (): void => {
     test('nested cd to a file', async (): Promise<string> => {
       return expect(
         cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
-      ).rejects.toMatchInlineSnapshot(`"path does not exist."`);
+      ).rejects.toMatchInlineSnapshot(
+        `"path does not exist: home/folder1/folder2/file1"`,
+      );
     });
   });
 });

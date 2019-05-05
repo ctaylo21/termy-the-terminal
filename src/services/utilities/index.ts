@@ -78,14 +78,14 @@ export function getInternalPath(
   targetPath: string,
 ): string {
   if (!targetPath) {
-    return currentPath.replace(/^\/+/g, '');
+    return convertPathToInternalFormat(currentPath.replace(/^\/+/g, ''));
   }
 
   const normalizedPath = targetPath.startsWith('/')
     ? targetPath
     : currentPath === '/'
-      ? `/${targetPath}`
-      : `${currentPath}/${targetPath}`;
+    ? `/${targetPath}`
+    : `${currentPath}/${targetPath}`;
 
   return convertPathToInternalFormat(handleDotDotInPath(normalizedPath));
 }

@@ -25,7 +25,7 @@ describe('general', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>invalid-command: Invalid command</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"invalid-command\\"></form></div>command not found: invalid-command</li>"`,
     );
   });
 });
@@ -47,7 +47,7 @@ describe('cd', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>cd invalid: path does not exist.</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd invalid\\"></form></div>cd: path does not exist: invalid</li>"`,
     );
     expect(currentPath.innerHTML).toEqual('/');
   });
@@ -68,7 +68,7 @@ describe('cd', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>cd home: cd success</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div></li>"`,
     );
     expect(currentPath.innerHTML).toEqual('/home');
   });
@@ -91,7 +91,7 @@ describe('cd', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>cd home/../home/user/../user/test: cd success</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home/../home/user/../user/test\\"></form></div></li>"`,
     );
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
@@ -121,7 +121,7 @@ describe('cd', (): void => {
         );
 
         expect(history.innerHTML).toMatchInlineSnapshot(
-          `"<li>cd /home/user: cd success</li><li>cd /home: cd success</li>"`,
+          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home/user\\"></form></div></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home/user</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home\\"></form></div></li>"`,
         );
         expect(currentPath.innerHTML).toEqual('/home');
         done();
@@ -133,7 +133,7 @@ describe('cd', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>cd /home/user: cd success</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home/user\\"></form></div></li>"`,
     );
     expect(currentPath.innerHTML).toEqual('/home/user');
   });
@@ -155,7 +155,9 @@ describe('pwd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(`"<li>pwd: /</li>"`);
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"pwd\\"></form></div>/</li>"`,
+    );
     expect(currentPath.innerHTML).toEqual('/');
   });
 
@@ -183,7 +185,7 @@ describe('pwd', (): void => {
           );
 
           expect(history.innerHTML).toMatchInlineSnapshot(
-            `"<li>cd home/user/test: cd success</li><li>pwd: /home/user/test</li>"`,
+            `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home/user/test\\"></form></div></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home/user/test</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"pwd\\"></form></div>/home/user/test</li>"`,
           );
           expect(currentPath.innerHTML).toEqual('/home/user/test');
           done();
@@ -216,7 +218,7 @@ describe('ls', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>ls: {\\"home\\":{\\"type\\":\\"FOLDER\\"},\\"docs\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls\\"></form></div>{\\"home\\":{\\"type\\":\\"FOLDER\\"},\\"docs\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
     );
   });
 
@@ -237,7 +239,7 @@ describe('ls', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>ls home: {\\"user\\":{\\"type\\":\\"FOLDER\\"},\\"videos\\":{\\"type\\":\\"FOLDER\\"},\\"file1\\":{\\"type\\":\\"FILE\\"}}</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls home\\"></form></div>{\\"user\\":{\\"type\\":\\"FOLDER\\"},\\"videos\\":{\\"type\\":\\"FOLDER\\"},\\"file1\\":{\\"type\\":\\"FILE\\"}}</li>"`,
     );
   });
 
@@ -265,7 +267,7 @@ describe('ls', (): void => {
         );
 
         expect(history.innerHTML).toMatchInlineSnapshot(
-          `"<li>cd home: cd success</li><li>ls user: {\\"test\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
+          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls user\\"></form></div>{\\"test\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
         );
         done();
       },
@@ -292,7 +294,7 @@ describe('ls', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>ls /home/user: {\\"test\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls /home/user\\"></form></div>{\\"test\\":{\\"type\\":\\"FOLDER\\"}}</li>"`,
     );
   });
 
@@ -311,7 +313,7 @@ describe('ls', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li>ls invalid: Target folder does not exist</li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls invalid\\"></form></div>Target folder does not exist</li>"`,
     );
   });
 });

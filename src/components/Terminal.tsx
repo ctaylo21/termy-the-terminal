@@ -37,7 +37,6 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             commandArgs[1],
           );
 
-          result = 'cd success';
           this.setState({
             currentPath: newPath,
           });
@@ -61,7 +60,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         }
         break;
       default:
-        result = `termy: command not found: ${commandArgs[0]}`;
+        result = `command not found: ${commandArgs[0]}`;
         break;
     }
 

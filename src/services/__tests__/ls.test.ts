@@ -101,4 +101,16 @@ describe('ls suite', (): void => {
       ls(exampleFileSystem, '/invalid'),
     ).rejects.toMatchInlineSnapshot(`"Target folder does not exist"`);
   });
+
+  test('empty path from nested location', async (): Promise<object> => {
+    const expectedLs = {
+      test: {
+        type: 'FOLDER',
+      },
+    };
+
+    return expect(ls(exampleFileSystem, '/home/user', '')).resolves.toEqual(
+      expectedLs,
+    );
+  });
 });
