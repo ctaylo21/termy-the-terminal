@@ -1,38 +1,43 @@
 @import '~reset-css';
 @import '../styles/vars';
 
-body {
+#terminal-wrapper {
+  background-color: map-get($themeDark, background);
+  box-sizing: content-box;
   color: map-get($themeDark, fontColor);
   font-family: $fontFamily;
   font-size: $fontSize;
-}
-
-#terminal-container {
-  background-color: map-get($themeDark, background);
+  height: 100%;
+  padding: 0 1em;
 
   #history-container {
-    height: 350px;
-    padding: 1em;
+    li {
+      margin-bottom: 1em;
+    }
   }
 
-  #input-container > form {
-    display: flex;
+  #input-container {
+    padding-top: 1em;
 
-    input {
-      background: none;
-      border: none;
-      color: map-get($themeDark, fontColor);
-      font-family: $fontFamily;
-      font-size: $fontSize;
-      outline: none;
-      -webkit-appearance: none;
+    form {
+      display: flex;
 
-      flex-grow: 100;
-      margin: 0 10px;
-    }
+      input {
+        background: none;
+        border: none;
+        color: map-get($themeDark, fontColor);
+        font-family: $fontFamily;
+        font-size: $fontSize;
+        outline: none;
+        -webkit-appearance: none;
 
-    #inputPromptChar {
-      color: map-get($themeDark, green);
+        flex-grow: 100;
+        margin: 0 10px;
+      }
+
+      #inputPromptChar {
+        color: map-get($themeDark, green);
+      }
     }
   }
 }

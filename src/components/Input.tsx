@@ -5,8 +5,9 @@ interface InputProps {
   currentPath: string;
   inputValue: string;
   promptChar: string;
-  handleChange(event: ChangeEvent<HTMLInputElement>): void;
-  handleSubmit(event: FormEvent<HTMLFormElement>): void;
+  handleChange?(event: ChangeEvent<HTMLInputElement>): void;
+  handleSubmit?(event: FormEvent<HTMLFormElement>): void;
+  readOnly: boolean;
 }
 
 export const Input: React.FC<InputProps> = (props): JSX.Element => {
@@ -16,6 +17,7 @@ export const Input: React.FC<InputProps> = (props): JSX.Element => {
     handleSubmit,
     inputValue,
     promptChar,
+    readOnly,
   } = props;
 
   return (
@@ -27,6 +29,7 @@ export const Input: React.FC<InputProps> = (props): JSX.Element => {
           type="text"
           value={inputValue}
           onChange={handleChange}
+          readOnly={readOnly}
         />
       </form>
     </div>

@@ -5,7 +5,8 @@ export const History: React.FC<HistoryProps> = (props): JSX.Element => {
   const commandList = history.map(
     (command): JSX.Element => (
       <li key={command.id}>
-        {command.value}: {command.result}
+        {command.input}
+        {command.result}
       </li>
     ),
   );

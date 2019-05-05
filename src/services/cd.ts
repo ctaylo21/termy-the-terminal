@@ -37,7 +37,7 @@ export default function cd(
         resolve(convertInternalPathToExternal(internalCdPath));
       }
 
-      reject('path does not exist.');
+      reject(`path does not exist: ${targetPath}`);
     },
   );
 }

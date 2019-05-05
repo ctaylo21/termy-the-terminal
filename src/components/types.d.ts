@@ -26,6 +26,7 @@ declare interface TerminalProps {
 }
 
 declare interface HistoryItem {
+  input: JSX.Element;
   id: number;
   result: string;
   value: string;

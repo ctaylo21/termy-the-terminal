@@ -10,7 +10,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     currentPath: '/',
     history: [],
     inputValue: '',
-    promptChar: '→',
+    promptChar: '$>',
   };
 
   private handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -24,9 +24,8 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   ): Promise<void> => {
     event.preventDefault();
 
-    const commandArgs = this.state.inputValue.split(' ');
-
-    const { history, inputValue } = this.state;
+    const { history, inputValue, currentPath, promptChar } = this.state;
+    const commandArgs = inputValue.split(' ');
 
     let result = '';
     switch (commandArgs[0]) {
@@ -43,7 +42,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             currentPath: newPath,
           });
         } catch (cdException) {
-          result = cdException;
+          result = `cd: ${cdException}`;
         }
         break;
       case 'pwd':
@@ -62,11 +61,19 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         }
         break;
       default:
-        result = 'Invalid command';
+        result = `termy: command not found: ${commandArgs[0]}`;
         break;
     }
 
     const updatedHistory = history.concat({
+      input: (
+        <Input
+          currentPath={currentPath}
+          inputValue={inputValue}
+          promptChar={promptChar}
+          readOnly={true}
+        />
+      ),
       id: this.state.currentCommandId,
       result,
       value: inputValue,
@@ -82,7 +89,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   public render(): JSX.Element {
     const { currentPath, history, inputValue, promptChar } = this.state;
     return (
-      <>
+      <div id="terminal-wrapper">
         <History history={history} />
         <Input
           currentPath={currentPath}
@@ -90,8 +97,9 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
           handleSubmit={this.handleSubmit}
           inputValue={inputValue}
           promptChar={promptChar}
+          readOnly={false}
         />
-      </>
+      </div>
     );
   }
 }

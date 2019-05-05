@@ -7,3 +7,5 @@ ReactDOM.render(
   <Terminal fileSystem={exampleFileSystem} />,
   document.getElementById('terminal-container'),
 );
+
+export default {};
