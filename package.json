@@ -13,8 +13,6 @@
     "coverage": "npm test -- --collect-coverage",
     "start": "webpack-dev-server --open --mode=development",
     "build": "webpack --mode=production",
-    "predeploygh": "npm run build",
-    "deploygh": "gh-pages -d dist",
     "commit": "git-cz",
     "lint": "eslint src --ext ts,tsx"
   },
