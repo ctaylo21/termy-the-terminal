@@ -317,3 +317,24 @@ describe('ls', (): void => {
     );
   });
 });
+
+describe('help', (): void => {
+  test('should print help menu', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'help' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"help\\"></form></div><div id=\\"help-container\\"><ul aria-label=\\"help-menu\\"><li>cd - Changes the current working directory</li><li>pwd - Prints the current working directory</li><li>ls - Lists the contents of the given directory</li><li>help - Prints list of available commands</li></ul></div></li>"`,
+    );
+  });
+});

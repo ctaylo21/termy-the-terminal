@@ -1,6 +1,7 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History } from './History';
 import Input from './Input';
+import HelpMenu from './HelpMenu';
 import { cd, ls } from '../services';
 import './Terminal.scss';
 
@@ -27,7 +28,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     const { history, inputValue, currentPath, promptChar } = this.state;
     const commandArgs = inputValue.split(' ');
 
-    let result = '';
+    let result: string | JSX.Element = '';
     switch (commandArgs[0]) {
       case 'cd':
         try {
@@ -43,6 +44,9 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         } catch (cdException) {
           result = `cd: ${cdException}`;
         }
+        break;
+      case 'help':
+        result = <HelpMenu />;
         break;
       case 'pwd':
         result = this.state.currentPath;
