@@ -35,6 +35,32 @@ ReactDOM.render(
 );
 ```
 
+The example file system needs to be a particular format:
+
+```javascript
+const exampleFileSystem = {
+  home: {
+    type: 'FOLDER',
+    children: {
+      user: {
+        type: 'FOLDER',
+        children: null,
+      },
+      file1: {
+        type: 'FILE',
+      },
+    },
+  },
+  docs: {
+    type: 'FOLDER',
+    children: null,
+  },
+};
+```
+
+Since the code is written in Typescript, you can also look at the [project types](src/components/types.d.ts) or
+look at the [example filesystem](src/data/exampleFileSystem.ts).
+
 ## Commands
 
 The following commands are supported by Termy.
