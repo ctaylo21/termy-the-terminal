@@ -37,50 +37,68 @@ ReactDOM.render(
 
 ## Commands
 
-- `cd directory` - Supports changing directory, including use `..` to move up a level
+The following commands are supported by Termy.
 
-  To switch the current working directory based upon your current directory
+### `cd [DIRECTORY]`
 
-  ```
-  cd user/test
-  ```
+Supports changing directory, including use `..` to move up a level
 
-  To switch directories using an absolute path, just prefix directory path with `/`
+```bash
+/home
+$> cd user/test
+/home/user/test
 
-  ```
-  cd /home/user/test
-  ```
+/home
+$> cd /home/user/test
+/home/user/test
 
-  Supports `..` in path, and anything path "above" root just defaults to root
+/home
+$> cd ..
+/
 
-  (from root)
+/
+$> cd /home/user/../user
+/home/user
+```
 
-  ```
-  cd ..  // -> /
-  cd /home/user/../user // -> /home/user
-  ```
+### `pwd`
 
-- `pwd` - Prints current directory to the console
+Prints current directory to the console
 
-- `ls [DIRECTORY]` - Lists information about files and directories within the file system
+```bash
+/home/user
+$> pwd
+/home/user
+```
 
-  When used with no arguments, the ls command will list all contents of current working directory
+### `ls [DIRECTORY]`
 
-  ```
-  ls
-  ```
+Lists information about files and directories within the file system. With no arguments,
+it will use the current directory.
 
-  To list files in a specific directory, pass the path to the directory to the ls command
+```bash
+/home/user
+$> ls
+# Contents of /home/user
 
-  ```
-  ls /home
-  ```
+/home/user
+$> ls /home
+# Contents of /home
 
-  Supports `..` in path, and anything path "above" root just defaults to root
+/home/user
+$> ls ..
+# Contents of /home
+```
 
-  (from root)
+### `help`
 
-  ```
-  ls ..  // -> contents of /
-  cd /home/user/../user // -> contents of /home/user
-  ```
+Prints available commands for the terminal with descriptions.
+
+```bash
+/
+$> help
+cd - Changes the current working directory
+pwd - Prints the current working directory
+ls - Lists the contents of the given directory
+help - Prints list of available commands
+```
