@@ -59,15 +59,20 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         result = this.state.currentPath;
         break;
       case 'mkdir':
-        const newFileSystem = await mkdir(
-          fileSystem,
-          this.state.currentPath,
-          commandArgs[1],
-        );
-        this.setState({
-          fileSystem: newFileSystem,
-        });
-        result = `Folder created: ${commandArgs[1]}`;
+        try {
+          const newFileSystem = await mkdir(
+            fileSystem,
+            this.state.currentPath,
+            commandArgs[1],
+          );
+          this.setState({
+            fileSystem: newFileSystem,
+          });
+          result = `Folder created: ${commandArgs[1]}`;
+          break;
+        } catch (e) {
+          result = `Error: ${e}`;
+        }
         break;
       case 'ls':
         try {

@@ -428,4 +428,23 @@ describe('mkdir', (): void => {
       },
     );
   });
+
+  test('should handle invalid mkdir command', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'mkdir home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir home\\"></form></div>Error: Path already exists</li>"`,
+    );
+  });
 });
