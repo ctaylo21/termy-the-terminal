@@ -34,6 +34,22 @@ describe('cd suite', (): void => {
         mkdir(exampleFileSystem, '/home', 'newDir'),
       ).resolves.toStrictEqual(expectedFileSystem);
     });
+
+    it('should create directory given a folder path', async (): Promise<
+      FileSystem
+    > => {
+      const expectedFileSystem = cloneDeep(exampleFileSystem);
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      set(expectedFileSystem, 'home.children.newDir', {
+        type: 'FOLDER',
+        children: null,
+      });
+
+      return expect(
+        mkdir(exampleFileSystem, '/', 'home/newDir'),
+      ).resolves.toStrictEqual(expectedFileSystem);
+    });
   });
 
   describe('Failure', (): void => {
