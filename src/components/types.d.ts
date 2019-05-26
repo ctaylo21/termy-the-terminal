@@ -19,6 +19,7 @@ declare interface TerminalState {
   history: HistoryItem[];
   inputValue: string;
   promptChar: string;
+  fileSystem: FileSystem;
 }
 
 declare interface TerminalProps {
