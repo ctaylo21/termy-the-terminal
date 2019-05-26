@@ -2,7 +2,7 @@ import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History } from './History';
 import Input from './Input';
 import HelpMenu from './HelpMenu';
-import { cd, ls } from '../services';
+import { cd, ls, mkdir } from '../services';
 import './Terminal.scss';
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
@@ -12,6 +12,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     history: [],
     inputValue: '',
     promptChar: '$>',
+    fileSystem: this.props.fileSystem,
   };
 
   private handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -25,7 +26,13 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   ): Promise<void> => {
     event.preventDefault();
 
-    const { history, inputValue, currentPath, promptChar } = this.state;
+    const {
+      history,
+      inputValue,
+      currentPath,
+      promptChar,
+      fileSystem,
+    } = this.state;
     const commandArgs = inputValue.split(' ');
 
     let result: string | JSX.Element = '';
@@ -33,7 +40,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       case 'cd':
         try {
           const newPath = await cd(
-            this.props.fileSystem,
+            fileSystem,
             this.state.currentPath,
             commandArgs[1],
           );
@@ -51,10 +58,26 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       case 'pwd':
         result = this.state.currentPath;
         break;
+      case 'mkdir':
+        try {
+          const newFileSystem = await mkdir(
+            fileSystem,
+            this.state.currentPath,
+            commandArgs[1],
+          );
+          this.setState({
+            fileSystem: newFileSystem,
+          });
+          result = `Folder created: ${commandArgs[1]}`;
+          break;
+        } catch (e) {
+          result = `Error: ${e}`;
+        }
+        break;
       case 'ls':
         try {
           const test = await ls(
-            this.props.fileSystem,
+            fileSystem,
             this.state.currentPath,
             commandArgs[1],
           );

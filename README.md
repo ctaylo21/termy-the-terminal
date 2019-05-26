@@ -20,6 +20,11 @@ A web-based terminal powered by React. Check out the [demo](https://clever-poitr
   - [Table of Contents](#table-of-contents)
   - [Usage](#usage)
   - [Commands](#commands)
+    - [`cd [DIRECTORY]`](#cd-directory)
+    - [`pwd`](#pwd)
+    - [`ls [DIRECTORY]`](#ls-directory)
+    - [`mkdir [DIRECTORY]`](#mkdir-directory)
+    - [`help`](#help)
 
 ## Usage
 
@@ -70,21 +75,25 @@ The following commands are supported by Termy.
 Supports changing directory, including use `..` to move up a level
 
 ```bash
-/home
-$> cd user/test
-/home/user/test
+# cd with relative path
+/home $> cd user/test
 
-/home
-$> cd /home/user/test
-/home/user/test
+/home/user/test $> cd user/test
 
-/home
-$> cd ..
-/
+# cd from absolute path
+/ $> cd /home/user/test
 
-/
-$> cd /home/user/../user
-/home/user
+/home/user/test $>
+
+# cd using ".."
+/home $> cd ..
+
+/ $>
+
+# cd using nested path with ".."
+/ $> cd /home/user/../user
+
+/home/user $>
 ```
 
 ### `pwd`
@@ -92,8 +101,7 @@ $> cd /home/user/../user
 Prints current directory to the console
 
 ```bash
-/home/user
-$> pwd
+/home/user $> pwd
 /home/user
 ```
 
@@ -103,17 +111,32 @@ Lists information about files and directories within the file system. With no ar
 it will use the current directory.
 
 ```bash
-/home/user
-$> ls
+/home/user $> ls
 # Contents of /home/user
 
-/home/user
-$> ls /home
+/home/user $> ls /home
 # Contents of /home
 
-/home/user
-$> ls ..
+/home/user $> ls ..
 # Contents of /home
+```
+
+### `mkdir [DIRECTORY]`
+
+Creates a folder for a given path in the filesystem
+
+```bash
+# mkdir with relative path
+/ $> mkdir test
+Folder created: test
+
+# mkdir with absolute path
+/ $> mkdir /home/banana
+Folder created: /home/banana
+
+# mkdir with ".." path
+/home/user $> mkdir ../test2
+Folder created: ../test2 #/home/test2
 ```
 
 ### `help`

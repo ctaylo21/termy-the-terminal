@@ -338,3 +338,113 @@ describe('help', (): void => {
     );
   });
 });
+
+describe('mkdir', (): void => {
+  test('should create new directory from root', async (done): Promise<void> => {
+    const { getByLabelText, getByTestId } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+    const currentPath = getByTestId('input-prompt-path');
+
+    fireEvent.change(input, { target: { value: 'mkdir banana' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div>Folder created: banana</li>"`,
+    );
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'cd banana' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+
+        expect(history.innerHTML).toMatchInlineSnapshot(
+          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div>Folder created: banana</li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd banana\\"></form></div></li>"`,
+        );
+        expect(currentPath.innerHTML).toEqual('/banana');
+        done();
+      },
+    );
+  });
+
+  test('should create new directory from nested path', async (done): Promise<
+    void
+  > => {
+    const { getByLabelText, getByTestId } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+    const currentPath = getByTestId('input-prompt-path');
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div></li>"`,
+    );
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'mkdir banana' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+        expect(history.innerHTML).toMatchInlineSnapshot(
+          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div>Folder created: banana</li>"`,
+        );
+
+        process.nextTick(
+          async (): Promise<void> => {
+            fireEvent.change(input, { target: { value: 'cd /home/banana' } });
+            fireEvent.submit(input);
+
+            const history = await waitForElement(
+              (): HTMLElement => getByLabelText('terminal-history'),
+            );
+
+            expect(history.innerHTML).toMatchInlineSnapshot(
+              `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div>Folder created: banana</li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home/banana\\"></form></div></li>"`,
+            );
+            expect(currentPath.innerHTML).toEqual('/home/banana');
+            done();
+          },
+        );
+      },
+    );
+  });
+
+  test('should handle invalid mkdir command', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'mkdir home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir home\\"></form></div>Error: Path already exists</li>"`,
+    );
+  });
+});
