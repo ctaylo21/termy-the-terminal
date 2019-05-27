@@ -19,7 +19,7 @@ const exampleFileSystem: FileSystem = {
           },
         },
       },
-      file1: {
+      'file1.txt': {
         type: 'FILE',
       },
     },

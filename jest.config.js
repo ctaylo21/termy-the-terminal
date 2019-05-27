@@ -27,7 +27,8 @@ module.exports = {
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    '\\.(scss|jpg|png|svg)$': '<rootDir>/node_modules/jest-css-modules',
+    '\\.(scss|jpg|png)$': '<rootDir>/node_modules/jest-css-modules',
+    '^-!svg-react-loader.*$': '<rootDir>/src/__mocks__/svgMock.tsx',
   },
 
   // Automatically clear mock calls and instances between every test

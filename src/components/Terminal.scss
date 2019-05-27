@@ -12,8 +12,35 @@
   padding: 0 1em;
 
   #history-container {
-    li {
-      margin-bottom: 1em;
+    ul.terminal-ls-list {
+      margin: 10px 0 0 10px;
+
+      li {
+        display: flex;
+        align-items: center;
+
+        svg {
+          margin-right: 20px;
+        }
+
+        &.ls-folder {
+          color: map-get($themeDark, folderResult);
+
+          svg {
+            fill: map-get($themeDark, folderResult);
+          }
+        }
+
+        &.ls-file {
+          color: map-get($themeDark, fileResult);
+
+          svg {
+            fill: map-get($themeDark, fileResult);
+            height: 20px;
+            width: 24px;
+          }
+        }
+      }
     }
   }
 

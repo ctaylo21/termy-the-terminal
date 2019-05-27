@@ -6,7 +6,7 @@ export const History: React.FC<HistoryProps> = (props): JSX.Element => {
     (command): JSX.Element => (
       <li key={command.id}>
         {command.input}
-        {command.result}
+        <span className="commandResult">{command.result}</span>
       </li>
     ),
   );

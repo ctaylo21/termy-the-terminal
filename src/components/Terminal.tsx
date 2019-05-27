@@ -2,6 +2,7 @@ import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History } from './History';
 import Input from './Input';
 import HelpMenu from './HelpMenu';
+import LsResult from './LsResult';
 import { cd, ls, mkdir } from '../services';
 import './Terminal.scss';
 
@@ -76,12 +77,12 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         break;
       case 'ls':
         try {
-          const test = await ls(
+          const lsResult = await ls(
             fileSystem,
             this.state.currentPath,
             commandArgs[1],
           );
-          result = JSON.stringify(test);
+          result = <LsResult lsResult={lsResult} />;
         } catch (e) {
           result = e;
         }

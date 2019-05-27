@@ -23,7 +23,7 @@ describe('ls suite', (): void => {
       videos: {
         type: 'FOLDER',
       },
-      file1: {
+      'file1.txt': {
         type: 'FILE',
       },
     };
@@ -39,7 +39,7 @@ describe('ls suite', (): void => {
       videos: {
         type: 'FOLDER',
       },
-      file1: {
+      'file1.txt': {
         type: 'FILE',
       },
     };
@@ -84,7 +84,7 @@ describe('ls suite', (): void => {
       videos: {
         type: 'FOLDER',
       },
-      file1: {
+      'file1.txt': {
         type: 'FILE',
       },
     };
