@@ -6,7 +6,7 @@ describe('cat suite', (): void => {
     string
   > => {
     return expect(
-      cat(exampleFileSystem, '/home', 'file1'),
+      cat(exampleFileSystem, '/home', 'file1.txt'),
     ).resolves.toStrictEqual('Contents of file 1');
   });
 
@@ -14,7 +14,7 @@ describe('cat suite', (): void => {
     string
   > => {
     return expect(
-      cat(exampleFileSystem, '/', 'home/videos/file2'),
+      cat(exampleFileSystem, '/', 'home/videos/file2.txt'),
     ).resolves.toStrictEqual('Contents of file 2');
   });
 
@@ -22,7 +22,7 @@ describe('cat suite', (): void => {
     string
   > => {
     return expect(
-      cat(exampleFileSystem, '/home', 'videos/file2'),
+      cat(exampleFileSystem, '/home', 'videos/file2.txt'),
     ).resolves.toStrictEqual('Contents of file 2');
   });
 

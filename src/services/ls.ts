@@ -54,10 +54,6 @@ export default function ls(
         externalFormatDir[lsKey] = {
           type: targetFolderContents[key].type,
         };
-
-        if (targetFolderContents[key].type === 'FILE') {
-          externalFormatDir;
-        }
       }
       resolve(externalFormatDir as LsResultType);
     },
