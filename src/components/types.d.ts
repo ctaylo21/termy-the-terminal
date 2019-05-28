@@ -1,6 +1,8 @@
 declare interface TerminalFile {
-  [key: string]: 'FILE';
+  [key: string]: 'FILE' | string;
   type: 'FILE';
+  content: string;
+  extension: 'txt';
 }
 
 declare interface TerminalFolder {
@@ -38,5 +40,7 @@ declare interface HistoryProps {
 }
 
 declare interface LsResultType {
-  [index: string]: { type: 'FOLDER' | 'FILE' };
+  [index: string]: {
+    type: 'FOLDER' | 'FILE';
+  };
 }

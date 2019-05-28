@@ -3,7 +3,7 @@ import { History } from './History';
 import Input from './Input';
 import HelpMenu from './HelpMenu';
 import LsResult from './LsResult';
-import { cd, ls, mkdir } from '../services';
+import { cd, ls, mkdir, cat } from '../services';
 import './Terminal.scss';
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
@@ -84,7 +84,18 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
           );
           result = <LsResult lsResult={lsResult} />;
         } catch (e) {
-          result = e;
+          result = `Error: ${e}`;
+        }
+        break;
+      case 'cat':
+        try {
+          result = await cat(
+            fileSystem,
+            this.state.currentPath,
+            commandArgs[1],
+          );
+        } catch (e) {
+          result = `Error: ${e}`;
         }
         break;
       default:

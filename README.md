@@ -24,6 +24,7 @@ A web-based terminal powered by React. Check out the [demo](https://clever-poitr
     - [`pwd`](#pwd)
     - [`ls [DIRECTORY]`](#ls-directory)
     - [`mkdir [DIRECTORY]`](#mkdir-directory)
+    - [`cat [FILE]`](#cat-file)
     - [`help`](#help)
 
 ## Usage
@@ -137,6 +138,18 @@ Folder created: /home/banana
 # mkdir with ".." path
 /home/user $> mkdir ../test2
 Folder created: ../test2 #/home/test2
+```
+
+### `cat [FILE]`
+
+Shows the contents of a file
+
+```bash
+/home $> cat file1.txt
+# Contents of file1.txt
+
+/home $> cat videos/file2.txt
+# Contents of file2.txt
 ```
 
 ### `help`

@@ -4,6 +4,8 @@ const commands: { [index: string]: string } = {
   cd: 'Changes the current working directory',
   pwd: 'Prints the current working directory',
   ls: 'Lists the contents of the given directory',
+  mkdir: 'Creates a folder for a given path in the filesystem',
+  cat: 'Shows the contents of a file',
   help: 'Prints list of available commands',
 };
 
