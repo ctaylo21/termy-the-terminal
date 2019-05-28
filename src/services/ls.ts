@@ -47,9 +47,17 @@ export default function ls(
       }
 
       for (let key in targetFolderContents) {
-        externalFormatDir[key] = {
+        const lsKey =
+          targetFolderContents[key].type === 'FILE'
+            ? `${key}.${targetFolderContents[key].extension}`
+            : key;
+        externalFormatDir[lsKey] = {
           type: targetFolderContents[key].type,
         };
+
+        if (targetFolderContents[key].type === 'FILE') {
+          externalFormatDir;
+        }
       }
       resolve(externalFormatDir as LsResultType);
     },

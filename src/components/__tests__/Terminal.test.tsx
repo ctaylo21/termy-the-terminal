@@ -313,7 +313,7 @@ describe('ls', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls invalid\\"></form></div><span class=\\"commandResult\\">Target folder does not exist</span></li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls invalid\\"></form></div><span class=\\"commandResult\\">Error: Target folder does not exist</span></li>"`,
     );
   });
 });
@@ -334,7 +334,7 @@ describe('help', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"help\\"></form></div><span class=\\"commandResult\\"><div id=\\"help-container\\"><ul aria-label=\\"help-menu\\"><li>cd - Changes the current working directory</li><li>pwd - Prints the current working directory</li><li>ls - Lists the contents of the given directory</li><li>help - Prints list of available commands</li></ul></div></span></li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"help\\"></form></div><span class=\\"commandResult\\"><div id=\\"help-container\\"><ul aria-label=\\"help-menu\\"><li>cd - Changes the current working directory</li><li>pwd - Prints the current working directory</li><li>ls - Lists the contents of the given directory</li><li>mkdir - Creates a folder for a given path in the filesystem</li><li>cat - Shows the contents of a file</li><li>help - Prints list of available commands</li></ul></div></span></li>"`,
     );
   });
 });
@@ -445,6 +445,68 @@ describe('mkdir', (): void => {
 
     expect(history.innerHTML).toMatchInlineSnapshot(
       `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir home\\"></form></div><span class=\\"commandResult\\">Error: Path already exists</span></li>"`,
+    );
+  });
+});
+
+describe('cat', (): void => {
+  test('should list contents of file with path', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cat home/file1.txt' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toContain('Contents of file 1');
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cat home/file1.txt\\"></form></div><span class=\\"commandResult\\">Contents of file 1</span></li>"`,
+    );
+  });
+
+  test('should show error when cat on non file', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cat home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cat home\\"></form></div><span class=\\"commandResult\\">Error: Target is not a file</span></li>"`,
+    );
+  });
+
+  test('should show error when cat on invalid path', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cat invalid.txt' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchInlineSnapshot(
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cat invalid.txt\\"></form></div><span class=\\"commandResult\\">Error: Invalid target path</span></li>"`,
     );
   });
 });

@@ -11,7 +11,6 @@ const LsResult: React.FC<LsResultProps> = (props): JSX.Element => {
 
   const lsItems = Object.keys(lsResult).map(
     (key): JSX.Element => {
-      console.log(FolderIcon);
       if (lsResult[key].type === 'FOLDER') {
         return (
           <li className="ls-folder" key={key}>

@@ -6,7 +6,7 @@ import {
 } from './utilities/index';
 
 /**
- * Given a fileysystem, validates if changing directories from a given path
+ * Given a file system, validates if changing directories from a given path
  * to a new path is possible, and returns the new path if so.
  *
  * @param fileSystem {object} - filesystem to cd upon

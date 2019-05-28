@@ -14,13 +14,17 @@ const exampleFileSystem: FileSystem = {
       videos: {
         type: 'FOLDER',
         children: {
-          video1: {
+          file2: {
             type: 'FILE',
+            content: 'Contents of file 2',
+            extension: 'txt',
           },
         },
       },
-      'file1.txt': {
+      file1: {
         type: 'FILE',
+        content: 'Contents of file 1',
+        extension: 'txt',
       },
     },
   },

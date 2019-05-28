@@ -67,6 +67,18 @@ export function convertInternalPathToExternal(pathStr: string): string {
 }
 
 /**
+ * Takes a file path (externally formatted) and trims the file extension from it i.e.
+ * /path/to/file.txt => /path/to/file
+ * file.txt => file
+ *
+ * @param filePath {string} - filePath to trim extension from
+ * @returns {string} - file path without file extension
+ */
+export function stripFileExtension(filePath: string): string {
+  return filePath.replace(/\.[^/.]+$/, '');
+}
+
+/**
  * Takes a current path and a target path, and calculates the combined path and
  * returns it in internal format. If target path is absolute, currentPath is ignored.
  *
