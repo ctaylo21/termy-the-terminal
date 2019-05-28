@@ -54,6 +54,7 @@ const exampleFileSystem = {
       },
       file1: {
         type: 'FILE',
+        extension: 'txt',
       },
     },
   },
