@@ -10,13 +10,13 @@ import has from 'lodash/has';
  * @param fileSystem {object} - filesystem to mkdir upon
  * @param currentPath {string} - current path within filesystem
  * @param folderPath  {string} - folder path to create
- * @returns Promise<string> - resolves with new path if successful, rejects if not
+ * @returns Promise<object> - resolves with new path created if successful, rejects if not
  */
 export default function mkdir(
   fileSystem: FileSystem,
   currentPath: string,
   folderPath: string,
-): Promise<FileSystem> {
+): Promise<ServiceResponse> {
   return new Promise(
     (resolve, reject): void => {
       if (has(fileSystem, getInternalPath(currentPath, folderPath))) {
@@ -31,7 +31,12 @@ export default function mkdir(
       const newFileSystem = cloneDeep(fileSystem);
       set(newFileSystem, getInternalPath(currentPath, folderPath), newFolder);
 
-      resolve(newFileSystem);
+      resolve({
+        serviceResult: `Folder created: ${folderPath}`,
+        updatedState: {
+          fileSystem: newFileSystem,
+        },
+      });
     },
   );
 }

@@ -4,7 +4,7 @@ import exampleFileSystem from '../../data/exampleFileSystem';
 describe('cd suite', (): void => {
   describe('valid cases', (): void => {
     describe('from root', (): void => {
-      test('1 level path', async (): Promise<string> => {
+      test('1 level path', async (): Promise<ServiceResponse> => {
         const fileSystem: FileSystem = {
           home: {
             children: null,
@@ -12,57 +12,85 @@ describe('cd suite', (): void => {
           },
         };
 
-        return expect(cd(fileSystem, '/', 'home')).resolves.toEqual('/home');
+        return expect(cd(fileSystem, '/', 'home')).resolves.toEqual({
+          updatedState: {
+            currentPath: '/home',
+          },
+        });
       });
 
-      test('multi-level cd', async (): Promise<string> => {
+      test('multi-level cd', async (): Promise<ServiceResponse> => {
         return expect(
           cd(exampleFileSystem, '/', 'home/user/test'),
-        ).resolves.toEqual('/home/user/test');
+        ).resolves.toEqual({
+          updatedState: {
+            currentPath: '/home/user/test',
+          },
+        });
       });
 
-      test('.. above root level', async (): Promise<string> => {
-        return expect(cd(exampleFileSystem, '/', '..')).resolves.toEqual('/');
+      test('.. above root level', async (): Promise<ServiceResponse> => {
+        return expect(cd(exampleFileSystem, '/', '..')).resolves.toEqual({
+          updatedState: {
+            currentPath: '/',
+          },
+        });
       });
     });
 
     describe('from nested path', (): void => {
-      test('1 level cd', async (): Promise<string> => {
-        return expect(cd(exampleFileSystem, '/home', 'user')).resolves.toEqual(
-          '/home/user',
-        );
+      test('1 level cd', async (): Promise<ServiceResponse> => {
+        return expect(cd(exampleFileSystem, '/home', 'user')).resolves.toEqual({
+          updatedState: {
+            currentPath: '/home/user',
+          },
+        });
       });
 
-      test('.. 1 level to root', async (): Promise<string> => {
-        return expect(cd(exampleFileSystem, '/home', '..')).resolves.toEqual(
-          '/',
-        );
+      test('.. 1 level to root', async (): Promise<ServiceResponse> => {
+        return expect(cd(exampleFileSystem, '/home', '..')).resolves.toEqual({
+          updatedState: {
+            currentPath: '/',
+          },
+        });
       });
 
-      test('.. 1 level', async (): Promise<string> => {
+      test('.. 1 level', async (): Promise<ServiceResponse> => {
         return expect(
           cd(exampleFileSystem, '/home/user/test', '..'),
-        ).resolves.toEqual('/home/user');
+        ).resolves.toEqual({
+          updatedState: {
+            currentPath: '/home/user',
+          },
+        });
       });
 
-      test('.. multiple levels', async (): Promise<string> => {
+      test('.. multiple levels', async (): Promise<ServiceResponse> => {
         return expect(
           cd(exampleFileSystem, '/home/folder1/folder2', '../..'),
-        ).resolves.toEqual('/home');
+        ).resolves.toEqual({
+          updatedState: {
+            currentPath: '/home',
+          },
+        });
       });
 
       test('.. multiple levels in separate paths', (): Promise<
-        Promise<string>
+        Promise<ServiceResponse>
       > => {
         return expect(
           cd(exampleFileSystem, '/home/folder1/folder2', '../folder2/../../'),
-        ).resolves.toEqual('/home');
+        ).resolves.toEqual({
+          updatedState: {
+            currentPath: '/home',
+          },
+        });
       });
     });
   });
 
   describe('invalid cases', (): void => {
-    test('empty path', async (): Promise<string> => {
+    test('empty path', async (): Promise<ServiceResponse> => {
       const fileSystem: FileSystem = {
         home: {
           children: null,
@@ -74,7 +102,7 @@ describe('cd suite', (): void => {
       );
     });
 
-    test('nested cd to a file', async (): Promise<string> => {
+    test('nested cd to a file', async (): Promise<ServiceResponse> => {
       return expect(
         cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
       ).rejects.toMatchInlineSnapshot(

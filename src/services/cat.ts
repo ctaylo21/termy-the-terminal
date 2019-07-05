@@ -7,13 +7,13 @@ import get from 'lodash/get';
  * @param fileSystem {object} - filesystem to cat upon
  * @param currentPath {string} - current path within filesystem
  * @param targetPath  {string} - path of file to cat
- * @returns Promise<string> - resolves with contents of file
+ * @returns Promise<object> - resolves with contents of file
  */
 export default function cat(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
-): Promise<string> {
+): Promise<ServiceResponse> {
   return new Promise(
     (resolve, reject): void => {
       const pathWithoutExtension = stripFileExtension(targetPath);
@@ -27,7 +27,9 @@ export default function cat(
       }
 
       if (file.type === 'FILE') {
-        resolve(file.content);
+        resolve({
+          serviceResult: file.content,
+        });
       }
 
       reject('Target is not a file');

@@ -1,116 +1,70 @@
 import ls from '../ls';
 import exampleFileSystem from '../../data/exampleFileSystem';
+import { render } from 'react-testing-library';
 
 describe('ls suite', (): void => {
-  test('root with no directory', async (): Promise<object> => {
-    const expectedLs = {
-      home: {
-        type: 'FOLDER',
-      },
-      docs: {
-        type: 'FOLDER',
-      },
-    };
+  test('root with no directory', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(ls(exampleFileSystem, '/')).resolves.toEqual(expectedLs);
+    expect(container.innerHTML).toContain('docs');
+    expect(container.innerHTML).toContain('home');
   });
 
-  test('nested path with no directory', async (): Promise<object> => {
-    const expectedLs = {
-      user: {
-        type: 'FOLDER',
-      },
-      videos: {
-        type: 'FOLDER',
-      },
-      'file1.txt': {
-        type: 'FILE',
-      },
-    };
+  test('nested path with no directory', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/home');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(ls(exampleFileSystem, '/home')).resolves.toEqual(expectedLs);
+    expect(container.innerHTML).toContain('user');
+    expect(container.innerHTML).toContain('videos');
+    expect(container.innerHTML).toContain('file1.txt');
   });
 
-  test('relative path from root', async (): Promise<object> => {
-    const expectedLs = {
-      user: {
-        type: 'FOLDER',
-      },
-      videos: {
-        type: 'FOLDER',
-      },
-      'file1.txt': {
-        type: 'FILE',
-      },
-    };
+  test('relative path from root', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/', '/home');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(ls(exampleFileSystem, '/', 'home')).resolves.toEqual(
-      expectedLs,
-    );
+    expect(container.innerHTML).toContain('user');
+    expect(container.innerHTML).toContain('videos');
+    expect(container.innerHTML).toContain('file1.txt');
   });
 
-  test('relative path from nested path', async (): Promise<object> => {
-    const expectedLs = {
-      test: {
-        type: 'FOLDER',
-      },
-    };
+  test('relative path from nested path', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/home', 'user');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(ls(exampleFileSystem, '/home', 'user')).resolves.toEqual(
-      expectedLs,
-    );
+    expect(container.innerHTML).toContain('test');
   });
 
-  test('root with dotdot', async (): Promise<object> => {
-    const expectedLs = {
-      home: {
-        type: 'FOLDER',
-      },
-      docs: {
-        type: 'FOLDER',
-      },
-    };
+  test('root with dotdot', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/', '..');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(ls(exampleFileSystem, '/', '..')).resolves.toEqual(
-      expectedLs,
-    );
+    expect(container.innerHTML).toContain('home');
+    expect(container.innerHTML).toContain('docs');
   });
 
-  test('nestd path with dotdot', async (): Promise<object> => {
-    const expectedLs = {
-      user: {
-        type: 'FOLDER',
-      },
-      videos: {
-        type: 'FOLDER',
-      },
-      'file1.txt': {
-        type: 'FILE',
-      },
-    };
+  test('nestd path with dotdot', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/home', '../home/user/..');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(
-      ls(exampleFileSystem, '/home', '../home/user/..'),
-    ).resolves.toEqual(expectedLs);
+    expect(container.innerHTML).toContain('user');
+    expect(container.innerHTML).toContain('videos');
+    expect(container.innerHTML).toContain('file1.txt');
   });
 
   test('should reject if invalid directory given', async (): Promise<
-    LsResultType
+    ServiceResponse
   > => {
     return expect(
       ls(exampleFileSystem, '/invalid'),
     ).rejects.toMatchInlineSnapshot(`"Target folder does not exist"`);
   });
 
-  test('empty path from nested location', async (): Promise<object> => {
-    const expectedLs = {
-      test: {
-        type: 'FOLDER',
-      },
-    };
+  test('empty path from nested location', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/home/user', '');
+    const { container } = render(lsResult.serviceResult as JSX.Element);
 
-    return expect(ls(exampleFileSystem, '/home/user', '')).resolves.toEqual(
-      expectedLs,
-    );
+    expect(container.innerHTML).toContain('test');
   });
 });

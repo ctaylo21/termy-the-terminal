@@ -12,13 +12,13 @@ import {
  * @param fileSystem {object} - filesystem to cd upon
  * @param currentPath {string} - current path within filesystem
  * @param targetPath  {string} - path to change to
- * @returns Promise<string> - resolves with new path if successful, rejects if not
+ * @returns Promise<object> - resolves with new path if successful, rejects if not
  */
 export default function cd(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
-): Promise<string> {
+): Promise<ServiceResponse> {
   return new Promise(
     (resolve, reject): void => {
       if (!targetPath) {
@@ -27,14 +27,22 @@ export default function cd(
       const internalCdPath = getInternalPath(currentPath, targetPath);
 
       if (!internalCdPath) {
-        resolve('/');
+        resolve({
+          updatedState: {
+            currentPath: '/',
+          },
+        });
       }
 
       if (
         has(fileSystem, internalCdPath) &&
         get(fileSystem, internalCdPath).type !== 'FILE'
       ) {
-        resolve(convertInternalPathToExternal(internalCdPath));
+        resolve({
+          updatedState: {
+            currentPath: convertInternalPathToExternal(internalCdPath),
+          },
+        });
       }
 
       reject(`path does not exist: ${targetPath}`);

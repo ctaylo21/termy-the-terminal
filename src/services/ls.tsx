@@ -1,6 +1,8 @@
+import React from 'react';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
+import LsResult from '../components/LsResult';
 
 function getTargetFolder(
   fileSystem: FileSystem,
@@ -24,13 +26,13 @@ function getTargetFolder(
  * @param fileSystem {object} - filesystem to ls upon
  * @param currentPath {string} - current path within filesystem
  * @param targetPath {string} - path to list contents within
- * @returns Promise<string> - resolves with contents of given path
+ * @returns Promise<object> - resolves with contents of given path
  */
 export default function ls(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string = '',
-): Promise<LsResultType> {
+): Promise<ServiceResponse> {
   return new Promise(
     (resolve, reject): void => {
       const externalFormatDir: LsResultType = {};
@@ -51,11 +53,14 @@ export default function ls(
           targetFolderContents[key].type === 'FILE'
             ? `${key}.${targetFolderContents[key].extension}`
             : key;
+
         externalFormatDir[lsKey] = {
           type: targetFolderContents[key].type,
         };
       }
-      resolve(externalFormatDir as LsResultType);
+      resolve({
+        serviceResult: <LsResult lsResult={externalFormatDir} />,
+      });
     },
   );
 }

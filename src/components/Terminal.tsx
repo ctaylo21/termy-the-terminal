@@ -2,8 +2,7 @@ import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History } from './History';
 import Input from './Input';
 import HelpMenu from './HelpMenu';
-import LsResult from './LsResult';
-import { cd, ls, mkdir, cat } from '../services';
+import services from '../services';
 import './Terminal.scss';
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
@@ -34,72 +33,37 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       promptChar,
       fileSystem,
     } = this.state;
-    const commandArgs = inputValue.split(' ');
+    const [commandName, commandArg] = inputValue.split(' ');
 
-    let result: string | JSX.Element = '';
-    switch (commandArgs[0]) {
-      case 'cd':
-        try {
-          const newPath = await cd(
-            fileSystem,
-            this.state.currentPath,
-            commandArgs[1],
-          );
-
-          this.setState({
-            currentPath: newPath,
-          });
-        } catch (cdException) {
-          result = `cd: ${cdException}`;
-        }
-        break;
+    let result: ServiceResponse['serviceResult'];
+    switch (commandName) {
       case 'help':
         result = <HelpMenu />;
         break;
       case 'pwd':
         result = this.state.currentPath;
         break;
+      case 'ls':
+      case 'cat':
+      case 'cd':
       case 'mkdir':
         try {
-          const newFileSystem = await mkdir(
+          const { serviceResult, updatedState } = await services[commandName](
             fileSystem,
             this.state.currentPath,
-            commandArgs[1],
+            commandArg,
           );
-          this.setState({
-            fileSystem: newFileSystem,
-          });
-          result = `Folder created: ${commandArgs[1]}`;
-          break;
-        } catch (e) {
-          result = `Error: ${e}`;
-        }
-        break;
-      case 'ls':
-        try {
-          const lsResult = await ls(
-            fileSystem,
-            this.state.currentPath,
-            commandArgs[1],
-          );
-          result = <LsResult lsResult={lsResult} />;
-        } catch (e) {
-          result = `Error: ${e}`;
-        }
-        break;
-      case 'cat':
-        try {
-          result = await cat(
-            fileSystem,
-            this.state.currentPath,
-            commandArgs[1],
-          );
+          result = serviceResult;
+
+          if (updatedState) {
+            this.setState(updatedState as TerminalState);
+          }
         } catch (e) {
           result = `Error: ${e}`;
         }
         break;
       default:
-        result = `command not found: ${commandArgs[0]}`;
+        result = `command not found: ${commandName}`;
         break;
     }
 

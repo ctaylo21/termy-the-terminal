@@ -47,7 +47,7 @@ describe('cd', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd invalid\\"></form></div><span class=\\"commandResult\\">cd: path does not exist: invalid</span></li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd invalid\\"></form></div><span class=\\"commandResult\\">Error: path does not exist: invalid</span></li>"`,
     );
     expect(currentPath.innerHTML).toEqual('/');
   });

@@ -3,9 +3,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import exampleFileSystem from '../../data/exampleFileSystem';
 
-describe('cd suite', (): void => {
+describe('mkdir suite', (): void => {
   describe('success', (): void => {
-    it('should create directory from root', async (): Promise<FileSystem> => {
+    it('should create directory from root', async (): Promise<
+      ServiceResponse
+    > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -16,11 +18,16 @@ describe('cd suite', (): void => {
 
       return expect(
         mkdir(exampleFileSystem, '/', 'newDir'),
-      ).resolves.toStrictEqual(expectedFileSystem);
+      ).resolves.toStrictEqual({
+        serviceResult: 'Folder created: newDir',
+        updatedState: {
+          fileSystem: expectedFileSystem,
+        },
+      });
     });
 
     it('should create directory from nested path', async (): Promise<
-      FileSystem
+      ServiceResponse
     > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
@@ -32,11 +39,16 @@ describe('cd suite', (): void => {
 
       return expect(
         mkdir(exampleFileSystem, '/home', 'newDir'),
-      ).resolves.toStrictEqual(expectedFileSystem);
+      ).resolves.toStrictEqual({
+        serviceResult: 'Folder created: newDir',
+        updatedState: {
+          fileSystem: expectedFileSystem,
+        },
+      });
     });
 
     it('should create directory given a folder path', async (): Promise<
-      FileSystem
+      ServiceResponse
     > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
@@ -48,13 +60,18 @@ describe('cd suite', (): void => {
 
       return expect(
         mkdir(exampleFileSystem, '/', 'home/newDir'),
-      ).resolves.toStrictEqual(expectedFileSystem);
+      ).resolves.toStrictEqual({
+        serviceResult: 'Folder created: home/newDir',
+        updatedState: {
+          fileSystem: expectedFileSystem,
+        },
+      });
     });
   });
 
   describe('Failure', (): void => {
     it('should reject if path already exists', async (): Promise<
-      FileSystem
+      ServiceResponse
     > => {
       return expect(
         mkdir(exampleFileSystem, '/home', 'user'),

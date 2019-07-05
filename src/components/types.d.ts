@@ -31,7 +31,7 @@ declare interface TerminalProps {
 declare interface HistoryItem {
   input: JSX.Element;
   id: number;
-  result: string | JSX.Element;
+  result: ServiceResponse['serviceResult'];
   value: string;
 }
 
@@ -44,3 +44,8 @@ declare interface LsResultType {
     type: 'FOLDER' | 'FILE';
   };
 }
+
+declare type ServiceResponse = {
+  updatedState?: Partial<TerminalState>;
+  serviceResult?: JSX.Element | string;
+};
