@@ -4,7 +4,7 @@ import {
   fireEvent,
   render,
   waitForElement,
-} from 'react-testing-library';
+} from '@testing-library/react';
 import { Terminal } from '../Terminal';
 import exampleFileSystem from '../../data/exampleFileSystem';
 

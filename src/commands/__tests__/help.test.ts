@@ -1,6 +1,6 @@
 import help from '../help';
-import { render } from 'react-testing-library';
-import services from '../';
+import { render } from '@testing-library/react';
+import services from '..';
 
 describe('help suite', (): void => {
   it('should contain help descriptions for each service', async (): Promise<
@@ -9,10 +9,8 @@ describe('help suite', (): void => {
     const helpResult = await help();
     const { container } = render(helpResult.commandResult as JSX.Element);
 
-    Object.keys(services).forEach(
-      (service): void => {
-        expect(container.innerHTML).toContain(service);
-      },
-    );
+    Object.keys(services).forEach((service): void => {
+      expect(container.innerHTML).toContain(service);
+    });
   });
 });
