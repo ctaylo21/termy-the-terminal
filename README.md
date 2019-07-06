@@ -13,6 +13,11 @@
   <a href='https://coveralls.io/github/ctaylo21/termy-the-terminal?branch=master'>
     <img src='https://coveralls.io/repos/github/ctaylo21/termy-the-terminal/badge.svg?branch=master' alt='Coverage Status' />
   </a>
+
+  <!-- Travis -->
+  <a href='https://travis-ci.com/ctaylo21/termy-the-terminal/'>
+    <img src='https://travis-ci.com/ctaylo21/termy-the-terminal.svg?branch=master' alt='Build Status' />
+  </a>
 </div>
 
 # Termy the Terminal
