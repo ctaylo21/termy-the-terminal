@@ -1,12 +1,13 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
 module.exports = {
   mode: 'development',
-  devtool: 'source-map',
-  entry: path.resolve(__dirname, 'src/Terminal.tsx'),
+  devtool: 'inline-source-map',
+  entry: path.resolve(__dirname, 'demo/index.tsx'),
   module: {
     rules: [
       {
@@ -27,14 +28,13 @@ module.exports = {
       },
     ],
   },
-  output: {
-    filename: 'Terminal.js',
-    libraryTarget: 'commonjs2',
-    path: path.resolve(__dirname, 'dist'),
-  },
   plugins: [
     new CleanWebpackPlugin({
       verbose: true,
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/templates/index.html'),
+      title: 'Termy',
     }),
     new MiniCssExtractPlugin({
       filename: 'Terminal.css',

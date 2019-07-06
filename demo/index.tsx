@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Terminal } from './components/Terminal';
-import exampleFileSystem from './data/exampleFileSystem';
+import { Terminal } from '../src/Terminal';
+import exampleFileSystem from '../src/data/exampleFileSystem';
 
 ReactDOM.render(
   <Terminal fileSystem={exampleFileSystem} />,

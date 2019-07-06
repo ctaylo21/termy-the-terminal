@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.6.0 - 2019-07-06
+
+### Added
+
+- Updated codebase to prepare for npm publish
+
 ## 0.5.2 - 2019-07-05
 
 ### Changed

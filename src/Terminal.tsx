@@ -1,8 +1,8 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
-import { History } from './History';
-import Input from './Input';
-import commands from '../commands';
-import './Terminal.scss';
+import { History } from './components/History';
+import Input from './components/Input';
+import commands from './commands';
+import './styles/Terminal.scss';
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
   public readonly state: TerminalState = {
