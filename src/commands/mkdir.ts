@@ -16,7 +16,7 @@ export default function mkdir(
   fileSystem: FileSystem,
   currentPath: string,
   folderPath: string,
-): Promise<ServiceResponse> {
+): Promise<CommandResponse> {
   return new Promise(
     (resolve, reject): void => {
       if (has(fileSystem, getInternalPath(currentPath, folderPath))) {
@@ -32,7 +32,7 @@ export default function mkdir(
       set(newFileSystem, getInternalPath(currentPath, folderPath), newFolder);
 
       resolve({
-        serviceResult: `Folder created: ${folderPath}`,
+        commandResult: `Folder created: ${folderPath}`,
         updatedState: {
           fileSystem: newFileSystem,
         },

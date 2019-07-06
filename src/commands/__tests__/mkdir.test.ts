@@ -6,7 +6,7 @@ import exampleFileSystem from '../../data/exampleFileSystem';
 describe('mkdir suite', (): void => {
   describe('success', (): void => {
     it('should create directory from root', async (): Promise<
-      ServiceResponse
+      CommandResponse
     > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
@@ -19,7 +19,7 @@ describe('mkdir suite', (): void => {
       return expect(
         mkdir(exampleFileSystem, '/', 'newDir'),
       ).resolves.toStrictEqual({
-        serviceResult: 'Folder created: newDir',
+        commandResult: 'Folder created: newDir',
         updatedState: {
           fileSystem: expectedFileSystem,
         },
@@ -27,7 +27,7 @@ describe('mkdir suite', (): void => {
     });
 
     it('should create directory from nested path', async (): Promise<
-      ServiceResponse
+      CommandResponse
     > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
@@ -40,7 +40,7 @@ describe('mkdir suite', (): void => {
       return expect(
         mkdir(exampleFileSystem, '/home', 'newDir'),
       ).resolves.toStrictEqual({
-        serviceResult: 'Folder created: newDir',
+        commandResult: 'Folder created: newDir',
         updatedState: {
           fileSystem: expectedFileSystem,
         },
@@ -48,7 +48,7 @@ describe('mkdir suite', (): void => {
     });
 
     it('should create directory given a folder path', async (): Promise<
-      ServiceResponse
+      CommandResponse
     > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
@@ -61,7 +61,7 @@ describe('mkdir suite', (): void => {
       return expect(
         mkdir(exampleFileSystem, '/', 'home/newDir'),
       ).resolves.toStrictEqual({
-        serviceResult: 'Folder created: home/newDir',
+        commandResult: 'Folder created: home/newDir',
         updatedState: {
           fileSystem: expectedFileSystem,
         },
@@ -71,7 +71,7 @@ describe('mkdir suite', (): void => {
 
   describe('Failure', (): void => {
     it('should reject if path already exists', async (): Promise<
-      ServiceResponse
+      CommandResponse
     > => {
       return expect(
         mkdir(exampleFileSystem, '/home', 'user'),

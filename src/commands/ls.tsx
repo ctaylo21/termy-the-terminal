@@ -32,7 +32,7 @@ export default function ls(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string = '',
-): Promise<ServiceResponse> {
+): Promise<CommandResponse> {
   return new Promise(
     (resolve, reject): void => {
       const externalFormatDir: LsResultType = {};
@@ -59,7 +59,7 @@ export default function ls(
         };
       }
       resolve({
-        serviceResult: <LsResult lsResult={externalFormatDir} />,
+        commandResult: <LsResult lsResult={externalFormatDir} />,
       });
     },
   );

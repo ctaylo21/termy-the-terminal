@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.5.2 - 2019-07-05
+
+### Changed
+
+- Cleanup of terminal code to unify command interface
+
 ## 0.5.1 - 2019-07-04
 
 ### Changed

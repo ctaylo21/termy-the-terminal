@@ -31,7 +31,7 @@ declare interface TerminalProps {
 declare interface HistoryItem {
   input: JSX.Element;
   id: number;
-  result: ServiceResponse['serviceResult'];
+  result: CommandResponse['commandResult'];
   value: string;
 }
 
@@ -45,7 +45,7 @@ declare interface LsResultType {
   };
 }
 
-declare type ServiceResponse = {
+declare type CommandResponse = {
   updatedState?: Partial<TerminalState>;
-  serviceResult?: JSX.Element | string;
+  commandResult?: JSX.Element | string;
 };

@@ -4,7 +4,7 @@ import exampleFileSystem from '../../data/exampleFileSystem';
 describe('cd suite', (): void => {
   describe('valid cases', (): void => {
     describe('from root', (): void => {
-      test('1 level path', async (): Promise<ServiceResponse> => {
+      test('1 level path', async (): Promise<CommandResponse> => {
         const fileSystem: FileSystem = {
           home: {
             children: null,
@@ -19,7 +19,7 @@ describe('cd suite', (): void => {
         });
       });
 
-      test('multi-level cd', async (): Promise<ServiceResponse> => {
+      test('multi-level cd', async (): Promise<CommandResponse> => {
         return expect(
           cd(exampleFileSystem, '/', 'home/user/test'),
         ).resolves.toEqual({
@@ -29,7 +29,7 @@ describe('cd suite', (): void => {
         });
       });
 
-      test('.. above root level', async (): Promise<ServiceResponse> => {
+      test('.. above root level', async (): Promise<CommandResponse> => {
         return expect(cd(exampleFileSystem, '/', '..')).resolves.toEqual({
           updatedState: {
             currentPath: '/',
@@ -39,7 +39,7 @@ describe('cd suite', (): void => {
     });
 
     describe('from nested path', (): void => {
-      test('1 level cd', async (): Promise<ServiceResponse> => {
+      test('1 level cd', async (): Promise<CommandResponse> => {
         return expect(cd(exampleFileSystem, '/home', 'user')).resolves.toEqual({
           updatedState: {
             currentPath: '/home/user',
@@ -47,7 +47,7 @@ describe('cd suite', (): void => {
         });
       });
 
-      test('.. 1 level to root', async (): Promise<ServiceResponse> => {
+      test('.. 1 level to root', async (): Promise<CommandResponse> => {
         return expect(cd(exampleFileSystem, '/home', '..')).resolves.toEqual({
           updatedState: {
             currentPath: '/',
@@ -55,7 +55,7 @@ describe('cd suite', (): void => {
         });
       });
 
-      test('.. 1 level', async (): Promise<ServiceResponse> => {
+      test('.. 1 level', async (): Promise<CommandResponse> => {
         return expect(
           cd(exampleFileSystem, '/home/user/test', '..'),
         ).resolves.toEqual({
@@ -65,7 +65,7 @@ describe('cd suite', (): void => {
         });
       });
 
-      test('.. multiple levels', async (): Promise<ServiceResponse> => {
+      test('.. multiple levels', async (): Promise<CommandResponse> => {
         return expect(
           cd(exampleFileSystem, '/home/folder1/folder2', '../..'),
         ).resolves.toEqual({
@@ -76,7 +76,7 @@ describe('cd suite', (): void => {
       });
 
       test('.. multiple levels in separate paths', (): Promise<
-        Promise<ServiceResponse>
+        Promise<CommandResponse>
       > => {
         return expect(
           cd(exampleFileSystem, '/home/folder1/folder2', '../folder2/../../'),
@@ -90,7 +90,7 @@ describe('cd suite', (): void => {
   });
 
   describe('invalid cases', (): void => {
-    test('empty path', async (): Promise<ServiceResponse> => {
+    test('empty path', async (): Promise<CommandResponse> => {
       const fileSystem: FileSystem = {
         home: {
           children: null,
@@ -102,7 +102,7 @@ describe('cd suite', (): void => {
       );
     });
 
-    test('nested cd to a file', async (): Promise<ServiceResponse> => {
+    test('nested cd to a file', async (): Promise<CommandResponse> => {
       return expect(
         cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
       ).rejects.toMatchInlineSnapshot(

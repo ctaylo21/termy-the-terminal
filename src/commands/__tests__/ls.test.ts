@@ -5,7 +5,7 @@ import { render } from 'react-testing-library';
 describe('ls suite', (): void => {
   test('root with no directory', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('docs');
     expect(container.innerHTML).toContain('home');
@@ -13,7 +13,7 @@ describe('ls suite', (): void => {
 
   test('nested path with no directory', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/home');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('user');
     expect(container.innerHTML).toContain('videos');
@@ -22,7 +22,7 @@ describe('ls suite', (): void => {
 
   test('relative path from root', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/', '/home');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('user');
     expect(container.innerHTML).toContain('videos');
@@ -31,14 +31,14 @@ describe('ls suite', (): void => {
 
   test('relative path from nested path', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/home', 'user');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('test');
   });
 
   test('root with dotdot', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/', '..');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('home');
     expect(container.innerHTML).toContain('docs');
@@ -46,7 +46,7 @@ describe('ls suite', (): void => {
 
   test('nestd path with dotdot', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/home', '../home/user/..');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('user');
     expect(container.innerHTML).toContain('videos');
@@ -54,7 +54,7 @@ describe('ls suite', (): void => {
   });
 
   test('should reject if invalid directory given', async (): Promise<
-    ServiceResponse
+    CommandResponse
   > => {
     return expect(
       ls(exampleFileSystem, '/invalid'),
@@ -63,7 +63,7 @@ describe('ls suite', (): void => {
 
   test('empty path from nested location', async (): Promise<void> => {
     const lsResult = await ls(exampleFileSystem, '/home/user', '');
-    const { container } = render(lsResult.serviceResult as JSX.Element);
+    const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('test');
   });

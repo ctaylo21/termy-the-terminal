@@ -1,8 +1,7 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
 import { History } from './History';
 import Input from './Input';
-import HelpMenu from './HelpMenu';
-import services from '../services';
+import commands from '../commands';
 import './Terminal.scss';
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
@@ -35,36 +34,18 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     } = this.state;
     const [commandName, commandArg] = inputValue.split(' ');
 
-    let result: ServiceResponse['serviceResult'];
-    switch (commandName) {
-      case 'help':
-        result = <HelpMenu />;
-        break;
-      case 'pwd':
-        result = this.state.currentPath;
-        break;
-      case 'ls':
-      case 'cat':
-      case 'cd':
-      case 'mkdir':
-        try {
-          const { serviceResult, updatedState } = await services[commandName](
-            fileSystem,
-            this.state.currentPath,
-            commandArg,
-          );
-          result = serviceResult;
-
-          if (updatedState) {
-            this.setState(updatedState as TerminalState);
-          }
-        } catch (e) {
-          result = `Error: ${e}`;
-        }
-        break;
-      default:
-        result = `command not found: ${commandName}`;
-        break;
+    let commandResult: CommandResponse['commandResult'];
+    let updatedState: CommandResponse['updatedState'] = {};
+    if (commandName in commands) {
+      try {
+        ({ commandResult, updatedState = {} } = await commands[
+          commandName as keyof typeof commands
+        ](fileSystem, currentPath, commandArg));
+      } catch (e) {
+        commandResult = `Error: ${e}`;
+      }
+    } else {
+      commandResult = `command not found: ${commandName}`;
     }
 
     const updatedHistory = history.concat({
@@ -77,15 +58,18 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         />
       ),
       id: this.state.currentCommandId,
-      result,
+      result: commandResult,
       value: inputValue,
     });
 
-    this.setState({
-      currentCommandId: this.state.currentCommandId + 1,
-      history: updatedHistory,
-      inputValue: '',
-    });
+    this.setState(Object.assign(
+      {
+        currentCommandId: this.state.currentCommandId + 1,
+        history: updatedHistory,
+        inputValue: '',
+      },
+      updatedState,
+    ) as TerminalState);
   };
 
   public render(): JSX.Element {

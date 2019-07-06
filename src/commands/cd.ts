@@ -18,7 +18,7 @@ export default function cd(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
-): Promise<ServiceResponse> {
+): Promise<CommandResponse> {
   return new Promise(
     (resolve, reject): void => {
       if (!targetPath) {

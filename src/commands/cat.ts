@@ -13,7 +13,7 @@ export default function cat(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
-): Promise<ServiceResponse> {
+): Promise<CommandResponse> {
   return new Promise(
     (resolve, reject): void => {
       const pathWithoutExtension = stripFileExtension(targetPath);
@@ -28,7 +28,7 @@ export default function cat(
 
       if (file.type === 'FILE') {
         resolve({
-          serviceResult: file.content,
+          commandResult: file.content,
         });
       }
 
