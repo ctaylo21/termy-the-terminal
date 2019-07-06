@@ -8,6 +8,11 @@
   <a href="https://github.com/prettier/prettie" title="Prettier">
     <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square"/>
   </a>
+
+  <!-- Coveralls -->
+  <a href='https://coveralls.io/github/ctaylo21/termy-the-terminal?branch=master'>
+    <img src='https://coveralls.io/repos/github/ctaylo21/termy-the-terminal/badge.svg?branch=master' alt='Coverage Status' />
+  </a>
 </div>
 
 # Termy the Terminal
@@ -16,15 +21,15 @@ A web-based terminal powered by React. Check out the [demo](https://clever-poitr
 
 ## Table of Contents
 
-- [Termy the Terminal](#termy-the-terminal)
-  - [Table of Contents](#table-of-contents)
-  - [Usage](#usage)
-  - [Commands](#commands)
-    - [`cd [DIRECTORY]`](#cd-directory)
+- [Termy the Terminal](#Termy-the-Terminal)
+  - [Table of Contents](#Table-of-Contents)
+  - [Usage](#Usage)
+  - [Commands](#Commands)
+    - [`cd [DIRECTORY]`](#cd-DIRECTORY)
     - [`pwd`](#pwd)
-    - [`ls [DIRECTORY]`](#ls-directory)
-    - [`mkdir [DIRECTORY]`](#mkdir-directory)
-    - [`cat [FILE]`](#cat-file)
+    - [`ls [DIRECTORY]`](#ls-DIRECTORY)
+    - [`mkdir [DIRECTORY]`](#mkdir-DIRECTORY)
+    - [`cat [FILE]`](#cat-FILE)
     - [`help`](#help)
 
 ## Usage
