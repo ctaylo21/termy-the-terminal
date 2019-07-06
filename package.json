@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "jest",
-    "coverage": "npm test -- --collect-coverage",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "start": "webpack-dev-server --open --mode=development",
     "build": "webpack --mode=production",
     "commit": "git-cz",
@@ -48,6 +48,7 @@
     "@typescript-eslint/parser": "^1.9.0",
     "clean-webpack-plugin": "^2.0.2",
     "commitizen": "^3.1.1",
+    "coveralls": "^3.0.4",
     "css-loader": "^2.1.1",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.16.0",
