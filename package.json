@@ -1,20 +1,27 @@
 {
   "name": "termy-the-terminal",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Web-based terminal powered by React",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/Terminal.js",
   "license": "MIT",
+  "sideEffects": false,
+  "files": [
+    "dist/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ctaylo21/termy-the-terminal"
   },
   "scripts": {
     "test": "jest",
+    "analyze": "npm run build -- --analyze",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "start": "webpack-dev-server --open --mode=development",
-    "build": "webpack --mode=production",
+    "start": "webpack-dev-server --open --config=webpack.demo.config.js",
+    "build": "rimraf dist && webpack --mode=production",
     "commit": "git-cz",
+    "prepare": "npm run build",
+    "preversion": "npm run lint",
+    "prepublishOnly": "npm test && npm run lint",
     "lint": "eslint src --ext ts,tsx"
   },
   "husky": {
@@ -32,19 +39,20 @@
     ]
   },
   "author": "Caleb Taylor <caleb89taylor@gmail.com>",
+  "peerDependencies": {
+    "react": "^16.0.0"
+  },
   "dependencies": {
     "@types/jest": "^24.0.15",
     "@types/lodash-es": "^4.17.3",
-    "@types/react": "^16.8.23",
-    "@types/react-dom": "^16.8.4",
     "lodash-es": "^4.17.11",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
     "@testing-library/react": "^8.0.4",
     "@types/node": "^12.0.12",
+    "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.4",
     "@types/user-event": "^4.1.0",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
@@ -67,15 +75,18 @@
     "lint-staged": "^9.1.0",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
-    "npm": "^6.10.0",
+    "npm": "^6.10.1",
     "prettier": "^1.18.2",
-    "reset-css": "^4.0.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
     "svg-react-loader": "^0.4.6",
     "ts-jest": "^24.0.2",
     "ts-loader": "6.0.4",
     "typescript": "3.5.2",
     "webpack": "^4.35.2",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.7.2"
   },

@@ -1,5 +1,4 @@
-@import '~reset-css';
-@import '../styles/vars';
+@import './vars';
 
 #terminal-wrapper {
   background-color: map-get($themeDark, background);
@@ -12,6 +11,12 @@
   padding: 0 1em;
 
   #history-container {
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
     ul.terminal-ls-list {
       margin: 10px 0 0 10px;
 

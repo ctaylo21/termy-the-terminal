@@ -1,13 +1,13 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const path = require('path');
 
-module.exports = (env, argv) => ({
+module.exports = {
   mode: 'development',
-  devtool: argv.mode === 'production' ? 'source-map' : 'inline-source-map',
-  entry: path.resolve(__dirname, 'src/index.tsx'),
+  devtool: 'inline-source-map',
+  entry: path.resolve(__dirname, 'demo/index.tsx'),
   module: {
     rules: [
       {
@@ -28,24 +28,19 @@ module.exports = (env, argv) => ({
       },
     ],
   },
-  output: {
-    filename: 'Terminal.js',
-    libraryTarget: 'commonjs2',
-    path: path.resolve(__dirname, 'dist'),
-  },
   plugins: [
     new CleanWebpackPlugin({
       verbose: true,
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/templates/index.html'),
+      title: 'Termy',
+    }),
     new MiniCssExtractPlugin({
       filename: 'Terminal.css',
     }),
-    argv.analyze ? new BundleAnalyzerPlugin() : () => {},
   ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
-  externals: {
-    react: 'commonjs react',
-  },
-});
+};

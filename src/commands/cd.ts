@@ -19,33 +19,31 @@ export default function cd(
   currentPath: string,
   targetPath: string,
 ): Promise<CommandResponse> {
-  return new Promise(
-    (resolve, reject): void => {
-      if (!targetPath) {
-        reject('path can not be empty.');
-      }
-      const internalCdPath = getInternalPath(currentPath, targetPath);
+  return new Promise((resolve, reject): void => {
+    if (!targetPath) {
+      reject('path can not be empty.');
+    }
+    const internalCdPath = getInternalPath(currentPath, targetPath);
 
-      if (!internalCdPath) {
-        resolve({
-          updatedState: {
-            currentPath: '/',
-          },
-        });
-      }
+    if (!internalCdPath) {
+      resolve({
+        updatedState: {
+          currentPath: '/',
+        },
+      });
+    }
 
-      if (
-        has(fileSystem, internalCdPath) &&
-        get(fileSystem, internalCdPath).type !== 'FILE'
-      ) {
-        resolve({
-          updatedState: {
-            currentPath: convertInternalPathToExternal(internalCdPath),
-          },
-        });
-      }
+    if (
+      has(fileSystem, internalCdPath) &&
+      get(fileSystem, internalCdPath).type !== 'FILE'
+    ) {
+      resolve({
+        updatedState: {
+          currentPath: convertInternalPathToExternal(internalCdPath),
+        },
+      });
+    }
 
-      reject(`path does not exist: ${targetPath}`);
-    },
-  );
+    reject(`path does not exist: ${targetPath}`);
+  });
 }

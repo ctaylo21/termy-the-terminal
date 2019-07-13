@@ -42,7 +42,8 @@ A web-based terminal powered by React. Check out the [demo](https://clever-poitr
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Terminal } from './components/Terminal';
+import { Terminal } from 'termy-the-terminal';
+import 'termy-the-terminal/dist/Terminal.css';
 import exampleFileSystem from './data/exampleFileSystem';
 
 ReactDOM.render(
