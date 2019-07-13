@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
-import { getInternalPath } from './utilities/index';
 import has from 'lodash/has';
+import { getInternalPath } from './utilities/index';
 
 /**
  * Given a folder path, creates that folder for the given file system and
@@ -17,26 +17,24 @@ export default function mkdir(
   currentPath: string,
   folderPath: string,
 ): Promise<CommandResponse> {
-  return new Promise(
-    (resolve, reject): void => {
-      if (has(fileSystem, getInternalPath(currentPath, folderPath))) {
-        reject('Path already exists');
-      }
+  return new Promise((resolve, reject): void => {
+    if (has(fileSystem, getInternalPath(currentPath, folderPath))) {
+      reject('Path already exists');
+    }
 
-      const newFolder: TerminalFolder = {
-        type: 'FOLDER',
-        children: null,
-      };
+    const newFolder: TerminalFolder = {
+      type: 'FOLDER',
+      children: null,
+    };
 
-      const newFileSystem = cloneDeep(fileSystem);
-      set(newFileSystem, getInternalPath(currentPath, folderPath), newFolder);
+    const newFileSystem = cloneDeep(fileSystem);
+    set(newFileSystem, getInternalPath(currentPath, folderPath), newFolder);
 
-      resolve({
-        commandResult: `Folder created: ${folderPath}`,
-        updatedState: {
-          fileSystem: newFileSystem,
-        },
-      });
-    },
-  );
+    resolve({
+      commandResult: `Folder created: ${folderPath}`,
+      updatedState: {
+        fileSystem: newFileSystem,
+      },
+    });
+  });
 }

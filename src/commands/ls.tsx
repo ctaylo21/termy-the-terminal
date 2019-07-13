@@ -33,34 +33,32 @@ export default function ls(
   currentPath: string,
   targetPath: string = '',
 ): Promise<CommandResponse> {
-  return new Promise(
-    (resolve, reject): void => {
-      const externalFormatDir: LsResultType = {};
+  return new Promise((resolve, reject): void => {
+    const externalFormatDir: LsResultType = {};
 
-      let targetFolderContents;
-      try {
-        targetFolderContents = getTargetFolder(
-          fileSystem,
-          currentPath,
-          targetPath,
-        );
-      } catch (e) {
-        reject(e.message);
-      }
+    let targetFolderContents;
+    try {
+      targetFolderContents = getTargetFolder(
+        fileSystem,
+        currentPath,
+        targetPath,
+      );
+    } catch (e) {
+      reject(e.message);
+    }
 
-      for (let key in targetFolderContents) {
-        const lsKey =
-          targetFolderContents[key].type === 'FILE'
-            ? `${key}.${targetFolderContents[key].extension}`
-            : key;
+    for (let key in targetFolderContents) {
+      const lsKey =
+        targetFolderContents[key].type === 'FILE'
+          ? `${key}.${targetFolderContents[key].extension}`
+          : key;
 
-        externalFormatDir[lsKey] = {
-          type: targetFolderContents[key].type,
-        };
-      }
-      resolve({
-        commandResult: <LsResult lsResult={externalFormatDir} />,
-      });
-    },
-  );
+      externalFormatDir[lsKey] = {
+        type: targetFolderContents[key].type,
+      };
+    }
+    resolve({
+      commandResult: <LsResult lsResult={externalFormatDir} />,
+    });
+  });
 }

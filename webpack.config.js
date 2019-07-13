@@ -1,12 +1,13 @@
 /* eslint @typescript-eslint/no-var-requires: 0 */
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const path = require('path');
 
-module.exports = {
+module.exports = (env, argv) => ({
   mode: 'development',
-  devtool: 'source-map',
-  entry: path.resolve(__dirname, 'src/Terminal.tsx'),
+  devtool: argv.mode === 'production' ? 'source-map' : 'inline-source-map',
+  entry: path.resolve(__dirname, 'src/index.tsx'),
   module: {
     rules: [
       {
@@ -39,8 +40,12 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'Terminal.css',
     }),
+    argv.analyze ? new BundleAnalyzerPlugin() : () => {},
   ],
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
-};
+  externals: {
+    react: 'commonjs react',
+  },
+});

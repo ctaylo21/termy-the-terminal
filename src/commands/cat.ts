@@ -14,25 +14,23 @@ export default function cat(
   currentPath: string,
   targetPath: string,
 ): Promise<CommandResponse> {
-  return new Promise(
-    (resolve, reject): void => {
-      const pathWithoutExtension = stripFileExtension(targetPath);
-      const file = get(
-        fileSystem,
-        getInternalPath(currentPath, pathWithoutExtension),
-      );
+  return new Promise((resolve, reject): void => {
+    const pathWithoutExtension = stripFileExtension(targetPath);
+    const file = get(
+      fileSystem,
+      getInternalPath(currentPath, pathWithoutExtension),
+    );
 
-      if (!file) {
-        reject('Invalid target path');
-      }
+    if (!file) {
+      reject('Invalid target path');
+    }
 
-      if (file.type === 'FILE') {
-        resolve({
-          commandResult: file.content,
-        });
-      }
+    if (file.type === 'FILE') {
+      resolve({
+        commandResult: file.content,
+      });
+    }
 
-      reject('Target is not a file');
-    },
-  );
+    reject('Target is not a file');
+  });
 }

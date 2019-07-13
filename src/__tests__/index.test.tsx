@@ -5,7 +5,7 @@ import {
   render,
   waitForElement,
 } from '@testing-library/react';
-import { Terminal } from '../Terminal';
+import { Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
 
 afterEach(cleanup);

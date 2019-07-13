@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Terminal } from '../src/Terminal';
+import { Terminal } from '../src';
 import exampleFileSystem from '../src/data/exampleFileSystem';
 
 ReactDOM.render(

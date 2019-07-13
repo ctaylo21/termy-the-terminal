@@ -1,4 +1,3 @@
-@import '~reset-css';
 @import './vars';
 
 #terminal-wrapper {
@@ -12,6 +11,12 @@
   padding: 0 1em;
 
   #history-container {
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
     ul.terminal-ls-list {
       margin: 10px 0 0 10px;
 
