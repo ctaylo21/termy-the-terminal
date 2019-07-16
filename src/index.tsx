@@ -14,6 +14,13 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     fileSystem: this.props.fileSystem,
   };
 
+  private inputWrapper: HTMLDivElement | null = null;
+
+  public componentDidUpdate(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.inputWrapper!.scrollIntoView({ behavior: 'smooth' });
+  }
+
   private handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     this.setState({
       inputValue: event.target.value,
@@ -77,14 +84,20 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     return (
       <div id="terminal-wrapper">
         <History history={history} />
-        <Input
-          currentPath={currentPath}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
-          inputValue={inputValue}
-          promptChar={promptChar}
-          readOnly={false}
-        />
+        <div
+          ref={(el): void => {
+            this.inputWrapper = el;
+          }}
+        >
+          <Input
+            currentPath={currentPath}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+            inputValue={inputValue}
+            promptChar={promptChar}
+            readOnly={false}
+          />
+        </div>
       </div>
     );
   }

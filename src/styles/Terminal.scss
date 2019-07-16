@@ -10,7 +10,36 @@
   overflow: auto;
   padding: 0 1em;
 
+  #input-container {
+    padding: 1em 0;
+
+    form {
+      display: flex;
+
+      input {
+        background: none;
+        border: none;
+        color: map-get($themeDark, fontColor);
+        font-family: $fontFamily;
+        font-size: $fontSize;
+        outline: none;
+        -webkit-appearance: none;
+
+        flex-grow: 100;
+        margin: 0 10px;
+      }
+
+      #inputPromptChar {
+        color: map-get($themeDark, green);
+      }
+    }
+  }
+
   #history-container {
+    & > ul > li > #input-container {
+      padding-bottom: 0;
+    }
+
     #help-container ul > li {
       margin: 5px 0;
 
@@ -53,31 +82,6 @@
             width: 24px;
           }
         }
-      }
-    }
-  }
-
-  #input-container {
-    padding-top: 1em;
-
-    form {
-      display: flex;
-
-      input {
-        background: none;
-        border: none;
-        color: map-get($themeDark, fontColor);
-        font-family: $fontFamily;
-        font-size: $fontSize;
-        outline: none;
-        -webkit-appearance: none;
-
-        flex-grow: 100;
-        margin: 0 10px;
-      }
-
-      #inputPromptChar {
-        color: map-get($themeDark, green);
       }
     }
   }

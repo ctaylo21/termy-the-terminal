@@ -8,6 +8,10 @@ import {
 import { Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
 
+beforeAll((): void => {
+  Element.prototype.scrollIntoView = jest.fn();
+});
+
 afterEach(cleanup);
 
 describe('general', (): void => {
