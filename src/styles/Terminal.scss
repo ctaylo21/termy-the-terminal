@@ -11,6 +11,14 @@
   padding: 0 1em;
 
   #history-container {
+    #help-container ul > li {
+      margin: 5px 0;
+
+      & > span.help-command-name {
+        color: map-get($themeDark, purple);
+      }
+    }
+
     ul {
       list-style-type: none;
       margin: 0;
@@ -29,18 +37,18 @@
         }
 
         &.ls-folder {
-          color: map-get($themeDark, folderResult);
+          color: map-get($themeDark, orange);
 
           svg {
-            fill: map-get($themeDark, folderResult);
+            fill: map-get($themeDark, orange);
           }
         }
 
         &.ls-file {
-          color: map-get($themeDark, fileResult);
+          color: map-get($themeDark, blue);
 
           svg {
-            fill: map-get($themeDark, fileResult);
+            fill: map-get($themeDark, blue);
             height: 20px;
             width: 24px;
           }

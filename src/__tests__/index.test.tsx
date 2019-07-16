@@ -334,7 +334,7 @@ describe('help', (): void => {
     );
 
     expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"help\\"></form></div><span class=\\"commandResult\\"><div id=\\"help-container\\"><ul aria-label=\\"help-menu\\"><li>cd - Changes the current working directory</li><li>pwd - Prints the current working directory</li><li>ls - Lists the contents of the given directory</li><li>mkdir - Creates a folder for a given path in the filesystem</li><li>cat - Shows the contents of a file</li><li>help - Prints list of available commands</li></ul></div></span></li>"`,
+      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"help\\"></form></div><span class=\\"commandResult\\"><div id=\\"help-container\\"><ul aria-label=\\"help-menu\\"><li><span class=\\"help-command-name\\">cd</span> - Changes the current working directory</li><li><span class=\\"help-command-name\\">pwd</span> - Prints the current working directory</li><li><span class=\\"help-command-name\\">ls</span> - Lists the contents of the given directory</li><li><span class=\\"help-command-name\\">mkdir</span> - Creates a folder for a given path in the filesystem</li><li><span class=\\"help-command-name\\">cat</span> - Shows the contents of a file</li><li><span class=\\"help-command-name\\">help</span> - Prints list of available commands</li></ul></div></span></li>"`,
     );
   });
 });

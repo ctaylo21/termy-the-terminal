@@ -13,7 +13,8 @@ export const HelpMenu: React.FC<{}> = (): JSX.Element => {
   const commandList = Object.keys(commands).map(
     (command): JSX.Element => (
       <li key={commands[command]}>
-        {command} - {commands[command]}
+        <span className="help-command-name">{command}</span> -{' '}
+        {commands[command]}
       </li>
     ),
   );
