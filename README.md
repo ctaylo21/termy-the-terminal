@@ -52,7 +52,7 @@ ReactDOM.render(
 );
 ```
 
-The example file system needs to be a particular format:
+The file system needs to be a particular format:
 
 ```javascript
 const exampleFileSystem = {
@@ -65,6 +65,7 @@ const exampleFileSystem = {
       },
       file1: {
         type: 'FILE',
+        content: 'Contents of file 1',
         extension: 'txt',
       },
     },
@@ -76,7 +77,7 @@ const exampleFileSystem = {
 };
 ```
 
-Since the code is written in Typescript, you can also look at the [project types](src/components/types.d.ts) or
+Since the code is written in Typescript, you can also look at the [project types](src/types.d.ts) or
 look at the [example filesystem](src/data/exampleFileSystem.ts).
 
 ## Commands
@@ -169,10 +170,11 @@ Shows the contents of a file
 Prints available commands for the terminal with descriptions.
 
 ```bash
-/
-$> help
+/ $> help
 cd - Changes the current working directory
 pwd - Prints the current working directory
 ls - Lists the contents of the given directory
+mkdir - Creates a folder for a given path in the filesystem
+cat - Shows the contents of a file
 help - Prints list of available commands
 ```
