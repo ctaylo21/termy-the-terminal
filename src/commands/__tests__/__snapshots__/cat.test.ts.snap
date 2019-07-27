@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cat suite should reject if target is not a file 1`] = `"Target is not a file"`;
+
+exports[`cat suite should reject if target is not a valid path 1`] = `"Invalid target path"`;

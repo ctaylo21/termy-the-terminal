@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mkdir suite Failure should reject if path already exists 1`] = `"Path already exists"`;

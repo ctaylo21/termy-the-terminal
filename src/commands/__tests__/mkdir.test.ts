@@ -75,7 +75,7 @@ describe('mkdir suite', (): void => {
     > => {
       return expect(
         mkdir(exampleFileSystem, '/home', 'user'),
-      ).rejects.toMatchInlineSnapshot(`"Path already exists"`);
+      ).rejects.toMatchSnapshot();
     });
   });
 });

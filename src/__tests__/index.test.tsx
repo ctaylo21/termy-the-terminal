@@ -28,9 +28,7 @@ describe('general', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"invalid-command\\"></form></div><span class=\\"commandResult\\">command not found: invalid-command</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 });
 
@@ -50,9 +48,7 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd invalid\\"></form></div><span class=\\"commandResult\\">Error: path does not exist: invalid</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
     expect(currentPath.innerHTML).toEqual('/');
   });
 
@@ -71,9 +67,7 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
     expect(currentPath.innerHTML).toEqual('/home');
   });
 
@@ -94,9 +88,7 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home/../home/user/../user/test\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
 
@@ -124,9 +116,7 @@ describe('cd', (): void => {
           (): HTMLElement => getByLabelText('terminal-history'),
         );
 
-        expect(history.innerHTML).toMatchInlineSnapshot(
-          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home/user\\"></form></div><span class=\\"commandResult\\"></span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home/user</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-        );
+        expect(history.innerHTML).toMatchSnapshot();
         expect(currentPath.innerHTML).toEqual('/home');
         done();
       },
@@ -136,9 +126,7 @@ describe('cd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home/user\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
     expect(currentPath.innerHTML).toEqual('/home/user');
   });
 });
@@ -159,9 +147,7 @@ describe('pwd', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"pwd\\"></form></div><span class=\\"commandResult\\">/</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
     expect(currentPath.innerHTML).toEqual('/');
   });
 
@@ -188,9 +174,7 @@ describe('pwd', (): void => {
             (): HTMLElement => getByLabelText('terminal-history'),
           );
 
-          expect(history.innerHTML).toMatchInlineSnapshot(
-            `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home/user/test\\"></form></div><span class=\\"commandResult\\"></span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home/user/test</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"pwd\\"></form></div><span class=\\"commandResult\\">/home/user/test</span></li>"`,
-          );
+          expect(history.innerHTML).toMatchSnapshot();
           expect(currentPath.innerHTML).toEqual('/home/user/test');
           done();
         } catch (e) {
@@ -221,9 +205,7 @@ describe('ls', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls\\"></form></div><span class=\\"commandResult\\"><ul class=\\"terminal-ls-list\\"><li class=\\"ls-folder\\"> home</li><li class=\\"ls-folder\\"> docs</li></ul></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 
   test('should correctly return contents for given relative directory from root', async (): Promise<
@@ -242,9 +224,7 @@ describe('ls', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls home\\"></form></div><span class=\\"commandResult\\"><ul class=\\"terminal-ls-list\\"><li class=\\"ls-folder\\"> user</li><li class=\\"ls-folder\\"> videos</li><li class=\\"ls-file\\"> file1.txt</li></ul></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 
   test('should correctly return contents for given relative directory from nested path', async (done): Promise<
@@ -270,9 +250,7 @@ describe('ls', (): void => {
           (): HTMLElement => getByLabelText('terminal-history'),
         );
 
-        expect(history.innerHTML).toMatchInlineSnapshot(
-          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div><span class=\\"commandResult\\"></span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls user\\"></form></div><span class=\\"commandResult\\"><ul class=\\"terminal-ls-list\\"><li class=\\"ls-folder\\"> test</li></ul></span></li>"`,
-        );
+        expect(history.innerHTML).toMatchSnapshot();
         done();
       },
     );
@@ -297,9 +275,7 @@ describe('ls', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls /home/user\\"></form></div><span class=\\"commandResult\\"><ul class=\\"terminal-ls-list\\"><li class=\\"ls-folder\\"> test</li></ul></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 
   test('should handle invalid directory for ls', async (): Promise<void> => {
@@ -316,9 +292,7 @@ describe('ls', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"ls invalid\\"></form></div><span class=\\"commandResult\\">Error: Target folder does not exist</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 });
 
@@ -337,9 +311,7 @@ describe('help', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"help\\"></form></div><span class=\\"commandResult\\"><div id=\\"help-container\\"><ul aria-label=\\"help-menu\\"><li><span class=\\"help-command-name\\">cd</span> - Changes the current working directory</li><li><span class=\\"help-command-name\\">pwd</span> - Prints the current working directory</li><li><span class=\\"help-command-name\\">ls</span> - Lists the contents of the given directory</li><li><span class=\\"help-command-name\\">mkdir</span> - Creates a folder for a given path in the filesystem</li><li><span class=\\"help-command-name\\">cat</span> - Shows the contents of a file</li><li><span class=\\"help-command-name\\">help</span> - Prints list of available commands</li></ul></div></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 });
 
@@ -359,9 +331,7 @@ describe('mkdir', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div><span class=\\"commandResult\\">Folder created: banana</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
 
     process.nextTick(
       async (): Promise<void> => {
@@ -372,9 +342,7 @@ describe('mkdir', (): void => {
           (): HTMLElement => getByLabelText('terminal-history'),
         );
 
-        expect(history.innerHTML).toMatchInlineSnapshot(
-          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div><span class=\\"commandResult\\">Folder created: banana</span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd banana\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-        );
+        expect(history.innerHTML).toMatchSnapshot();
         expect(currentPath.innerHTML).toEqual('/banana');
         done();
       },
@@ -397,9 +365,7 @@ describe('mkdir', (): void => {
     const history = await waitForElement(
       (): HTMLElement => getByLabelText('terminal-history'),
     );
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
 
     process.nextTick(
       async (): Promise<void> => {
@@ -409,9 +375,7 @@ describe('mkdir', (): void => {
         const history = await waitForElement(
           (): HTMLElement => getByLabelText('terminal-history'),
         );
-        expect(history.innerHTML).toMatchInlineSnapshot(
-          `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div><span class=\\"commandResult\\"></span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div><span class=\\"commandResult\\">Folder created: banana</span></li>"`,
-        );
+        expect(history.innerHTML).toMatchSnapshot();
 
         process.nextTick(
           async (): Promise<void> => {
@@ -422,9 +386,7 @@ describe('mkdir', (): void => {
               (): HTMLElement => getByLabelText('terminal-history'),
             );
 
-            expect(history.innerHTML).toMatchInlineSnapshot(
-              `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd home\\"></form></div><span class=\\"commandResult\\"></span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir banana\\"></form></div><span class=\\"commandResult\\">Folder created: banana</span></li><li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/home</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cd /home/banana\\"></form></div><span class=\\"commandResult\\"></span></li>"`,
-            );
+            expect(history.innerHTML).toMatchSnapshot();
             expect(currentPath.innerHTML).toEqual('/home/banana');
             done();
           },
@@ -447,9 +409,7 @@ describe('mkdir', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"mkdir home\\"></form></div><span class=\\"commandResult\\">Error: Path already exists</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 });
 
@@ -469,9 +429,7 @@ describe('cat', (): void => {
     );
 
     expect(history.innerHTML).toContain('Contents of file 1');
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cat home/file1.txt\\"></form></div><span class=\\"commandResult\\">Contents of file 1</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 
   test('should show error when cat on non file', async (): Promise<void> => {
@@ -488,9 +446,7 @@ describe('cat', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cat home\\"></form></div><span class=\\"commandResult\\">Error: Target is not a file</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 
   test('should show error when cat on invalid path', async (): Promise<
@@ -509,8 +465,6 @@ describe('cat', (): void => {
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
-    expect(history.innerHTML).toMatchInlineSnapshot(
-      `"<li><div id=\\"input-container\\"><form><span data-testid=\\"input-prompt-path\\">/</span>&nbsp;<span id=\\"inputPromptChar\\">$&gt;</span><input aria-label=\\"terminal-input\\" type=\\"text\\" readonly=\\"\\" value=\\"cat invalid.txt\\"></form></div><span class=\\"commandResult\\">Error: Invalid target path</span></li>"`,
-    );
+    expect(history.innerHTML).toMatchSnapshot();
   });
 });

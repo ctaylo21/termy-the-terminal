@@ -56,9 +56,7 @@ describe('ls suite', (): void => {
   test('should reject if invalid directory given', async (): Promise<
     CommandResponse
   > => {
-    return expect(
-      ls(exampleFileSystem, '/invalid'),
-    ).rejects.toMatchInlineSnapshot(`"Target folder does not exist"`);
+    return expect(ls(exampleFileSystem, '/invalid')).rejects.toMatchSnapshot();
   });
 
   test('empty path from nested location', async (): Promise<void> => {

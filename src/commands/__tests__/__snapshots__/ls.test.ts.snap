@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ls suite should reject if invalid directory given 1`] = `"Target folder does not exist"`;

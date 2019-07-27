@@ -37,7 +37,7 @@ describe('cat suite', (): void => {
   > => {
     return expect(
       cat(exampleFileSystem, 'home', 'videos'),
-    ).rejects.toMatchInlineSnapshot(`"Target is not a file"`);
+    ).rejects.toMatchSnapshot();
   });
 
   it('should reject if target is not a valid path', async (): Promise<
@@ -45,6 +45,6 @@ describe('cat suite', (): void => {
   > => {
     return expect(
       cat(exampleFileSystem, '/', 'invalid'),
-    ).rejects.toMatchInlineSnapshot(`"Invalid target path"`);
+    ).rejects.toMatchSnapshot();
   });
 });

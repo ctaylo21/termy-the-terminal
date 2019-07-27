@@ -97,17 +97,13 @@ describe('cd suite', (): void => {
           type: 'FOLDER',
         },
       };
-      return expect(cd(fileSystem, 'path', '')).rejects.toMatchInlineSnapshot(
-        `"path can not be empty."`,
-      );
+      return expect(cd(fileSystem, 'path', '')).rejects.toMatchSnapshot();
     });
 
     test('nested cd to a file', async (): Promise<CommandResponse> => {
       return expect(
         cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
-      ).rejects.toMatchInlineSnapshot(
-        `"path does not exist: home/folder1/folder2/file1"`,
-      );
+      ).rejects.toMatchSnapshot();
     });
   });
 });

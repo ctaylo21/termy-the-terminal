@@ -1,6 +1,6 @@
 {
   "name": "termy-the-terminal",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Web-based terminal powered by React",
   "main": "./dist/Terminal.js",
   "license": "MIT",

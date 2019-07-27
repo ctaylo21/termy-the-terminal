@@ -27,6 +27,5 @@
     },
     "types": ["jest", "node"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/", "**/__mocks__/"]
+  "include": ["./src/index.tsx", "./src/types.d.ts"]
 }
