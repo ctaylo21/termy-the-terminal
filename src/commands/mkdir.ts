@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
+import { CommandResponse, FileSystem, TerminalFolder } from '../index';
 
 /**
  * Given a folder path, creates that folder for the given file system and

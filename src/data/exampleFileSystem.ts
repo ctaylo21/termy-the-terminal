@@ -1,3 +1,5 @@
+import { FileSystem } from '../../src/index';
+
 const exampleFileSystem: FileSystem = {
   home: {
     type: 'FOLDER',

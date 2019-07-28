@@ -1,4 +1,9 @@
 import React from 'react';
+import { HistoryItem } from '../index';
+
+declare interface HistoryProps {
+  history: HistoryItem[];
+}
 
 export const History: React.FC<HistoryProps> = (props): JSX.Element => {
   const { history } = props;

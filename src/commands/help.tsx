@@ -1,5 +1,6 @@
 import React from 'react';
 import HelpMenu from '../components/HelpMenu';
+import { CommandResponse } from '../index';
 
 /**
  * Returns help menu for system commands
@@ -7,11 +8,9 @@ import HelpMenu from '../components/HelpMenu';
  * @returns Promise<object> - resolves with list of system commands
  */
 export default function help(): Promise<CommandResponse> {
-  return new Promise(
-    (resolve): void => {
-      resolve({
-        commandResult: <HelpMenu />,
-      });
-    },
-  );
+  return new Promise((resolve): void => {
+    resolve({
+      commandResult: <HelpMenu />,
+    });
+  });
 }

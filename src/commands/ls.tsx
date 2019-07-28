@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
 import LsResult from '../components/LsResult';
+import { CommandResponse, FileSystem, TerminalFolder } from '../index';
 
 function getTargetFolder(
   fileSystem: FileSystem,
@@ -18,6 +19,12 @@ function getTargetFolder(
   }
 
   throw new Error('Target folder does not exist');
+}
+
+export interface LsResultType {
+  [index: string]: {
+    type: 'FOLDER' | 'FILE';
+  };
 }
 
 /**

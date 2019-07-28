@@ -1,5 +1,6 @@
 import cd from '../cd';
 import exampleFileSystem from '../../data/exampleFileSystem';
+import { CommandResponse, FileSystem } from '../../index';
 
 describe('cd suite', (): void => {
   describe('valid cases', (): void => {

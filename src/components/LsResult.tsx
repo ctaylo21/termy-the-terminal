@@ -1,6 +1,7 @@
 import React from 'react';
 import FolderIcon from '-!svg-react-loader!../images/folder.svg';
 import FileIcon from '-!svg-react-loader!../images/file.svg';
+import { LsResultType } from '../commands/ls';
 
 interface LsResultProps {
   lsResult: LsResultType;

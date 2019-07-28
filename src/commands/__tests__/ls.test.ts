@@ -1,6 +1,7 @@
 import ls from '../ls';
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { render } from '@testing-library/react';
+import { CommandResponse } from '../../index';
 
 describe('ls suite', (): void => {
   test('root with no directory', async (): Promise<void> => {

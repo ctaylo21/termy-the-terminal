@@ -1,3 +1,5 @@
+import { CommandResponse, FileSystem } from '../index';
+
 /**
  * Returns current directory
  *
@@ -7,11 +9,9 @@ export default function help(
   fileSystem: FileSystem,
   currentPath: string,
 ): Promise<CommandResponse> {
-  return new Promise(
-    (resolve): void => {
-      resolve({
-        commandResult: currentPath,
-      });
-    },
-  );
+  return new Promise((resolve): void => {
+    resolve({
+      commandResult: currentPath,
+    });
+  });
 }

@@ -1,5 +1,6 @@
 import { getInternalPath, stripFileExtension } from './utilities';
 import get from 'lodash/get';
+import { CommandResponse, FileSystem } from '../index';
 
 /**
  * Given a file system, returns contents for a given file

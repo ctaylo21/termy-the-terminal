@@ -4,6 +4,48 @@ import Input from './components/Input';
 import commands from './commands';
 import './styles/Terminal.scss';
 
+export interface TerminalState {
+  currentCommandId: number;
+  currentPath: string;
+  history: HistoryItem[];
+  inputValue: string;
+  promptChar: string;
+  fileSystem: FileSystem;
+}
+
+export interface HistoryItem {
+  input: JSX.Element;
+  id: number;
+  result: CommandResponse['commandResult'];
+  value: string;
+}
+
+export interface TerminalProps {
+  fileSystem: FileSystem;
+}
+
+export interface FileSystem {
+  [key: string]: TerminalFolder | TerminalFile;
+}
+
+export interface TerminalFile {
+  [key: string]: 'FILE' | string;
+  type: 'FILE';
+  content: string;
+  extension: 'txt';
+}
+
+export interface TerminalFolder {
+  [key: string]: 'FOLDER' | FileSystem | null;
+  type: 'FOLDER';
+  children: FileSystem | null;
+}
+
+export type CommandResponse = {
+  updatedState?: Partial<TerminalState>;
+  commandResult?: JSX.Element | string;
+};
+
 export class Terminal extends Component<TerminalProps, TerminalState> {
   public readonly state: TerminalState = {
     currentCommandId: 0,

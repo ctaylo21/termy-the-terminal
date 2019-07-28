@@ -1,5 +1,6 @@
 import get from 'lodash/get';
 import has from 'lodash/has';
+import { CommandResponse, FileSystem } from '../index';
 import {
   convertInternalPathToExternal,
   getInternalPath,

@@ -1,8 +1,9 @@
 {
   "name": "termy-the-terminal",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "Web-based terminal powered by React",
-  "main": "./dist/Terminal.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "sideEffects": false,
   "files": [
@@ -17,7 +18,7 @@
     "analyze": "npm run build -- --analyze",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "start": "webpack-dev-server --open --config=webpack.demo.config.js",
-    "build": "rimraf dist && webpack --mode=production && npm run build:demo",
+    "build": "rimraf dist && webpack && npm run build:demo",
     "build:demo": "webpack --config=webpack.demo.config.js",
     "commit": "git-cz",
     "prepare": "npm run build",

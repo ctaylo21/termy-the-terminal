@@ -6,7 +6,7 @@ const path = require('path');
 
 module.exports = (env, argv) => ({
   mode: 'development',
-  devtool: argv.mode === 'production' ? 'source-map' : 'inline-source-map',
+  devtool: 'source-map',
   entry: path.resolve(__dirname, 'src/index.tsx'),
   module: {
     rules: [
@@ -29,7 +29,7 @@ module.exports = (env, argv) => ({
     ],
   },
   output: {
-    filename: 'Terminal.js',
+    filename: 'index.js',
     libraryTarget: 'commonjs2',
     path: path.resolve(__dirname, 'dist'),
   },
