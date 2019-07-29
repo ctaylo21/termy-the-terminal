@@ -10,6 +10,12 @@
     "node": ">=8",
     "npm": ">=5"
   },
+  "keywords": [
+    "react",
+    "terminal",
+    "typescript",
+    "react-component"
+  ],
   "license": "MIT",
   "sideEffects": false,
   "files": [
