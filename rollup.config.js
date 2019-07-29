@@ -24,7 +24,7 @@ export default {
       sourcemap: true,
     },
   ],
-  external: ['react', 'react-dom'],
+  external: Object.keys(pkg.peerDependencies),
   plugins: [
     cleaner({
       targets: ['dist'],
