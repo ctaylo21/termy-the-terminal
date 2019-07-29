@@ -1,5 +1,6 @@
 import cat from '../cat';
 import exampleFileSystem from '../../data/exampleFileSystem';
+import { CommandResponse } from '../../index';
 
 describe('cat suite', (): void => {
   it('should print contents of file with no path', async (): Promise<

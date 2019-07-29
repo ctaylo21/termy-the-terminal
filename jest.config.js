@@ -11,6 +11,6 @@ module.exports = {
   errorOnDeprecated: true,
   moduleNameMapper: {
     '\\.(scss|jpg|png)$': '<rootDir>/node_modules/jest-css-modules',
-    '^-!svg-react-loader.*$': '<rootDir>/src/__mocks__/svgMock.tsx',
+    '\\.(svg)$': '<rootDir>/src/__mocks__/svgMock.tsx',
   },
 };
