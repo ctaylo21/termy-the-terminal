@@ -1,7 +1,8 @@
 import commonjs from 'rollup-plugin-commonjs';
+import copy from 'rollup-plugin-copy';
 import replace from 'rollup-plugin-replace';
 import serve from 'rollup-plugin-serve';
-import copy from 'rollup-plugin-copy';
+import typescript from 'rollup-plugin-typescript2';
 
 import { getBasePlugins } from './rollup.config';
 
@@ -29,6 +30,11 @@ export default commandLineArgs => {
           ],
           'node_modules/react-dom/index.js': ['render'],
         },
+      }),
+      typescript({
+        rollupCommonJSResolveHack: true,
+        clean: true,
+        tsconfigOverride: { compilerOptions: { declaration: false } },
       }),
       copy({
         targets: [{ src: 'src/templates/index.html', dest: targetFolder }],

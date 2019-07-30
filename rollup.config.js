@@ -1,22 +1,18 @@
+import cleaner from 'rollup-plugin-cleaner';
 import commonjs from 'rollup-plugin-commonjs';
 import external from 'rollup-plugin-peer-deps-external';
-import resolve from 'rollup-plugin-node-resolve';
-import url from 'rollup-plugin-url';
-import svgr from '@svgr/rollup';
-import scss from 'rollup-plugin-scss';
-import cleaner from 'rollup-plugin-cleaner';
-import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
+import scss from 'rollup-plugin-scss';
+import resolve from 'rollup-plugin-node-resolve';
+import svgr from '@svgr/rollup';
+import typescript from 'rollup-plugin-typescript2';
+import url from 'rollup-plugin-url';
 
 export const getBasePlugins = targetFolder => [
   cleaner({ targets: [targetFolder] }),
   url({ exclude: ['**/*.svg'] }),
   svgr(),
   resolve(),
-  typescript({
-    rollupCommonJSResolveHack: true,
-    clean: true,
-  }),
   scss({
     output: `${targetFolder}/index.css`,
   }),
@@ -39,5 +35,13 @@ export default {
     },
   ],
   external: Object.keys(pkg.peerDependencies),
-  plugins: [...getBasePlugins('dist'), commonjs(), external()],
+  plugins: [
+    ...getBasePlugins('dist'),
+    typescript({
+      rollupCommonJSResolveHack: true,
+      clean: true,
+    }),
+    commonjs(),
+    external(),
+  ],
 };
