@@ -70,6 +70,8 @@
 
           svg {
             fill: map-get($themeDark, orange);
+            height: 24px;
+            width: 24px;
           }
         }
 
@@ -78,6 +80,8 @@
 
           svg {
             fill: map-get($themeDark, blue);
+            margin-top: 2px;
+            margin-bottom: 2px;
             height: 20px;
             width: 24px;
           }
