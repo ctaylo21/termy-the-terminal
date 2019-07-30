@@ -25434,8 +25434,7 @@
 
 	var SvgFolder = function SvgFolder(props) {
 	  return react.createElement("svg", _extends({
-	    width: 24,
-	    height: 24
+	    viewBox: "0 0 24 24"
 	  }, props), _ref);
 	};
 
@@ -25449,8 +25448,7 @@
 
 	var SvgFile = function SvgFile(props) {
 	  return react.createElement("svg", _extends$1({
-	    width: 26,
-	    height: 26
+	    viewBox: "0 0 26 26"
 	  }, props), _ref$1);
 	};
 

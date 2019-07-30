@@ -43,10 +43,14 @@
       #terminal-wrapper #history-container ul.terminal-ls-list li.ls-folder {
         color: #f99157; }
         #terminal-wrapper #history-container ul.terminal-ls-list li.ls-folder svg {
-          fill: #f99157; }
+          fill: #f99157;
+          height: 24px;
+          width: 24px; }
       #terminal-wrapper #history-container ul.terminal-ls-list li.ls-file {
         color: #5fb3b3; }
         #terminal-wrapper #history-container ul.terminal-ls-list li.ls-file svg {
           fill: #5fb3b3;
+          margin-top: 2px;
+          margin-bottom: 2px;
           height: 20px;
           width: 24px; }
