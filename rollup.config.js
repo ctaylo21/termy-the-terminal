@@ -8,6 +8,20 @@ import cleaner from 'rollup-plugin-cleaner';
 import typescript from 'rollup-plugin-typescript2';
 import pkg from './package.json';
 
+export const getBasePlugins = targetFolder => [
+  cleaner({ targets: [targetFolder] }),
+  url({ exclude: ['**/*.svg'] }),
+  svgr(),
+  resolve(),
+  typescript({
+    rollupCommonJSResolveHack: true,
+    clean: true,
+  }),
+  scss({
+    output: `${targetFolder}/index.css`,
+  }),
+];
+
 export default {
   input: 'src/index.tsx',
   output: [
@@ -25,21 +39,5 @@ export default {
     },
   ],
   external: Object.keys(pkg.peerDependencies),
-  plugins: [
-    cleaner({
-      targets: ['dist'],
-    }),
-    external(),
-    url({ exclude: ['**/*.svg'] }),
-    svgr(),
-    resolve(),
-    typescript({
-      rollupCommonJSResolveHack: true,
-      clean: true,
-    }),
-    commonjs(),
-    scss({
-      output: 'dist/index.css',
-    }),
-  ],
+  plugins: [...getBasePlugins('dist'), commonjs(), external()],
 };

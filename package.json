@@ -31,10 +31,10 @@
   "scripts": {
     "test": "jest",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "start": "rollup -c -w",
+    "start": "rollup -c rollup.dev.config.js -w",
     "build": "npm run build:lib && npm run build:demo",
     "build:lib": "rollup -c",
-    "build:demo": "rollup -c rollup.demo.config.js",
+    "build:demo": "rollup -c rollup.dev.config.js --configDocBuild",
     "commit": "git-cz",
     "prepare": "npm run build",
     "preversion": "npm run lint",

@@ -2047,11 +2047,10 @@
 	  module.exports = react_development;
 	}
 	});
-	var react_1 = react.Component;
-	var react_2 = react.PureComponent;
-	var react_3 = react.Fragment;
-	var react_4 = react.Children;
-	var react_5 = react.createElement;
+	var react_1 = react.Children;
+	var react_2 = react.Component;
+	var react_3 = react.PropTypes;
+	var react_4 = react.createElement;
 
 	var scheduler_production_min = createCommonjsModule(function (module, exports) {
 	Object.defineProperty(exports,"__esModule",{value:!0});var d=null,e=!1,g=3,k=-1,l=-1,m=!1,n=!1;function p(){if(!m){var a=d.expirationTime;n?q():n=!0;r(t,a);}}
@@ -23822,6 +23821,7 @@
 	  module.exports = reactDom_development;
 	}
 	});
+	var reactDom_1 = reactDom.render;
 
 	/*! *****************************************************************************
 	Copyright (c) Microsoft Corporation. All rights reserved.
@@ -27299,7 +27299,7 @@
 	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleSubmit: this.handleSubmit, inputValue: inputValue, promptChar: promptChar, readOnly: false }))));
 	    };
 	    return Terminal;
-	}(react_1));
+	}(react_2));
 
 	var exampleFileSystem = {
 	    home: {
@@ -27340,3 +27340,4 @@
 	reactDom.render(react.createElement(Terminal, { fileSystem: exampleFileSystem }), document.getElementById('terminal-container'));
 
 }());
+//# sourceMappingURL=demo.js.map
