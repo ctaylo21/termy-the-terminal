@@ -2,6 +2,7 @@ import mkdir from '../mkdir';
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import exampleFileSystem from '../../data/exampleFileSystem';
+import { CommandResponse } from '../../index';
 
 describe('mkdir suite', (): void => {
   describe('success', (): void => {

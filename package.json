@@ -1,25 +1,40 @@
 {
   "name": "termy-the-terminal",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Web-based terminal powered by React",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "keywords": [
+    "react",
+    "terminal",
+    "typescript",
+    "react-component"
+  ],
   "license": "MIT",
   "sideEffects": false,
   "files": [
-    "dist/**/*"
+    "dist"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ctaylo21/termy-the-terminal"
+    "url": "git://github.com/ctaylo21/termy-the-terminal"
+  },
+  "bugs": {
+    "url": "https://github.com/ctaylo21/termy-the-terminal/issues"
   },
   "scripts": {
     "test": "jest",
-    "analyze": "npm run build -- --analyze",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "start": "webpack-dev-server --open --config=webpack.demo.config.js",
-    "build": "rimraf dist && webpack && npm run build:demo",
-    "build:demo": "webpack --config=webpack.demo.config.js",
+    "start": "rollup -c rollup.dev.config.js -w",
+    "build": "npm run build:lib && npm run build:demo",
+    "build:lib": "rollup -c",
+    "build:demo": "rollup -c rollup.dev.config.js --configDocBuild",
     "commit": "git-cz",
     "prepare": "npm run build",
     "preversion": "npm run lint",
@@ -42,55 +57,56 @@
   },
   "author": "Caleb Taylor <caleb89taylor@gmail.com>",
   "peerDependencies": {
-    "react": "^16.8.6"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "dependencies": {
-    "@types/jest": "^24.0.15",
-    "@types/lodash-es": "^4.17.3",
-    "lodash-es": "^4.17.14",
-    "tslib": "^1.10.0"
+    "lodash-es": "^4.17.15"
   },
   "devDependencies": {
-    "@testing-library/react": "^8.0.5",
-    "@types/node": "^12.6.3",
+    "@svgr/rollup": "^4.3.2",
+    "@testing-library/react": "^8.0.7",
+    "@types/jest": "^24.0.15",
+    "@types/lodash-es": "^4.17.3",
+    "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
-    "@types/react-dom": "^16.8.4",
+    "@types/react-dom": "^16.8.5",
     "@types/user-event": "^4.1.0",
-    "@typescript-eslint/eslint-plugin": "^1.12.0",
-    "@typescript-eslint/parser": "^1.12.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "commitizen": "^3.1.1",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "commitizen": "^4.0.3",
     "coveralls": "^3.0.5",
-    "css-loader": "^3.0.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^6.0.1",
+    "cz-conventional-changelog": "^3.0.2",
+    "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-jest": "^22.8.0",
+    "eslint-plugin-jest": "^22.14.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react": "^7.14.3",
     "gh-pages": "^2.0.1",
-    "html-webpack-plugin": "^3.2.0",
-    "husky": "^3.0.0",
+    "husky": "^3.0.1",
     "jest": "^24.8.0",
     "jest-css-modules": "^2.1.0",
     "jest-dom": "^4.0.0",
-    "lint-staged": "^9.2.0",
-    "mini-css-extract-plugin": "^0.7.0",
+    "lint-staged": "^9.2.1",
     "node-sass": "^4.12.0",
-    "npm": "^6.10.1",
+    "npm": "^6.10.2",
     "prettier": "^1.18.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "rimraf": "^2.6.3",
-    "sass-loader": "^7.1.0",
-    "svg-react-loader": "^0.4.6",
+    "rollup": "^1.17.0",
+    "rollup-plugin-cleaner": "^1.0.0",
+    "rollup-plugin-commonjs": "^10.0.1",
+    "rollup-plugin-copy": "^3.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-scss": "^1.0.1",
+    "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "rollup-plugin-url": "^2.2.2",
     "ts-jest": "^24.0.2",
     "ts-loader": "6.0.4",
-    "typescript": "3.5.3",
-    "webpack": "^4.35.3",
-    "webpack-bundle-analyzer": "^3.3.2",
-    "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "typescript": "3.5.3"
   },
   "config": {
     "commitizen": {

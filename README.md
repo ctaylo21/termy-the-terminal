@@ -26,15 +26,15 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
 
 ## Table of Contents
 
-- [Termy the Terminal](#Termy-the-Terminal)
-  - [Table of Contents](#Table-of-Contents)
-  - [Usage](#Usage)
-  - [Commands](#Commands)
-    - [`cd [DIRECTORY]`](#cd-DIRECTORY)
+- [Termy the Terminal](#termy-the-terminal)
+  - [Table of Contents](#table-of-contents)
+  - [Usage](#usage)
+  - [Commands](#commands)
+    - [`cd [DIRECTORY]`](#cd-directory)
     - [`pwd`](#pwd)
-    - [`ls [DIRECTORY]`](#ls-DIRECTORY)
-    - [`mkdir [DIRECTORY]`](#mkdir-DIRECTORY)
-    - [`cat [FILE]`](#cat-FILE)
+    - [`ls [DIRECTORY]`](#ls-directory)
+    - [`mkdir [DIRECTORY]`](#mkdir-directory)
+    - [`cat [FILE]`](#cat-file)
     - [`help`](#help)
 
 ## Usage
@@ -43,7 +43,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Terminal } from 'termy-the-terminal';
-import 'termy-the-terminal/dist/Terminal.css';
+import 'termy-the-terminal/dist/index.css';
 import exampleFileSystem from './data/exampleFileSystem';
 
 ReactDOM.render(
