@@ -52,7 +52,7 @@ ReactDOM.render(
 );
 ```
 
-The file system needs to be a particular format:
+The file system needs to be a particular format ([code example](src/data/exampleFileSystem.ts)):
 
 ```javascript
 const exampleFileSystem = {
@@ -76,9 +76,6 @@ const exampleFileSystem = {
   },
 };
 ```
-
-Since the code is written in Typescript, you can also look at the [project types](src/types.d.ts) or
-look at the [example filesystem](src/data/exampleFileSystem.ts).
 
 ## Commands
 
