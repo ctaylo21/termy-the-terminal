@@ -22,7 +22,7 @@
 
 # Termy the Terminal
 
-A web-based terminal powered by React. Check out the [demo](https://clever-poitras-e72340.netlify.com/).
+A web-based terminal powered by React. Check out the [demo](https://ctaylo21.github.io/termy-the-terminal/).
 
 ## Table of Contents
 
