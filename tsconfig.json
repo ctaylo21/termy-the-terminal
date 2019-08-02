@@ -21,7 +21,7 @@
     "allowSyntheticDefaultImports": true,
     "types": ["jest", "node"]
   },
-  "include": ["src/index.tsx", "./src/types.d.ts", "src/demo.tsx"],
+  "include": ["src/index.tsx", "./src/types.d.ts"],
   "exclude": ["node_modules", "dist", "rollup.config.js"],
   "typeRoots": ["node_modules/@types", "types.d.ts"],
   "paths": {

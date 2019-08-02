@@ -34,7 +34,10 @@ export default commandLineArgs => {
       typescript({
         rollupCommonJSResolveHack: true,
         clean: true,
-        tsconfigOverride: { compilerOptions: { declaration: false } },
+        tsconfigOverride: {
+          compilerOptions: { declaration: false },
+          include: ['src/index.tsx', './src/types.d.ts', 'src/demo.tsx'],
+        },
       }),
       copy({
         targets: [{ src: 'src/templates/index.html', dest: targetFolder }],
