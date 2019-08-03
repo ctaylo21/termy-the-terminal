@@ -34,6 +34,11 @@ const exampleFileSystem: FileSystem = {
     type: 'FOLDER',
     children: null,
   },
+  file3: {
+    type: 'FILE',
+    content: 'Contents of file 3',
+    extension: 'txt',
+  },
 };
 
 export default exampleFileSystem;

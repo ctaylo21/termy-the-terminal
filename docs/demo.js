@@ -25387,7 +25387,7 @@
 	        : currentPath === '/'
 	            ? "/" + targetPath
 	            : currentPath + "/" + targetPath;
-	    return convertPathToInternalFormat(handleDotDotInPath(normalizedPath));
+	    return convertPathToInternalFormat(handleDotDotInPath(stripFileExtension(normalizedPath)));
 	}
 
 	/**
@@ -27180,6 +27180,7 @@
 	    ls: 'Lists the contents of the given directory',
 	    mkdir: 'Creates a folder for a given path in the filesystem',
 	    cat: 'Shows the contents of a file',
+	    rm: 'Removes a file or directory',
 	    help: 'Prints list of available commands',
 	};
 	var HelpMenu = function () {
@@ -27218,7 +27219,171 @@
 	    });
 	}
 
-	var commands$1 = { cd: cd$1, ls: ls, mkdir: mkdir, cat: cat, help: help, pwd: pwd };
+	/**
+	 * Gets the last element of `array`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Array
+	 * @param {Array} array The array to query.
+	 * @returns {*} Returns the last element of `array`.
+	 * @example
+	 *
+	 * _.last([1, 2, 3]);
+	 * // => 3
+	 */
+	function last(array) {
+	  var length = array == null ? 0 : array.length;
+	  return length ? array[length - 1] : undefined;
+	}
+
+	var last_1 = last;
+
+	/**
+	 * The base implementation of `_.slice` without an iteratee call guard.
+	 *
+	 * @private
+	 * @param {Array} array The array to slice.
+	 * @param {number} [start=0] The start position.
+	 * @param {number} [end=array.length] The end position.
+	 * @returns {Array} Returns the slice of `array`.
+	 */
+	function baseSlice(array, start, end) {
+	  var index = -1,
+	      length = array.length;
+
+	  if (start < 0) {
+	    start = -start > length ? 0 : (length + start);
+	  }
+	  end = end > length ? length : end;
+	  if (end < 0) {
+	    end += length;
+	  }
+	  length = start > end ? 0 : ((end - start) >>> 0);
+	  start >>>= 0;
+
+	  var result = Array(length);
+	  while (++index < length) {
+	    result[index] = array[index + start];
+	  }
+	  return result;
+	}
+
+	var _baseSlice = baseSlice;
+
+	/**
+	 * Gets the parent value at `path` of `object`.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @param {Array} path The path to get the parent value of.
+	 * @returns {*} Returns the parent value.
+	 */
+	function parent(object, path) {
+	  return path.length < 2 ? object : _baseGet(object, _baseSlice(path, 0, -1));
+	}
+
+	var _parent = parent;
+
+	/**
+	 * The base implementation of `_.unset`.
+	 *
+	 * @private
+	 * @param {Object} object The object to modify.
+	 * @param {Array|string} path The property path to unset.
+	 * @returns {boolean} Returns `true` if the property is deleted, else `false`.
+	 */
+	function baseUnset(object, path) {
+	  path = _castPath(path, object);
+	  object = _parent(object, path);
+	  return object == null || delete object[_toKey(last_1(path))];
+	}
+
+	var _baseUnset = baseUnset;
+
+	/**
+	 * Removes the property at `path` of `object`.
+	 *
+	 * **Note:** This method mutates `object`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 4.0.0
+	 * @category Object
+	 * @param {Object} object The object to modify.
+	 * @param {Array|string} path The path of the property to unset.
+	 * @returns {boolean} Returns `true` if the property is deleted, else `false`.
+	 * @example
+	 *
+	 * var object = { 'a': [{ 'b': { 'c': 7 } }] };
+	 * _.unset(object, 'a[0].b.c');
+	 * // => true
+	 *
+	 * console.log(object);
+	 * // => { 'a': [{ 'b': {} }] };
+	 *
+	 * _.unset(object, ['a', '0', 'b', 'c']);
+	 * // => true
+	 *
+	 * console.log(object);
+	 * // => { 'a': [{ 'b': {} }] };
+	 */
+	function unset(object, path) {
+	  return object == null ? true : _baseUnset(object, path);
+	}
+
+	var unset_1 = unset;
+
+	/**
+	 * Deletes path from given filesystem and returns updatd filesystem
+	 * without modifying original arg.
+	 *
+	 * @param fileSystem {object} - filesystem to act upon
+	 * @param pathToDelete {string} - internally-formatted path to delete
+	 */
+	function handleDelete(fileSystem, pathToDelete) {
+	    var newFileSystem = cloneDeep_1(fileSystem);
+	    unset_1(newFileSystem, pathToDelete);
+	    return {
+	        updatedState: {
+	            fileSystem: newFileSystem,
+	        },
+	    };
+	}
+	/**
+	 * Given a path, removes the object at that location if possible. Rejects if
+	 * the parameters aren't correct for the given item
+	 *
+	 * @param fileSystem {object} - filesystem to act upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param folderPath  {string} - path of object to remove
+	 * @returns Promise<object> - resolves if rm was successful, rejects if not
+	 */
+	function rm(fileSystem, currentPath, targetPath, options) {
+	    return new Promise(function (resolve, reject) {
+	        if (!targetPath) {
+	            reject('Missing argument to rm');
+	        }
+	        var internalCdPath = getInternalPath(currentPath, targetPath);
+	        if (has_1(fileSystem, internalCdPath)) {
+	            if (get_1(fileSystem, internalCdPath).type === 'FOLDER') {
+	                if (options === '-r') {
+	                    resolve(handleDelete(fileSystem, internalCdPath));
+	                }
+	                else {
+	                    reject("Can't remove " + targetPath + ". It is a directory.");
+	                }
+	            }
+	            if (get_1(fileSystem, internalCdPath).type === 'FILE') {
+	                resolve(handleDelete(fileSystem, internalCdPath));
+	            }
+	        }
+	        reject("Can't remove " + targetPath + ". No such file or directory.");
+	    });
+	}
+
+	var commands$1 = { cd: cd$1, ls: ls, mkdir: mkdir, cat: cat, help: help, pwd: pwd, rm: rm };
 
 	var Terminal = /** @class */ (function (_super) {
 	    __extends(Terminal, _super);
@@ -27239,20 +27404,21 @@
 	            });
 	        };
 	        _this.handleSubmit = function (event) { return __awaiter(_this, void 0, void 0, function () {
-	            var _a, history, inputValue, currentPath, promptChar, fileSystem, _b, commandName, commandArg, commandResult, updatedState, e_1, updatedHistory;
+	            var _a, history, inputValue, currentPath, promptChar, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1, updatedHistory;
 	            var _c, _d;
 	            return __generator(this, function (_e) {
 	                switch (_e.label) {
 	                    case 0:
 	                        event.preventDefault();
 	                        _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, promptChar = _a.promptChar, fileSystem = _a.fileSystem;
-	                        _b = inputValue.split(' '), commandName = _b[0], commandArg = _b[1];
+	                        _b = inputValue.split(' '), commandName = _b[0], commandArgs = _b.slice(1);
+	                        commandTarget = commandArgs.pop() || '';
 	                        updatedState = {};
 	                        if (!(commandName in commands$1)) return [3 /*break*/, 5];
 	                        _e.label = 1;
 	                    case 1:
 	                        _e.trys.push([1, 3, , 4]);
-	                        return [4 /*yield*/, commands$1[commandName](fileSystem, currentPath, commandArg)];
+	                        return [4 /*yield*/, commands$1[commandName].apply(commands$1, [fileSystem, currentPath, commandTarget].concat(commandArgs))];
 	                    case 2:
 	                        (_c = _e.sent(), commandResult = _c.commandResult, _d = _c.updatedState, updatedState = _d === void 0 ? {} : _d);
 	                        return [3 /*break*/, 4];
@@ -27332,6 +27498,11 @@
 	    docs: {
 	        type: 'FOLDER',
 	        children: null,
+	    },
+	    file3: {
+	        type: 'FILE',
+	        content: 'Contents of file 3',
+	        extension: 'txt',
 	    },
 	};
 

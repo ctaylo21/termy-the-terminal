@@ -413,6 +413,97 @@ describe('mkdir', (): void => {
   });
 });
 
+describe('rm', (): void => {
+  test('should remove file from root', async (done): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'rm file3.txt' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'cat file3.txt' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+
+        expect(history.innerHTML).toMatchSnapshot();
+        expect(history.innerHTML).not.toContain('Contents of file 3');
+        done();
+      },
+    );
+  });
+
+  test('should remove folder from root', async (done): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'rm -r home' } });
+    fireEvent.submit(input);
+
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'cd home' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+
+        expect(history.innerHTML).toMatchSnapshot();
+        expect(history.innerHTML).toContain('path does not exist: home');
+        done();
+      },
+    );
+  });
+
+  test('should remove folder from parent path', async (done): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cd home/user' } });
+    fireEvent.submit(input);
+
+    process.nextTick(
+      async (): Promise<void> => {
+        fireEvent.change(input, { target: { value: 'rm -r ../../docs' } });
+        fireEvent.submit(input);
+
+        const history = await waitForElement(
+          (): HTMLElement => getByLabelText('terminal-history'),
+        );
+
+        expect(history.innerHTML).toMatchSnapshot();
+        done();
+      },
+    );
+  });
+});
+
 describe('cat', (): void => {
   test('should list contents of file with path', async (): Promise<void> => {
     const { getByLabelText } = render(
