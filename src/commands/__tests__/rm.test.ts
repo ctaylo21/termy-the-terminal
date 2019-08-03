@@ -3,7 +3,7 @@ import exampleFileSystem from '../../data/exampleFileSystem';
 import { CommandResponse, FileSystem } from '../../index';
 import cloneDeep from 'lodash/cloneDeep';
 
-describe('mkdir suite', (): void => {
+describe('rm suite', (): void => {
   describe('success', (): void => {
     describe('non-folders', (): void => {
       it('should remove a file with no options', async (): Promise<
