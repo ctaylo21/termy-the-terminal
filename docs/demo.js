@@ -25385,8 +25385,8 @@
 	    var normalizedPath = targetPath.startsWith('/')
 	        ? targetPath
 	        : currentPath === '/'
-	            ? "/" + targetPath
-	            : currentPath + "/" + targetPath;
+	            ? "/" + targetPath // eslint-disable-line indent
+	            : currentPath + "/" + targetPath; // eslint-disable-line indent
 	    return convertPathToInternalFormat(handleDotDotInPath(stripFileExtension(normalizedPath)));
 	}
 

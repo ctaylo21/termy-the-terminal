@@ -1,5 +1,9 @@
-<div align="center">
-  <!-- Commitizen -->
+<table>
+ <tr>
+   <td><div align="center"><img src="./TermyLogo.png" width="230px"/></div></td>
+ </tr>
+ <tr>
+    <td> <!-- Commitizen -->
   <a href="http://commitizen.github.io/cz-cli/v" title="Commitizen">
     <img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"/>
   </a>
@@ -17,8 +21,9 @@
   <!-- Travis -->
   <a href='https://travis-ci.com/ctaylo21/termy-the-terminal/'>
     <img src='https://travis-ci.com/ctaylo21/termy-the-terminal.svg?branch=master' alt='Build Status' />
-  </a>
-</div>
+  </a></td>
+ </tr>
+</table>
 
 # Termy the Terminal
 
