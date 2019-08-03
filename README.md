@@ -1,4 +1,6 @@
-<img src="./TermyLogo.png" style="display: block; width: 300px; margin: 0 auto;"/>
+<div align="center">
+  <img src="./TermyLogo.png" width="300px"/>
+</div>
 
 <div align="center">
   <!-- Commitizen -->
