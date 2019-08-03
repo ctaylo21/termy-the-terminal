@@ -6,6 +6,7 @@ const commands: { [index: string]: string } = {
   ls: 'Lists the contents of the given directory',
   mkdir: 'Creates a folder for a given path in the filesystem',
   cat: 'Shows the contents of a file',
+  rm: 'Removes a file or directory',
   help: 'Prints list of available commands',
 };
 

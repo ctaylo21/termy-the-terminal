@@ -35,6 +35,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
     - [`ls [DIRECTORY]`](#ls-directory)
     - [`mkdir [DIRECTORY]`](#mkdir-directory)
     - [`cat [FILE]`](#cat-file)
+    - [`rm [OPTIONS] [FILE]`](#rm-options-file)
     - [`help`](#help)
 
 ## Usage
@@ -162,16 +163,33 @@ Shows the contents of a file
 # Contents of file2.txt
 ```
 
+### `rm [OPTIONS] [FILE]`
+
+Remove a file or directory from the filesystem
+
+**Options**
+
+- `-r` - remove directories and their contents recursively
+
+```bash
+/ $> rm -r home
+# home directory deleted
+
+/home $> rm videos/file2.txt
+# file2.txt deleted
+```
+
 ### `help`
 
 Prints available commands for the terminal with descriptions.
 
-```bash
+```
 / $> help
 cd - Changes the current working directory
 pwd - Prints the current working directory
 ls - Lists the contents of the given directory
 mkdir - Creates a folder for a given path in the filesystem
 cat - Shows the contents of a file
+rm - Removes a file or directory
 help - Prints list of available commands
 ```

@@ -12,14 +12,12 @@ export function convertPathToInternalFormat(pathStr: string): string {
   return pathStr
     .replace(/^\/+/g, '')
     .split('/')
-    .map(
-      (elem, index, arr): string => {
-        if (elem !== '..' && index !== arr.length - 1) {
-          elem += '.children';
-        }
-        return elem;
-      },
-    )
+    .map((elem, index, arr): string => {
+      if (elem !== '..' && index !== arr.length - 1) {
+        elem += '.children';
+      }
+      return elem;
+    })
     .join('.');
 }
 
@@ -99,5 +97,7 @@ export function getInternalPath(
     ? `/${targetPath}`
     : `${currentPath}/${targetPath}`;
 
-  return convertPathToInternalFormat(handleDotDotInPath(normalizedPath));
+  return convertPathToInternalFormat(
+    handleDotDotInPath(stripFileExtension(normalizedPath)),
+  );
 }

@@ -81,7 +81,8 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       promptChar,
       fileSystem,
     } = this.state;
-    const [commandName, commandArg] = inputValue.split(' ');
+    const [commandName, ...commandArgs] = inputValue.split(' ');
+    const commandTarget = commandArgs.pop() || '';
 
     let commandResult: CommandResponse['commandResult'];
     let updatedState: CommandResponse['updatedState'] = {};
@@ -89,7 +90,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       try {
         ({ commandResult, updatedState = {} } = await commands[
           commandName as keyof typeof commands
-        ](fileSystem, currentPath, commandArg));
+        ](fileSystem, currentPath, commandTarget, ...commandArgs));
       } catch (e) {
         commandResult = `Error: ${e}`;
       }

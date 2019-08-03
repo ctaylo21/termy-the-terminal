@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.9.0 - 2019-08-03
+
+### Added
+
+- rm command
+
 ## 0.8.0 - 2019-07-28
 
 ### Updated
