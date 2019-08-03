@@ -1,5 +1,4 @@
-<div align="center">
-<table border="0" width="100%">
+<table>
  <tr>
    <td><div align="center"><img src="./TermyLogo.png" width="230px"/></div></td>
  </tr>
@@ -25,7 +24,6 @@
   </a></td>
  </tr>
 </table>
-</div>
 
 # Termy the Terminal
 
