@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SvgMock: React.FC<any> = (): JSX.Element => {
+const SvgMock: React.FC<unknown> = (): JSX.Element => {
   return <></>;
 };
 
