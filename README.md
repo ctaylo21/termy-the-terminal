@@ -1,3 +1,5 @@
+<img src="./TermyLogo.png" style="display: block; width: 300px; margin: 0 auto;"/>
+
 <div align="center">
   <!-- Commitizen -->
   <a href="http://commitizen.github.io/cz-cli/v" title="Commitizen">
