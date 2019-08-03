@@ -35,7 +35,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
     - [`ls [DIRECTORY]`](#ls-directory)
     - [`mkdir [DIRECTORY]`](#mkdir-directory)
     - [`cat [FILE]`](#cat-file)
-    - [`cat [OPTIONS] [FILE]`](#cat-options-file)
+    - [`rm [OPTIONS] [FILE]`](#rm-options-file)
     - [`help`](#help)
 
 ## Usage
@@ -163,7 +163,7 @@ Shows the contents of a file
 # Contents of file2.txt
 ```
 
-### `cat [OPTIONS] [FILE]`
+### `rm [OPTIONS] [FILE]`
 
 Remove a file or directory from the filesystem
 
