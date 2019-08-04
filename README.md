@@ -44,6 +44,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
 
 - [Termy the Terminal](#termy-the-terminal)
   - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
   - [Usage](#usage)
   - [Commands](#commands)
     - [`cd [DIRECTORY]`](#cd-directory)
@@ -53,6 +54,13 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
     - [`cat [FILE]`](#cat-file)
     - [`rm [OPTIONS] [FILE]`](#rm-options-file)
     - [`help`](#help)
+
+## Installation
+The package can be installed via NPM:
+
+    npm i termy-the-terminal
+
+You will need to install the React and ReactDOM packages separately as they aren't included in this package.
 
 ## Usage
 
