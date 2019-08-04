@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.1 - 2019-08-04
+
+### Updated
+
+- New logo for README
+- Installation instructions to README
+
 ## 1.0.0 - 2019-08-03
 
 ### Updated
