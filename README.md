@@ -21,7 +21,18 @@
   <!-- Travis -->
   <a href='https://travis-ci.com/ctaylo21/termy-the-terminal/'>
     <img src='https://travis-ci.com/ctaylo21/termy-the-terminal.svg?branch=master' alt='Build Status' />
-  </a></td>
+  </a>
+
+  <!-- Build Size -->
+  <a href='https://bundlephobia.com/result?p=termy-the-terminal@1.0.0'/>
+    <img src='https://img.shields.io/bundlephobia/minzip/termy-the-terminal' alt='bundle size' />
+  </a>
+
+  <!-- NPM Version -->
+  <a href='https://www.npmjs.com/package/termy-the-terminal'/>
+    <img src='https://img.shields.io/npm/v/termy-the-terminal' alt='NPM Version' />
+  </a>
+ </td>
  </tr>
 </table>
 
