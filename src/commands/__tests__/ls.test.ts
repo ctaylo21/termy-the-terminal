@@ -1,7 +1,6 @@
 import ls from '../ls';
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { render } from '@testing-library/react';
-import { CommandResponse } from '../../index';
 
 describe('ls suite', (): void => {
   test('root with no directory', async (): Promise<void> => {
@@ -54,9 +53,7 @@ describe('ls suite', (): void => {
     expect(container.innerHTML).toContain('file1.txt');
   });
 
-  test('should reject if invalid directory given', async (): Promise<
-    CommandResponse
-  > => {
+  test('should reject if invalid directory given', async (): Promise<void> => {
     return expect(ls(exampleFileSystem, '/invalid')).rejects.toMatchSnapshot();
   });
 

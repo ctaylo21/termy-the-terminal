@@ -1,11 +1,8 @@
 import cat from '../cat';
 import exampleFileSystem from '../../data/exampleFileSystem';
-import { CommandResponse } from '../../index';
 
 describe('cat suite', (): void => {
-  it('should print contents of file with no path', async (): Promise<
-    CommandResponse
-  > => {
+  it('should print contents of file with no path', async (): Promise<void> => {
     return expect(
       cat(exampleFileSystem, '/home', 'file1.txt'),
     ).resolves.toStrictEqual({
@@ -14,7 +11,7 @@ describe('cat suite', (): void => {
   });
 
   it('should print contents of file with path from root', async (): Promise<
-    CommandResponse
+    void
   > => {
     return expect(
       cat(exampleFileSystem, '/', 'home/videos/file2.txt'),
@@ -24,7 +21,7 @@ describe('cat suite', (): void => {
   });
 
   it('should print contents of file with path from netsted path', async (): Promise<
-    CommandResponse
+    void
   > => {
     return expect(
       cat(exampleFileSystem, '/home', 'videos/file2.txt'),
@@ -33,17 +30,13 @@ describe('cat suite', (): void => {
     });
   });
 
-  it('should reject if target is not a file', async (): Promise<
-    CommandResponse
-  > => {
+  it('should reject if target is not a file', async (): Promise<void> => {
     return expect(
       cat(exampleFileSystem, 'home', 'videos'),
     ).rejects.toMatchSnapshot();
   });
 
-  it('should reject if target is not a valid path', async (): Promise<
-    CommandResponse
-  > => {
+  it('should reject if target is not a valid path', async (): Promise<void> => {
     return expect(
       cat(exampleFileSystem, '/', 'invalid'),
     ).rejects.toMatchSnapshot();

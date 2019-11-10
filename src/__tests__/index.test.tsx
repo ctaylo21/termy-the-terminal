@@ -4,6 +4,7 @@ import {
   fireEvent,
   render,
   waitForElement,
+  wait,
 } from '@testing-library/react';
 import { Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
@@ -92,7 +93,7 @@ describe('cd', (): void => {
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
 
-  test('should support cd with absolute path from nested path', async (done): Promise<
+  test('should support cd with absolute path from nested path', async (): Promise<
     void
   > => {
     const { getByLabelText, getByTestId } = render(
@@ -107,27 +108,21 @@ describe('cd', (): void => {
     });
     fireEvent.submit(input);
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'cd /home' } });
-        fireEvent.submit(input);
-
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
-
-        expect(history.innerHTML).toMatchSnapshot();
-        expect(currentPath.innerHTML).toEqual('/home');
-        done();
-      },
+    let history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(currentPath.innerHTML).toEqual('/home/user');
 
-    const history = await waitForElement(
+    fireEvent.change(input, { target: { value: 'cd /home' } });
+    fireEvent.submit(input);
+
+    history = await waitForElement(
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
     expect(history.innerHTML).toMatchSnapshot();
-    expect(currentPath.innerHTML).toEqual('/home/user');
+    expect(currentPath.innerHTML).toEqual('/home');
   });
 });
 
@@ -151,7 +146,7 @@ describe('pwd', (): void => {
     expect(currentPath.innerHTML).toEqual('/');
   });
 
-  test('should correctly return directory after cd', async (done): Promise<
+  test('should correctly return directory after cd', async (): Promise<
     void
   > => {
     const { getByLabelText, getByTestId } = render(
@@ -164,24 +159,16 @@ describe('pwd', (): void => {
     fireEvent.change(input, { target: { value: 'cd home/user/test' } });
     fireEvent.submit(input);
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'pwd' } });
-        fireEvent.submit(input);
+    await wait();
+    fireEvent.change(input, { target: { value: 'pwd' } });
+    fireEvent.submit(input);
 
-        try {
-          const history = await waitForElement(
-            (): HTMLElement => getByLabelText('terminal-history'),
-          );
-
-          expect(history.innerHTML).toMatchSnapshot();
-          expect(currentPath.innerHTML).toEqual('/home/user/test');
-          done();
-        } catch (e) {
-          done.fail(e);
-        }
-      },
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
 });
 
@@ -227,33 +214,28 @@ describe('ls', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
-  test('should correctly return contents for given relative directory from nested path', async (done): Promise<
+  test('should correctly return contents for given relative directory from nested path', async (): Promise<
     void
   > => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
 
-    let input = getByLabelText('terminal-input');
+    const input = getByLabelText('terminal-input');
 
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    input = await getByLabelText('terminal-input');
+    await wait();
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'ls user' } });
-        fireEvent.submit(input);
+    fireEvent.change(input, { target: { value: 'ls user' } });
+    fireEvent.submit(input);
 
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
-
-        expect(history.innerHTML).toMatchSnapshot();
-        done();
-      },
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+
+    expect(history.innerHTML).toMatchSnapshot();
   });
 
   test('should correctly return contents for absolute path from nested path', async (): Promise<
@@ -267,6 +249,8 @@ describe('ls', (): void => {
 
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
+
+    await wait();
 
     fireEvent.change(input, { target: { value: 'ls /home/user' } });
     fireEvent.submit(input);
@@ -316,7 +300,7 @@ describe('help', (): void => {
 });
 
 describe('mkdir', (): void => {
-  test('should create new directory from root', async (done): Promise<void> => {
+  test('should create new directory from root', async (): Promise<void> => {
     const { getByLabelText, getByTestId } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -327,29 +311,24 @@ describe('mkdir', (): void => {
     fireEvent.change(input, { target: { value: 'mkdir banana' } });
     fireEvent.submit(input);
 
-    const history = await waitForElement(
+    let history = await waitForElement(
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
     expect(history.innerHTML).toMatchSnapshot();
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'cd banana' } });
-        fireEvent.submit(input);
+    fireEvent.change(input, { target: { value: 'cd banana' } });
+    fireEvent.submit(input);
 
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
-
-        expect(history.innerHTML).toMatchSnapshot();
-        expect(currentPath.innerHTML).toEqual('/banana');
-        done();
-      },
+    history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(currentPath.innerHTML).toEqual('/banana');
   });
 
-  test('should create new directory from nested path', async (done): Promise<
+  test('should create new directory from nested path', async (): Promise<
     void
   > => {
     const { getByLabelText, getByTestId } = render(
@@ -362,37 +341,28 @@ describe('mkdir', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    const history = await waitForElement(
+    let history = await waitForElement(
       (): HTMLElement => getByLabelText('terminal-history'),
     );
     expect(history.innerHTML).toMatchSnapshot();
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'mkdir banana' } });
-        fireEvent.submit(input);
+    fireEvent.change(input, { target: { value: 'mkdir banana' } });
+    fireEvent.submit(input);
 
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
-        expect(history.innerHTML).toMatchSnapshot();
-
-        process.nextTick(
-          async (): Promise<void> => {
-            fireEvent.change(input, { target: { value: 'cd /home/banana' } });
-            fireEvent.submit(input);
-
-            const history = await waitForElement(
-              (): HTMLElement => getByLabelText('terminal-history'),
-            );
-
-            expect(history.innerHTML).toMatchSnapshot();
-            expect(currentPath.innerHTML).toEqual('/home/banana');
-            done();
-          },
-        );
-      },
+    history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+    expect(history.innerHTML).toMatchSnapshot();
+
+    fireEvent.change(input, { target: { value: 'cd /home/banana' } });
+    fireEvent.submit(input);
+
+    history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
+    );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(currentPath.innerHTML).toEqual('/home/banana');
   });
 
   test('should handle invalid mkdir command', async (): Promise<void> => {
@@ -414,7 +384,7 @@ describe('mkdir', (): void => {
 });
 
 describe('rm', (): void => {
-  test('should remove file from root', async (done): Promise<void> => {
+  test('should remove file from root', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -424,29 +394,24 @@ describe('rm', (): void => {
     fireEvent.change(input, { target: { value: 'rm file3.txt' } });
     fireEvent.submit(input);
 
-    const history = await waitForElement(
+    let history = await waitForElement(
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
     expect(history.innerHTML).toMatchSnapshot();
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'cat file3.txt' } });
-        fireEvent.submit(input);
+    fireEvent.change(input, { target: { value: 'cat file3.txt' } });
+    fireEvent.submit(input);
 
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
-
-        expect(history.innerHTML).toMatchSnapshot();
-        expect(history.innerHTML).not.toContain('Contents of file 3');
-        done();
-      },
+    history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).not.toContain('Contents of file 3');
   });
 
-  test('should remove folder from root', async (done): Promise<void> => {
+  test('should remove folder from root', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -456,29 +421,24 @@ describe('rm', (): void => {
     fireEvent.change(input, { target: { value: 'rm -r home' } });
     fireEvent.submit(input);
 
-    const history = await waitForElement(
+    let history = await waitForElement(
       (): HTMLElement => getByLabelText('terminal-history'),
     );
 
     expect(history.innerHTML).toMatchSnapshot();
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'cd home' } });
-        fireEvent.submit(input);
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
 
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
-
-        expect(history.innerHTML).toMatchSnapshot();
-        expect(history.innerHTML).toContain('path does not exist: home');
-        done();
-      },
+    history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toContain('path does not exist: home');
   });
 
-  test('should remove folder from parent path', async (done): Promise<void> => {
+  test('should remove folder from parent path', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -488,19 +448,16 @@ describe('rm', (): void => {
     fireEvent.change(input, { target: { value: 'cd home/user' } });
     fireEvent.submit(input);
 
-    process.nextTick(
-      async (): Promise<void> => {
-        fireEvent.change(input, { target: { value: 'rm -r ../../docs' } });
-        fireEvent.submit(input);
+    await wait();
 
-        const history = await waitForElement(
-          (): HTMLElement => getByLabelText('terminal-history'),
-        );
+    fireEvent.change(input, { target: { value: 'rm -r ../../docs' } });
+    fireEvent.submit(input);
 
-        expect(history.innerHTML).toMatchSnapshot();
-        done();
-      },
+    const history = await waitForElement(
+      (): HTMLElement => getByLabelText('terminal-history'),
     );
+
+    expect(history.innerHTML).toMatchSnapshot();
   });
 });
 

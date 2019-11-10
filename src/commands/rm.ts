@@ -16,7 +16,7 @@ function handleDelete(
   fileSystem: FileSystem,
   pathToDelete: string,
 ): CommandResponse {
-  let newFileSystem = cloneDeep(fileSystem);
+  const newFileSystem = cloneDeep(fileSystem);
   unset(newFileSystem, pathToDelete);
   return {
     updatedState: {

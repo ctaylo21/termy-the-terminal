@@ -112,14 +112,16 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       value: inputValue,
     });
 
-    this.setState(Object.assign(
-      {
-        currentCommandId: this.state.currentCommandId + 1,
-        history: updatedHistory,
-        inputValue: '',
-      },
-      updatedState,
-    ) as TerminalState);
+    this.setState(
+      Object.assign(
+        {
+          currentCommandId: this.state.currentCommandId + 1,
+          history: updatedHistory,
+          inputValue: '',
+        },
+        updatedState,
+      ) as TerminalState,
+    );
   };
 
   public render(): JSX.Element {

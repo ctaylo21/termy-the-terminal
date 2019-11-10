@@ -38,7 +38,7 @@ export interface LsResultType {
 export default function ls(
   fileSystem: FileSystem,
   currentPath: string,
-  targetPath: string = '',
+  targetPath = '',
 ): Promise<CommandResponse> {
   return new Promise((resolve, reject): void => {
     const externalFormatDir: LsResultType = {};
@@ -54,7 +54,7 @@ export default function ls(
       reject(e.message);
     }
 
-    for (let key in targetFolderContents) {
+    for (const key in targetFolderContents) {
       const lsKey =
         targetFolderContents[key].type === 'FILE'
           ? `${key}.${targetFolderContents[key].extension}`

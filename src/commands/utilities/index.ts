@@ -31,7 +31,7 @@ export function convertPathToInternalFormat(pathStr: string): string {
  */
 export function handleDotDotInPath(pathStr: string): string {
   let currentDotDots = 0;
-  let pathArr = pathStr.split('/').filter((path): boolean => path.length > 0);
+  const pathArr = pathStr.split('/').filter((path): boolean => path.length > 0);
   for (let i = pathArr.length - 1; i >= 0; i--) {
     if (pathArr[i] === '..') {
       currentDotDots++;

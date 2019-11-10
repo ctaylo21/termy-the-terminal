@@ -2,13 +2,10 @@ import mkdir from '../mkdir';
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import exampleFileSystem from '../../data/exampleFileSystem';
-import { CommandResponse } from '../../index';
 
 describe('mkdir suite', (): void => {
   describe('success', (): void => {
-    it('should create directory from root', async (): Promise<
-      CommandResponse
-    > => {
+    it('should create directory from root', async (): Promise<void> => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -27,9 +24,7 @@ describe('mkdir suite', (): void => {
       });
     });
 
-    it('should create directory from nested path', async (): Promise<
-      CommandResponse
-    > => {
+    it('should create directory from nested path', async (): Promise<void> => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -49,7 +44,7 @@ describe('mkdir suite', (): void => {
     });
 
     it('should create directory given a folder path', async (): Promise<
-      CommandResponse
+      void
     > => {
       const expectedFileSystem = cloneDeep(exampleFileSystem);
 
@@ -71,9 +66,7 @@ describe('mkdir suite', (): void => {
   });
 
   describe('Failure', (): void => {
-    it('should reject if path already exists', async (): Promise<
-      CommandResponse
-    > => {
+    it('should reject if path already exists', async (): Promise<void> => {
       return expect(
         mkdir(exampleFileSystem, '/home', 'user'),
       ).rejects.toMatchSnapshot();

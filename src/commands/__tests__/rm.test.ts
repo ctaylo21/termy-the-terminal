@@ -1,14 +1,12 @@
 import rm from '../rm';
 import exampleFileSystem from '../../data/exampleFileSystem';
-import { CommandResponse, FileSystem } from '../../index';
+import { FileSystem } from '../../index';
 import cloneDeep from 'lodash/cloneDeep';
 
 describe('rm suite', (): void => {
   describe('success', (): void => {
     describe('non-folders', (): void => {
-      it('should remove a file with no options', async (): Promise<
-        CommandResponse
-      > => {
+      it('should remove a file with no options', async (): Promise<void> => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete expectedFileSystem.file3;
 
@@ -21,7 +19,7 @@ describe('rm suite', (): void => {
         );
       });
 
-      it('should remove a nested file', async (): Promise<CommandResponse> => {
+      it('should remove a nested file', async (): Promise<void> => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete ((expectedFileSystem.home.children as FileSystem).videos
           .children as FileSystem).file2;
@@ -35,9 +33,7 @@ describe('rm suite', (): void => {
         });
       });
 
-      it('should remove file in parent path', async (): Promise<
-        CommandResponse
-      > => {
+      it('should remove file in parent path', async (): Promise<void> => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete expectedFileSystem.file3;
 
@@ -52,7 +48,7 @@ describe('rm suite', (): void => {
     });
 
     describe('folders', (): void => {
-      it('should delete at same level', async (): Promise<CommandResponse> => {
+      it('should delete at same level', async (): Promise<void> => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete expectedFileSystem.docs;
 
@@ -65,9 +61,7 @@ describe('rm suite', (): void => {
         });
       });
 
-      it('should delete from nested path', async (): Promise<
-        CommandResponse
-      > => {
+      it('should delete from nested path', async (): Promise<void> => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete (expectedFileSystem.home.children as FileSystem).videos;
 
@@ -80,9 +74,7 @@ describe('rm suite', (): void => {
         });
       });
 
-      it('should delete from parent path', async (): Promise<
-        CommandResponse
-      > => {
+      it('should delete from parent path', async (): Promise<void> => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete expectedFileSystem.docs;
 
@@ -98,22 +90,18 @@ describe('rm suite', (): void => {
   });
 
   describe('failure', (): void => {
-    it('should reject if path is invalid', async (): Promise<
-      CommandResponse
-    > => {
+    it('should reject if path is invalid', async (): Promise<void> => {
       return expect(
         rm(exampleFileSystem, '/', 'invalid'),
       ).rejects.toMatchSnapshot();
     });
 
-    it('should reject if no target path provided', async (): Promise<
-      CommandResponse
-    > => {
+    it('should reject if no target path provided', async (): Promise<void> => {
       return expect(rm(exampleFileSystem, '/', '')).rejects.toMatchSnapshot();
     });
 
     it('should reject if no options and target is a folder', async (): Promise<
-      CommandResponse
+      void
     > => {
       return expect(
         rm(exampleFileSystem, '/', 'home'),
