@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.2 - 2019-11-10
+
+### Updated
+
+- Disable spellcheck in Termy
+
 ## 1.0.1 - 2019-08-04
 
 ### Updated

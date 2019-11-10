@@ -21,7 +21,7 @@ export const Input: React.FC<InputProps> = (props): JSX.Element => {
   } = props;
 
   return (
-    <div id="input-container">
+    <div id="input-container" spellCheck={false}>
       <form onSubmit={handleSubmit}>
         <InputPrompt path={currentPath} promptChar={promptChar} />
         <input
