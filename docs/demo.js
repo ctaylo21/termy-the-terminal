@@ -26573,7 +26573,7 @@
 
 	var Input = function (props) {
 	    var currentPath = props.currentPath, handleChange = props.handleChange, handleSubmit = props.handleSubmit, inputValue = props.inputValue, promptChar = props.promptChar, readOnly = props.readOnly;
-	    return (react.createElement("div", { id: "input-container" },
+	    return (react.createElement("div", { id: "input-container", spellCheck: false },
 	        react.createElement("form", { onSubmit: handleSubmit },
 	            react.createElement(InputPrompt, { path: currentPath, promptChar: promptChar }),
 	            react.createElement("input", { "aria-label": "terminal-input", type: "text", value: inputValue, onChange: handleChange, readOnly: readOnly }))));
