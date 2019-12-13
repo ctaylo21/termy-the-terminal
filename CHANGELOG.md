@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.4 - 2019-12-13
+
+### Fixed
+
+- Incorrect README code example
+
 ## 1.0.3 - 2019-12-13
 
 ### Added
