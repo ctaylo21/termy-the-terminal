@@ -4,8 +4,8 @@
   background-color: map-get($themeDark, background);
   box-sizing: content-box;
   color: map-get($themeDark, fontColor);
-  font-family: $fontFamily;
-  font-size: $fontSize;
+  font-family: map-get($themeDark, fontFamily);
+  font-size: map-get($themeDark, fontSize);
   height: 100%;
   overflow: auto;
   padding: 0 1em;
@@ -20,8 +20,8 @@
         background: none;
         border: none;
         color: map-get($themeDark, fontColor);
-        font-family: $fontFamily;
-        font-size: $fontSize;
+        font-family: map-get($themeDark, fontFamily);
+        font-size: map-get($themeDark, fontSize);
         outline: none;
         -webkit-appearance: none;
 
@@ -29,7 +29,7 @@
         margin: 0 10px;
       }
 
-      #inputPromptChar {
+      #inputPrompt {
         color: map-get($themeDark, green);
       }
     }

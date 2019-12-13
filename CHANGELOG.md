@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3 - 2019-12-13
+
+### Added
+
+- inputPrompt prop to Termy
+
 ## 1.0.2 - 2019-11-10
 
 ### Updated
