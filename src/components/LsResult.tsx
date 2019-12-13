@@ -15,14 +15,14 @@ const LsResult: React.FC<LsResultProps> = (props): JSX.Element => {
       if (lsResult[key].type === 'FOLDER') {
         return (
           <li className="ls-folder" key={key}>
-            <FolderIcon /> {key}
+            <FolderIcon /> <span>{key}</span>
           </li>
         );
       }
 
       return (
         <li className="ls-file" key={key}>
-          <FileIcon /> {key}
+          <FileIcon /> <span>{key}</span>
         </li>
       );
     },

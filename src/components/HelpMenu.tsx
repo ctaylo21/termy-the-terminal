@@ -15,7 +15,7 @@ export const HelpMenu: React.FC<{}> = (): JSX.Element => {
     (command): JSX.Element => (
       <li key={commands[command]}>
         <span className="help-command-name">{command}</span> -{' '}
-        {commands[command]}
+        <span>{commands[command]}</span>
       </li>
     ),
   );

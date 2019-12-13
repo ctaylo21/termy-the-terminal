@@ -4,7 +4,7 @@ import { InputPrompt } from './InputPrompt';
 interface InputProps {
   currentPath: string;
   inputValue: string;
-  promptChar: string;
+  inputPrompt: string;
   handleChange?(event: ChangeEvent<HTMLInputElement>): void;
   handleSubmit?(event: FormEvent<HTMLFormElement>): void;
   readOnly: boolean;
@@ -16,14 +16,14 @@ export const Input: React.FC<InputProps> = (props): JSX.Element => {
     handleChange,
     handleSubmit,
     inputValue,
-    promptChar,
+    inputPrompt,
     readOnly,
   } = props;
 
   return (
     <div id="input-container" spellCheck={false}>
       <form onSubmit={handleSubmit}>
-        <InputPrompt path={currentPath} promptChar={promptChar} />
+        <InputPrompt path={currentPath} inputPrompt={inputPrompt} />
         <input
           aria-label="terminal-input"
           type="text"

@@ -2,7 +2,7 @@
   background-color: #1b2b34;
   box-sizing: content-box;
   color: #d8dee9;
-  font-family: "Inconsolata", monospace;
+  font-family: Inconsolata, monospace;
   font-size: 18px;
   height: 100%;
   overflow: auto;
@@ -15,13 +15,13 @@
         background: none;
         border: none;
         color: #d8dee9;
-        font-family: "Inconsolata", monospace;
+        font-family: Inconsolata, monospace;
         font-size: 18px;
         outline: none;
         -webkit-appearance: none;
         flex-grow: 100;
         margin: 0 10px; }
-      #terminal-wrapper #input-container form #inputPromptChar {
+      #terminal-wrapper #input-container form #inputPrompt {
         color: #9ac794; }
   #terminal-wrapper #history-container > ul > li > #input-container {
     padding-bottom: 0; }

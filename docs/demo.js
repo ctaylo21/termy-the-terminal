@@ -26564,18 +26564,18 @@
 	};
 
 	var InputPrompt = function (props) {
-	    var path = props.path, promptChar = props.promptChar;
+	    var path = props.path, inputPrompt = props.inputPrompt;
 	    return (react.createElement(react.Fragment, null,
 	        react.createElement("span", { "data-testid": "input-prompt-path" }, path),
 	        "\u00A0",
-	        react.createElement("span", { id: "inputPromptChar" }, promptChar)));
+	        react.createElement("span", { id: "inputPrompt" }, inputPrompt)));
 	};
 
 	var Input = function (props) {
-	    var currentPath = props.currentPath, handleChange = props.handleChange, handleSubmit = props.handleSubmit, inputValue = props.inputValue, promptChar = props.promptChar, readOnly = props.readOnly;
+	    var currentPath = props.currentPath, handleChange = props.handleChange, handleSubmit = props.handleSubmit, inputValue = props.inputValue, inputPrompt = props.inputPrompt, readOnly = props.readOnly;
 	    return (react.createElement("div", { id: "input-container", spellCheck: false },
 	        react.createElement("form", { onSubmit: handleSubmit },
-	            react.createElement(InputPrompt, { path: currentPath, promptChar: promptChar }),
+	            react.createElement(InputPrompt, { path: currentPath, inputPrompt: inputPrompt }),
 	            react.createElement("input", { "aria-label": "terminal-input", type: "text", value: inputValue, onChange: handleChange, readOnly: readOnly }))));
 	};
 
@@ -28124,12 +28124,12 @@
 	            return (react.createElement("li", { className: "ls-folder", key: key },
 	                react.createElement(SvgFolder, null),
 	                " ",
-	                key));
+	                react.createElement("span", null, key)));
 	        }
 	        return (react.createElement("li", { className: "ls-file", key: key },
 	            react.createElement(SvgFile, null),
 	            " ",
-	            key));
+	            react.createElement("span", null, key)));
 	    });
 	    return react.createElement("ul", { className: "terminal-ls-list" }, lsItems);
 	};
@@ -29853,7 +29853,7 @@
 	        react.createElement("span", { className: "help-command-name" }, command),
 	        " -",
 	        ' ',
-	        commands[command])); });
+	        react.createElement("span", null, commands[command]))); });
 	    return (react.createElement("div", { id: "help-container" },
 	        react.createElement("ul", { "aria-label": "help-menu" }, commandList)));
 	};
@@ -30059,7 +30059,7 @@
 	            currentPath: '/',
 	            history: [],
 	            inputValue: '',
-	            promptChar: '$>',
+	            inputPrompt: _this.props.inputPrompt || '$>',
 	            fileSystem: _this.props.fileSystem,
 	        };
 	        _this.inputWrapper = null;
@@ -30069,13 +30069,13 @@
 	            });
 	        };
 	        _this.handleSubmit = function (event) { return __awaiter(_this, void 0, void 0, function () {
-	            var _a, history, inputValue, currentPath, promptChar, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1, updatedHistory;
+	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1, updatedHistory;
 	            var _c, _d;
 	            return __generator(this, function (_e) {
 	                switch (_e.label) {
 	                    case 0:
 	                        event.preventDefault();
-	                        _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, promptChar = _a.promptChar, fileSystem = _a.fileSystem;
+	                        _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, inputPrompt = _a.inputPrompt, fileSystem = _a.fileSystem;
 	                        _b = inputValue.split(' '), commandName = _b[0], commandArgs = _b.slice(1);
 	                        commandTarget = commandArgs.pop() || '';
 	                        updatedState = {};
@@ -30097,7 +30097,7 @@
 	                        _e.label = 6;
 	                    case 6:
 	                        updatedHistory = history.concat({
-	                            input: (react.createElement(Input, { currentPath: currentPath, inputValue: inputValue, promptChar: promptChar, readOnly: true })),
+	                            input: (react.createElement(Input, { currentPath: currentPath, inputValue: inputValue, inputPrompt: inputPrompt, readOnly: true })),
 	                            id: this.state.currentCommandId,
 	                            result: commandResult,
 	                            value: inputValue,
@@ -30119,13 +30119,13 @@
 	    };
 	    Terminal.prototype.render = function () {
 	        var _this = this;
-	        var _a = this.state, currentPath = _a.currentPath, history = _a.history, inputValue = _a.inputValue, promptChar = _a.promptChar;
+	        var _a = this.state, currentPath = _a.currentPath, history = _a.history, inputValue = _a.inputValue, inputPrompt = _a.inputPrompt;
 	        return (react.createElement("div", { id: "terminal-wrapper" },
 	            react.createElement(History, { history: history }),
 	            react.createElement("div", { ref: function (el) {
 	                    _this.inputWrapper = el;
 	                } },
-	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleSubmit: this.handleSubmit, inputValue: inputValue, promptChar: promptChar, readOnly: false }))));
+	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, readOnly: false }))));
 	    };
 	    return Terminal;
 	}(react_2));

@@ -9,7 +9,7 @@ export interface TerminalState {
   currentPath: string;
   history: HistoryItem[];
   inputValue: string;
-  promptChar: string;
+  inputPrompt: string;
   fileSystem: FileSystem;
 }
 
@@ -22,6 +22,7 @@ export interface HistoryItem {
 
 export interface TerminalProps {
   fileSystem: FileSystem;
+  inputPrompt?: string;
 }
 
 export interface FileSystem {
@@ -52,7 +53,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     currentPath: '/',
     history: [],
     inputValue: '',
-    promptChar: '$>',
+    inputPrompt: this.props.inputPrompt || '$>',
     fileSystem: this.props.fileSystem,
   };
 
@@ -78,7 +79,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       history,
       inputValue,
       currentPath,
-      promptChar,
+      inputPrompt,
       fileSystem,
     } = this.state;
     const [commandName, ...commandArgs] = inputValue.split(' ');
@@ -103,7 +104,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         <Input
           currentPath={currentPath}
           inputValue={inputValue}
-          promptChar={promptChar}
+          inputPrompt={inputPrompt}
           readOnly={true}
         />
       ),
@@ -125,7 +126,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   };
 
   public render(): JSX.Element {
-    const { currentPath, history, inputValue, promptChar } = this.state;
+    const { currentPath, history, inputValue, inputPrompt } = this.state;
     return (
       <div id="terminal-wrapper">
         <History history={history} />
@@ -139,7 +140,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
             inputValue={inputValue}
-            promptChar={promptChar}
+            inputPrompt={inputPrompt}
             readOnly={false}
           />
         </div>
