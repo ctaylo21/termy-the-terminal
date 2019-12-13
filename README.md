@@ -46,6 +46,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
+    - [Terminal Props](#terminal-props)
   - [Commands](#commands)
     - [`cd [DIRECTORY]`](#cd-directory)
     - [`pwd`](#pwd)
@@ -56,6 +57,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
     - [`help`](#help)
 
 ## Installation
+
 The package can be installed via NPM:
 
     npm i termy-the-terminal
@@ -72,12 +74,19 @@ import 'termy-the-terminal/dist/index.css';
 import exampleFileSystem from './data/exampleFileSystem';
 
 ReactDOM.render(
-  <Terminal fileSystem={exampleFileSystem} />,
+  <Terminal fileSystem={exampleFileSystem} inputPrompt={'$>'} />,
   document.getElementById('terminal-container'),
 );
 ```
 
-The file system needs to be a particular format ([code example](src/data/exampleFileSystem.ts)):
+### Terminal Props
+
+| Prop Name   | Description                                                              | Required |
+| ----------- | ------------------------------------------------------------------------ | -------- |
+| fileSystem  | A properly formatted (see below) JSON object representing the filesystem | Yes      |
+| inputPrompt | String to use as input prompt (default is `$>`)                          | No       |
+
+The `fileSystem` prop needs to be a particular format ([code example](src/data/exampleFileSystem.ts)):
 
 ```javascript
 const exampleFileSystem = {
