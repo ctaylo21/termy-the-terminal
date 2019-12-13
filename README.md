@@ -74,7 +74,7 @@ import 'termy-the-terminal/dist/index.css';
 import exampleFileSystem from './data/exampleFileSystem';
 
 ReactDOM.render(
-  <Terminal fileSystem={exampleFileSystem} inputPrompt={'$>'} />,
+  <Terminal fileSystem={exampleFileSystem} inputPrompt="$>" />,
   document.getElementById('terminal-container'),
 );
 ```
