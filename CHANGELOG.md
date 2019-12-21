@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.0.5 - 2019-12-21
+
+### Added
+
+- Support for arrow keys to move through command history
+
+## Changed
+- Auto-focus of terminal input once Termy is mounted
+
 ## 1.0.4 - 2019-12-13
 
 ### Fixed

@@ -47,14 +47,16 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
   - [Installation](#installation)
   - [Usage](#usage)
     - [Terminal Props](#terminal-props)
+  - [General](#general)
+    - [Command History](#command-history)
   - [Commands](#commands)
-    - [`cd [DIRECTORY]`](#cd-directory)
-    - [`pwd`](#pwd)
-    - [`ls [DIRECTORY]`](#ls-directory)
-    - [`mkdir [DIRECTORY]`](#mkdir-directory)
-    - [`cat [FILE]`](#cat-file)
-    - [`rm [OPTIONS] [FILE]`](#rm-options-file)
-    - [`help`](#help)
+    - [cd [DIRECTORY]](#cd-directory)
+    - [pwd](#pwd)
+    - [ls [DIRECTORY]](#ls-directory)
+    - [mkdir [DIRECTORY]](#mkdir-directory)
+    - [cat [FILE]](#cat-file)
+    - [rm [OPTIONS] [FILE]](#rm-options-file)
+    - [help](#help)
 
 ## Installation
 
@@ -110,6 +112,12 @@ const exampleFileSystem = {
   },
 };
 ```
+
+## General
+The following sections include general features that Termy supports outside of the terminal commands.
+
+### Command History
+Termy supports using the arrow keys (up and down) to move through the command history.
 
 ## Commands
 
