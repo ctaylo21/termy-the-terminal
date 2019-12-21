@@ -26571,13 +26571,13 @@
 	        react.createElement("span", { id: "inputPrompt" }, inputPrompt)));
 	};
 
-	var Input = function (props) {
-	    var currentPath = props.currentPath, handleChange = props.handleChange, handleSubmit = props.handleSubmit, inputValue = props.inputValue, inputPrompt = props.inputPrompt, readOnly = props.readOnly;
+	var Input = react.forwardRef(function Input(props, ref) {
+	    var currentPath = props.currentPath, handleChange = props.handleChange, handleKeyDown = props.handleKeyDown, handleKeyUp = props.handleKeyUp, handleSubmit = props.handleSubmit, inputValue = props.inputValue, inputPrompt = props.inputPrompt, readOnly = props.readOnly;
 	    return (react.createElement("div", { id: "input-container", spellCheck: false },
 	        react.createElement("form", { onSubmit: handleSubmit },
 	            react.createElement(InputPrompt, { path: currentPath, inputPrompt: inputPrompt }),
-	            react.createElement("input", { "aria-label": "terminal-input", type: "text", value: inputValue, onChange: handleChange, readOnly: readOnly }))));
-	};
+	            react.createElement("input", { "aria-label": "terminal-input", type: "text", value: inputValue, onChange: handleChange, onKeyDown: handleKeyDown, onKeyUp: handleKeyUp, readOnly: readOnly, ref: ref }))));
+	});
 
 	/**
 	 * Checks if `value` is classified as an `Array` object.
@@ -30057,16 +30057,67 @@
 	        _this.state = {
 	            currentCommandId: 0,
 	            currentPath: '/',
+	            currentHistoryId: -1,
 	            history: [],
 	            inputValue: '',
 	            inputPrompt: _this.props.inputPrompt || '$>',
 	            fileSystem: _this.props.fileSystem,
 	        };
-	        _this.inputWrapper = null;
+	        _this.inputWrapper = react.createRef();
+	        _this.terminalInput = react.createRef();
 	        _this.handleChange = function (event) {
 	            _this.setState({
 	                inputValue: event.target.value,
 	            });
+	        };
+	        _this.handleKeyDown = function (event) {
+	            // Prevent behavior of up arrow moving cursor to beginning of line in Chrome (and possibly others)
+	            if (event.keyCode == 38 || event.key === 'ArrowUp') {
+	                event.preventDefault();
+	            }
+	        };
+	        _this.handleKeyUp = function (event) {
+	            event.preventDefault();
+	            var handleUpArrowKeyPress = function () {
+	                // Handle no history item to show
+	                if (_this.state.currentHistoryId < 0) {
+	                    return;
+	                }
+	                // Handle showing very first item from history
+	                if (_this.state.currentHistoryId === 0) {
+	                    _this.setState({
+	                        inputValue: _this.state.history[_this.state.currentHistoryId].value,
+	                    });
+	                }
+	                // Handle show previous history item
+	                if (_this.state.currentHistoryId > 0) {
+	                    _this.setState({
+	                        currentHistoryId: _this.state.currentHistoryId - 1,
+	                        inputValue: _this.state.history[_this.state.currentHistoryId].value,
+	                    });
+	                }
+	            };
+	            var handleDownArrowKeyPress = function () {
+	                // Handle showing next history item
+	                if (_this.state.currentHistoryId + 1 < _this.state.currentCommandId) {
+	                    _this.setState({
+	                        currentHistoryId: _this.state.currentHistoryId + 1,
+	                        inputValue: _this.state.history[_this.state.currentHistoryId + 1].value,
+	                    });
+	                }
+	                // Handle when no next history item exists
+	                if (_this.state.currentHistoryId + 1 >= _this.state.currentCommandId) {
+	                    _this.setState({
+	                        inputValue: '',
+	                    });
+	                }
+	            };
+	            if (event.keyCode == 38 || event.key === 'ArrowUp') {
+	                handleUpArrowKeyPress();
+	            }
+	            if (event.keyCode == 40 || event.key === 'ArrowDown') {
+	                handleDownArrowKeyPress();
+	            }
 	        };
 	        _this.handleSubmit = function (event) { return __awaiter(_this, void 0, void 0, function () {
 	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1, updatedHistory;
@@ -30104,6 +30155,7 @@
 	                        });
 	                        this.setState(Object.assign({
 	                            currentCommandId: this.state.currentCommandId + 1,
+	                            currentHistoryId: this.state.currentCommandId,
 	                            history: updatedHistory,
 	                            inputValue: '',
 	                        }, updatedState));
@@ -30113,19 +30165,20 @@
 	        }); };
 	        return _this;
 	    }
+	    Terminal.prototype.componentDidMount = function () {
+	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	        this.terminalInput.current.focus();
+	    };
 	    Terminal.prototype.componentDidUpdate = function () {
 	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	        this.inputWrapper.scrollIntoView({ behavior: 'smooth' });
+	        this.inputWrapper.current.scrollIntoView({ behavior: 'smooth' });
 	    };
 	    Terminal.prototype.render = function () {
-	        var _this = this;
 	        var _a = this.state, currentPath = _a.currentPath, history = _a.history, inputValue = _a.inputValue, inputPrompt = _a.inputPrompt;
 	        return (react.createElement("div", { id: "terminal-wrapper" },
 	            react.createElement(History, { history: history }),
-	            react.createElement("div", { ref: function (el) {
-	                    _this.inputWrapper = el;
-	                } },
-	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, readOnly: false }))));
+	            react.createElement("div", { ref: this.inputWrapper },
+	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleKeyDown: this.handleKeyDown, handleKeyUp: this.handleKeyUp, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, ref: this.terminalInput, readOnly: false }))));
 	    };
 	    return Terminal;
 	}(react_2));
