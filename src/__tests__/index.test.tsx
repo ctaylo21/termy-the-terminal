@@ -34,6 +34,15 @@ describe('initialization', (): void => {
 
     expect(inputPrompt).not.toBeNull();
   });
+
+  test('should focus terminal input on page load', async (): Promise<void> => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input');
+
+    expect(document.activeElement).toEqual(input);
+  });
 });
 
 describe('general', (): void => {
@@ -483,5 +492,204 @@ describe('cat', (): void => {
     const history = await findByLabelText(container, 'terminal-history');
 
     expect(history.innerHTML).toMatchSnapshot();
+  });
+});
+
+describe('history', (): void => {
+  test('up key should auto-fill previous command into input', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    await wait(() => {
+      expect(input.value).toBe('cd home');
+    });
+  });
+
+  test('up key should do nothing if no history items', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+  });
+
+  test('up key should handle multiple history items', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.change(input, { target: { value: 'pwd' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    await wait(() => {
+      expect(input.value).toBe('cd home');
+    });
+  });
+
+  test('should handle pressing up with nothing left in history', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    await wait(() => {
+      expect(input.value).toBe('cd home');
+    });
+  });
+
+  test('should call "e.preventDefault" on up arrow keyDown handler', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    const keyDownEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      code: '38',
+      key: 'ArrowUp',
+    });
+    Object.assign(keyDownEvent, { preventDefault: jest.fn() });
+
+    fireEvent(input, keyDownEvent);
+
+    await wait(() => {
+      expect(keyDownEvent.preventDefault).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test('should not call "e.preventDefault" on up down keyDown handler', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    const keyDownEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      code: '40',
+      key: 'ArrowDown',
+    });
+    Object.assign(keyDownEvent, { preventDefault: jest.fn() });
+
+    fireEvent(input, keyDownEvent);
+
+    await wait(() => {
+      expect(keyDownEvent.preventDefault).not.toHaveBeenCalled();
+    });
+  });
+
+  test('down key should let you go to more recent history items', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.change(input, { target: { value: 'pwd' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    await wait(() => {
+      expect(input.value).toBe('pwd');
+    });
+  });
+
+  test('pressing down on most recent history item should make input empty', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'cd home' } });
+    fireEvent.submit(input);
+
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+
+    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
+  });
+
+  test('down key should do nothing if no history items', async (): Promise<
+    void
+  > => {
+    const { getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    await wait(() => {
+      expect(input.value).toBe('');
+    });
   });
 });
