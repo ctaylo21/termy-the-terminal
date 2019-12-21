@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent, KeyboardEvent, RefObject } from 'react';
 import { InputPrompt } from './InputPrompt';
 
 interface InputProps {
@@ -6,14 +6,22 @@ interface InputProps {
   inputValue: string;
   inputPrompt: string;
   handleChange?(event: ChangeEvent<HTMLInputElement>): void;
+  handleKeyDown?(event: KeyboardEvent<HTMLInputElement>): void;
+  handleKeyUp?(event: KeyboardEvent<HTMLInputElement>): void;
   handleSubmit?(event: FormEvent<HTMLFormElement>): void;
   readOnly: boolean;
+  ref?: RefObject<HTMLInputElement>;
 }
 
-export const Input: React.FC<InputProps> = (props): JSX.Element => {
+export const Input: React.FC<InputProps> = React.forwardRef(function Input(
+  props,
+  ref,
+): JSX.Element {
   const {
     currentPath,
     handleChange,
+    handleKeyDown,
+    handleKeyUp,
     handleSubmit,
     inputValue,
     inputPrompt,
@@ -29,11 +37,14 @@ export const Input: React.FC<InputProps> = (props): JSX.Element => {
           type="text"
           value={inputValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
           readOnly={readOnly}
+          ref={ref}
         />
       </form>
     </div>
   );
-};
+});
 
 export default Input;
