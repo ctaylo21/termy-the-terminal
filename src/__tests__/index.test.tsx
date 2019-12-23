@@ -8,12 +8,17 @@ import {
 } from '@testing-library/react';
 import { Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
+jest.mock('../../images/dog.png', () => 'abc/dog.png');
 
 beforeAll((): void => {
   Element.prototype.scrollIntoView = jest.fn();
 });
 
 afterEach(cleanup);
+
+afterAll(() => {
+  jest.clearAllMocks();
+});
 
 describe('initialization', (): void => {
   test('custom input prompt', async (): Promise<void> => {
@@ -491,6 +496,22 @@ describe('cat', (): void => {
 
     const history = await findByLabelText(container, 'terminal-history');
 
+    expect(history.innerHTML).toMatchSnapshot();
+  });
+
+  test('should support cat on images', async (): Promise<void> => {
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cat home/dog.png' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toContain('<img src="abc/dog.png">');
     expect(history.innerHTML).toMatchSnapshot();
   });
 });
