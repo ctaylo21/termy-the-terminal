@@ -1,4 +1,5 @@
 import { FileSystem } from '../../src/index';
+import dogImg from '../../src/images/dog.png';
 
 const exampleFileSystem: FileSystem = {
   home: {
@@ -22,6 +23,11 @@ const exampleFileSystem: FileSystem = {
             extension: 'txt',
           },
         },
+      },
+      dog: {
+        type: 'FILE',
+        content: dogImg,
+        extension: 'png',
       },
       file1: {
         type: 'FILE',
