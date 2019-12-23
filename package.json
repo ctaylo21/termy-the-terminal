@@ -64,6 +64,7 @@
     "lodash-es": "^4.17.15"
   },
   "devDependencies": {
+    "@rollup/plugin-image": "^2.0.0",
     "@rollup/plugin-url": "^4.0.0",
     "@svgr/rollup": "^4.3.3",
     "@testing-library/react": "^9.4.0",

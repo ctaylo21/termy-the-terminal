@@ -1,7 +1,12 @@
-import { getInternalPath, stripFileExtension } from './utilities';
+import React from 'react';
+import {
+  getInternalPath,
+  stripFileExtension,
+  isImageExtension,
+} from './utilities';
 import get from 'lodash/get';
 import { CommandResponse, FileSystem } from '../index';
-
+import TerminalImage from '../components/TerminalImage';
 /**
  * Given a file system, returns contents for a given file
  *
@@ -27,9 +32,15 @@ export default function cat(
     }
 
     if (file.type === 'FILE') {
-      resolve({
-        commandResult: file.content,
-      });
+      if (isImageExtension(file.extension)) {
+        resolve({
+          commandResult: <TerminalImage src={file.content} />,
+        });
+      } else {
+        resolve({
+          commandResult: file.content,
+        });
+      }
     }
 
     reject('Target is not a file');

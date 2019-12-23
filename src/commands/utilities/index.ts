@@ -101,3 +101,15 @@ export function getInternalPath(
     handleDotDotInPath(stripFileExtension(normalizedPath)),
   );
 }
+
+/**
+ * Checks if a file extension is a valid image file extension
+ *
+ * @param extension {string} - file extension to check
+ * @returns {boolean} - whether or not file is image extension
+ */
+export function isImageExtension(extension: string): boolean {
+  const imageExtensions = ['png', 'jpg', 'gif'];
+
+  return imageExtensions.includes(extension);
+}

@@ -34,7 +34,7 @@ export interface TerminalFile {
   [key: string]: 'FILE' | string;
   type: 'FILE';
   content: string;
-  extension: 'txt';
+  extension: 'txt' | 'jpg' | 'png' | 'gif';
 }
 
 export interface TerminalFolder {

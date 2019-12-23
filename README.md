@@ -91,6 +91,8 @@ ReactDOM.render(
 The `fileSystem` prop needs to be a particular format ([code example](src/data/exampleFileSystem.ts)):
 
 ```javascript
+import dogImg from '../../src/images/dog.png';
+
 const exampleFileSystem = {
   home: {
     type: 'FOLDER',
@@ -104,6 +106,11 @@ const exampleFileSystem = {
         content: 'Contents of file 1',
         extension: 'txt',
       },
+      dog: {
+        type: 'FILE',
+        content: dogImg,
+        extension: 'png',
+      },
     },
   },
   docs: {
@@ -113,10 +120,14 @@ const exampleFileSystem = {
 };
 ```
 
+**Important**: To support using `cat` to display images from your filesystem, you need to pass a valid image location and valid extension (`'jpg'`, `'png'`, or `'gif'`). To follow the example above, you will need to make sure your bundler (webpack, rollup, etc..) supports importing images. For an example of this in webpack, see the [weback docs](https://webpack.js.org/guides/asset-management/#loading-images), and for rollup, check out [@rollup/plugin-image](https://github.com/rollup/plugins/tree/master/packages/image).
+
 ## General
+
 The following sections include general features that Termy supports outside of the terminal commands.
 
 ### Command History
+
 Termy supports using the arrow keys (up and down) to move through the command history.
 
 ## Commands
@@ -194,7 +205,8 @@ Folder created: ../test2 #/home/test2
 
 ### `cat [FILE]`
 
-Shows the contents of a file
+Shows the contents of a file. Both basic text files and images are supported (with some dependencies, see the [Usage](#usage)
+section).
 
 ```bash
 /home $> cat file1.txt
@@ -202,6 +214,13 @@ Shows the contents of a file
 
 /home $> cat videos/file2.txt
 # Contents of file2.txt
+
+/home $> cat home/dog.png
+   / \__
+  (    @\___
+  /         O
+ /   (_____/
+/_____/   U
 ```
 
 ### `rm [OPTIONS] [FILE]`

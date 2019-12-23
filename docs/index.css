@@ -25,6 +25,8 @@
         color: #9ac794; }
   #terminal-wrapper #history-container > ul > li > #input-container {
     padding-bottom: 0; }
+  #terminal-wrapper #history-container img {
+    margin-top: 10px; }
   #terminal-wrapper #history-container #help-container ul > li {
     margin: 5px 0; }
     #terminal-wrapper #history-container #help-container ul > li > span.help-command-name {
