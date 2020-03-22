@@ -1,6 +1,12 @@
 # Change Log
 
-## 1.0.6 - 2020-3-22
+## 1.1.1 - 2020-3-22
+
+### Fixed
+
+- Update input to disable auto correct/capitalize/complete
+
+## 1.1.0 - 2020-3-22
 
 ### Fixed
 
