@@ -26408,7 +26408,7 @@
 	    return (react.createElement("div", { id: "input-container", spellCheck: false },
 	        react.createElement("form", { onSubmit: handleSubmit },
 	            react.createElement(InputPrompt, { path: currentPath, inputPrompt: inputPrompt }),
-	            react.createElement("input", { "aria-label": "terminal-input", type: "text", value: inputValue, onChange: handleChange, onKeyDown: handleKeyDown, onKeyUp: handleKeyUp, readOnly: readOnly, ref: ref }))));
+	            react.createElement("input", { "aria-label": "terminal-input", autoComplete: "none", autoCapitalize: "none", autoCorrect: "off", type: "text", value: inputValue, onChange: handleChange, onKeyDown: handleKeyDown, onKeyUp: handleKeyUp, readOnly: readOnly, ref: ref }))));
 	});
 
 	/**

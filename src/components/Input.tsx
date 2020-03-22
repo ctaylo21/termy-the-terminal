@@ -34,6 +34,9 @@ export const Input: React.FC<InputProps> = React.forwardRef(function Input(
         <InputPrompt path={currentPath} inputPrompt={inputPrompt} />
         <input
           aria-label="terminal-input"
+          autoComplete="none"
+          autoCapitalize="none"
+          autoCorrect="off"
           type="text"
           value={inputValue}
           onChange={handleChange}
