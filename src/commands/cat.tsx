@@ -5,7 +5,7 @@ import {
   isImageExtension,
 } from './utilities';
 import get from 'lodash/get';
-import { CommandResponse, FileSystem } from '../index';
+import { CommandResponse, FileSystem, TerminalImageFile } from '../index';
 import TerminalImage from '../components/TerminalImage';
 /**
  * Given a file system, returns contents for a given file
@@ -34,7 +34,9 @@ export default function cat(
     if (file.type === 'FILE') {
       if (isImageExtension(file.extension)) {
         resolve({
-          commandResult: <TerminalImage src={file.content} />,
+          commandResult: (
+            <TerminalImage src={(file as TerminalImageFile).content} />
+          ),
         });
       } else {
         resolve({

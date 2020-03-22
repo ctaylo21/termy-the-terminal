@@ -93,6 +93,13 @@ The `fileSystem` prop needs to be a particular format ([code example](src/data/e
 ```javascript
 import dogImg from '../../src/images/dog.png';
 
+const BlogPost ({date, content}) => (
+  <>
+    <h3>{date}</h3>
+    <p>{content}</p>
+  </>
+);
+
 const exampleFileSystem = {
   home: {
     type: 'FOLDER',
@@ -116,6 +123,11 @@ const exampleFileSystem = {
   docs: {
     type: 'FOLDER',
     children: null,
+  },
+  blog: {
+    type: 'FILE',
+    content: <BlogPost date="3/22" content="Today is a good day" />,
+    extension: 'txt'
   },
 };
 ```

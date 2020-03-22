@@ -467,6 +467,26 @@ describe('cat', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
+  test('should list contents of file that contains react component', async (): Promise<
+    void
+  > => {
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cat blog.txt' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toContain('3/22');
+    expect(history.innerHTML).toContain('Today is a good day');
+
+    expect(history.innerHTML).toMatchSnapshot();
+  });
+
   test('should show error when cat on non file', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,

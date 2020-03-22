@@ -1,5 +1,6 @@
+import React from 'react';
 import cat from '../cat';
-import exampleFileSystem from '../../data/exampleFileSystem';
+import exampleFileSystem, { BlogPost } from '../../data/exampleFileSystem';
 import { render } from '@testing-library/react';
 jest.mock('../../images/dog.png', () => 'abc/dog.png');
 
@@ -35,6 +36,14 @@ describe('cat suite', (): void => {
     expect(container.getElementsByTagName('img')[0].src).toEqual(
       'http://localhost/abc/dog.png',
     );
+  });
+
+  it('should print contents of file that contans react component', () => {
+    return expect(
+      cat(exampleFileSystem, '/', 'blog.txt'),
+    ).resolves.toStrictEqual({
+      commandResult: <BlogPost content="Today is a good day" date="3/22" />,
+    });
   });
 
   it('should print contents of file with path from nested path', async (): Promise<

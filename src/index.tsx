@@ -30,11 +30,20 @@ export interface FileSystem {
   [key: string]: TerminalFolder | TerminalFile;
 }
 
-export interface TerminalFile {
+export type TerminalFile = TerminalTextFile | TerminalImageFile;
+
+export interface TerminalTextFile {
+  [key: string]: 'FILE' | string | JSX.Element;
+  type: 'FILE';
+  content: string | JSX.Element;
+  extension: 'txt';
+}
+
+export interface TerminalImageFile {
   [key: string]: 'FILE' | string;
   type: 'FILE';
   content: string;
-  extension: 'txt' | 'jpg' | 'png' | 'gif';
+  extension: 'jpg' | 'png' | 'gif';
 }
 
 export interface TerminalFolder {
