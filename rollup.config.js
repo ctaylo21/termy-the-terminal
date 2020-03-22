@@ -6,10 +6,9 @@ import resolve from 'rollup-plugin-node-resolve';
 import svgr from '@svgr/rollup';
 import typescript from 'rollup-plugin-typescript2';
 import url from '@rollup/plugin-url';
-import image from '@rollup/plugin-image';
 import pkg from './package.json';
 
-export const getBasePlugins = targetFolder => [
+export const getBasePlugins = (targetFolder) => [
   cleaner({ targets: [targetFolder] }),
   url({ exclude: ['**/*.svg'] }),
   svgr(),
@@ -44,6 +43,5 @@ export default {
     }),
     commonjs(),
     external(),
-    image(),
   ],
 };
