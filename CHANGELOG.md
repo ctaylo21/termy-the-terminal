@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.6 - 2020-3-22
+
+### Fixed
+
+- Removed image plugin that was breaking icons
+
 ## 1.0.6 - 2019-12-23
 
 ### Added
