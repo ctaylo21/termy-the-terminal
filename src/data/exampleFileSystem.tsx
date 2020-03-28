@@ -61,6 +61,11 @@ const exampleFileSystem: FileSystem = {
     content: 'Contents of file 3',
     extension: 'txt',
   },
+  file4: {
+    type: 'FILE',
+    content: 'Contents of file 4',
+    extension: 'txt',
+  },
   blog: {
     type: 'FILE',
     content: <BlogPost date="3/22" content="Today is a good day" />,

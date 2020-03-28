@@ -8,10 +8,11 @@ export interface TerminalState {
   currentCommandId: number;
   currentHistoryId: number;
   currentPath: string;
-  history: HistoryItem[];
-  inputValue: string;
-  inputPrompt: string;
   fileSystem: FileSystem;
+  history: HistoryItem[];
+  inputPrompt: string;
+  inputValue: string;
+  tabCompleteResult?: React.Component;
 }
 
 export interface HistoryItem {
@@ -62,10 +63,10 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     currentCommandId: 0,
     currentPath: '/',
     currentHistoryId: -1,
-    history: [],
-    inputValue: '',
-    inputPrompt: this.props.inputPrompt || '$>',
     fileSystem: this.props.fileSystem,
+    history: [],
+    inputPrompt: this.props.inputPrompt || '$>',
+    inputValue: '',
   };
 
   private inputWrapper = React.createRef<HTMLDivElement>();
@@ -90,13 +91,14 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
   private handleKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
     // Prevent behavior of up arrow moving cursor to beginning of line in Chrome (and possibly others)
-    if (event.keyCode == 38 || event.key === 'ArrowUp') {
+    if (
+      event.keyCode == 38 ||
+      event.key === 'ArrowUp' ||
+      event.keyCode == 9 ||
+      event.key === 'Tab'
+    ) {
       event.preventDefault();
     }
-  };
-
-  private handleKeyUp = (event: KeyboardEvent<HTMLInputElement>): void => {
-    event.preventDefault();
 
     const handleUpArrowKeyPress = (): void => {
       // Handle no history item to show
@@ -137,12 +139,58 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       }
     };
 
+    const handleTabPress = async (): Promise<void> => {
+      const {
+        history,
+
+        inputValue,
+        currentPath,
+        fileSystem,
+      } = this.state;
+      const [commandName, ...commandArgs] = inputValue.split(' ');
+      const commandTarget = commandArgs.pop() || '';
+
+      let commandResult: CommandResponse['commandResult'];
+      let updatedState: CommandResponse['updatedState'] = {};
+
+      if (commandName === 'ls') {
+        try {
+          ({ commandResult, updatedState = {} } = await commands.lsAutoComplete(
+            fileSystem,
+            currentPath,
+            commandTarget,
+          ));
+        } catch (e) {
+          commandResult = `Error: ${e}`;
+        }
+      } else {
+        commandResult = `command not found: ${commandName}`;
+      }
+
+      this.setState(
+        Object.assign(
+          {
+            currentCommandId: this.state.currentCommandId + 1,
+            currentHistoryId: this.state.currentCommandId,
+            history: history,
+            inputValue: '',
+            tabCompleteResult: commandResult,
+          },
+          updatedState,
+        ) as TerminalState,
+      );
+    };
+
     if (event.keyCode == 38 || event.key === 'ArrowUp') {
       handleUpArrowKeyPress();
     }
 
     if (event.keyCode == 40 || event.key === 'ArrowDown') {
       handleDownArrowKeyPress();
+    }
+
+    if (event.keyCode == 9 || event.key === 'Tab') {
+      handleTabPress();
     }
   };
 
@@ -203,7 +251,14 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   };
 
   public render(): JSX.Element {
-    const { currentPath, history, inputValue, inputPrompt } = this.state;
+    const {
+      currentPath,
+      history,
+      inputPrompt,
+      inputValue,
+      tabCompleteResult,
+    } = this.state;
+
     return (
       <div id="terminal-wrapper">
         <History history={history} />
@@ -212,13 +267,15 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             currentPath={currentPath}
             handleChange={this.handleChange}
             handleKeyDown={this.handleKeyDown}
-            handleKeyUp={this.handleKeyUp}
             handleSubmit={this.handleSubmit}
             inputValue={inputValue}
             inputPrompt={inputPrompt}
             ref={this.terminalInput}
             readOnly={false}
           />
+        </div>
+        <div aria-label="autocomplete-preview" className="tab-complete-result">
+          {tabCompleteResult}
         </div>
       </div>
     );

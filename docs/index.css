@@ -56,3 +56,9 @@
           margin-bottom: 2px;
           height: 20px;
           width: 24px; }
+  #terminal-wrapper .preview-list span {
+    margin: 0px 10px; }
+    #terminal-wrapper .preview-list span.ls-preview-folder {
+      color: #f99157; }
+    #terminal-wrapper .preview-list span.ls-preview-file {
+      color: #5fb3b3; }

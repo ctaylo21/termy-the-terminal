@@ -1,4 +1,4 @@
-import ls from '../ls';
+import { ls, lsAutoComplete } from '../ls';
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { render } from '@testing-library/react';
 
@@ -62,5 +62,36 @@ describe('ls suite', (): void => {
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('test');
+  });
+
+  describe('auto complete', (): void => {
+    test('empty value', async (): Promise<void> => {
+      const lsResult = await lsAutoComplete(
+        exampleFileSystem,
+        '/home/user',
+        '',
+      );
+      const { container } = render(lsResult.commandResult as JSX.Element);
+
+      expect(container.innerHTML).toContain('test');
+    });
+
+    test('should filter single level target', async (): Promise<void> => {
+      const lsResult = await lsAutoComplete(exampleFileSystem, '/', 'fi');
+      const { container } = render(lsResult.commandResult as JSX.Element);
+
+      expect(container.innerHTML).toContain('file3');
+      expect(container.innerHTML).toContain('file4');
+      expect(container.innerHTML).not.toContain('blog');
+      expect(container.innerHTML).not.toContain('docs');
+      expect(container.innerHTML).not.toContain('home');
+    });
+
+    test('invalid path should return nothing', async (): Promise<void> => {
+      const lsResult = await lsAutoComplete(exampleFileSystem, '/bad/path', '');
+      const { container } = render(lsResult.commandResult as JSX.Element);
+
+      expect(container.innerHTML).toBe('');
+    });
   });
 });

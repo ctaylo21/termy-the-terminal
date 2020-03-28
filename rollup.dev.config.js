@@ -6,7 +6,7 @@ import typescript from 'rollup-plugin-typescript2';
 
 import { getBasePlugins } from './rollup.config';
 
-export default commandLineArgs => {
+export default (commandLineArgs) => {
   const targetFolder = commandLineArgs.configDocBuild ? 'docs' : 'dist';
   const config = {
     input: 'src/demo.tsx',
@@ -35,7 +35,7 @@ export default commandLineArgs => {
         rollupCommonJSResolveHack: true,
         clean: true,
         tsconfigOverride: {
-          compilerOptions: { declaration: false },
+          compilerOptions: { declaration: false, sourceMap: true },
           include: ['src/index.tsx', './src/types.d.ts', 'src/demo.tsx'],
         },
       }),

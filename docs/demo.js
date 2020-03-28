@@ -27931,6 +27931,19 @@
 	    });
 	}
 
+	var AutoCompleteList = function (props) {
+	    var items = props.items;
+	    var autoCompleteItems = Object.keys(items).map(function (key) {
+	        if (items[key].type === 'FOLDER') {
+	            return (react.createElement("span", { className: "ls-preview-folder", key: key },
+	                key,
+	                "/"));
+	        }
+	        return (react.createElement("span", { className: "ls-preview-file", key: key }, key));
+	    });
+	    return react.createElement("div", { className: "preview-list" }, autoCompleteItems);
+	};
+
 	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 	var _ref = /*#__PURE__*/react_4("path", {
@@ -28011,6 +28024,41 @@
 	        }
 	        resolve({
 	            commandResult: react.createElement(LsResult, { lsResult: externalFormatDir }),
+	        });
+	    });
+	}
+	/**
+	 * Given a fileysystem, lists all items for a given directory
+	 *
+	 * @param fileSystem {object} - filesystem to ls upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param target {string} - potentially empty string to match autocomplete against
+	 * @returns Promise<object> - resolves with contents of given path
+	 */
+	function lsAutoComplete(fileSystem, currentPath, target) {
+	    if (target === void 0) { target = ''; }
+	    return new Promise(function (resolve, reject) {
+	        var externalFormatDir = {};
+	        var targetFolderContents;
+	        try {
+	            targetFolderContents = getTargetFolder(fileSystem, currentPath, '');
+	        }
+	        catch (e) {
+	            reject(e.message);
+	        }
+	        for (var key in targetFolderContents) {
+	            var lsKey = targetFolderContents[key].type === 'FILE'
+	                ? key + "." + targetFolderContents[key].extension
+	                : key;
+	            if (lsKey.startsWith(target)) {
+	                externalFormatDir[lsKey] = {
+	                    type: targetFolderContents[key].type,
+	                };
+	            }
+	        }
+	        console.log('tab ls results', externalFormatDir);
+	        resolve({
+	            commandResult: react.createElement(AutoCompleteList, { items: externalFormatDir }),
 	        });
 	    });
 	}
@@ -29898,7 +29946,7 @@
 	    });
 	}
 
-	var commands$1 = { cd: cd$1, ls: ls, mkdir: mkdir, cat: cat, help: help, pwd: pwd, rm: rm };
+	var commands$1 = { cd: cd$1, ls: ls, lsAutoComplete: lsAutoComplete, mkdir: mkdir, cat: cat, help: help, pwd: pwd, rm: rm };
 
 	var Terminal = /** @class */ (function (_super) {
 	    __extends(Terminal, _super);
@@ -29908,10 +29956,10 @@
 	            currentCommandId: 0,
 	            currentPath: '/',
 	            currentHistoryId: -1,
-	            history: [],
-	            inputValue: '',
-	            inputPrompt: _this.props.inputPrompt || '$>',
 	            fileSystem: _this.props.fileSystem,
+	            history: [],
+	            inputPrompt: _this.props.inputPrompt || '$>',
+	            inputValue: '',
 	        };
 	        _this.inputWrapper = react.createRef();
 	        _this.terminalInput = react.createRef();
@@ -29922,12 +29970,12 @@
 	        };
 	        _this.handleKeyDown = function (event) {
 	            // Prevent behavior of up arrow moving cursor to beginning of line in Chrome (and possibly others)
-	            if (event.keyCode == 38 || event.key === 'ArrowUp') {
+	            if (event.keyCode == 38 ||
+	                event.key === 'ArrowUp' ||
+	                event.keyCode == 9 ||
+	                event.key === 'Tab') {
 	                event.preventDefault();
 	            }
-	        };
-	        _this.handleKeyUp = function (event) {
-	            event.preventDefault();
 	            var handleUpArrowKeyPress = function () {
 	                // Handle no history item to show
 	                if (_this.state.currentHistoryId < 0) {
@@ -29962,15 +30010,56 @@
 	                    });
 	                }
 	            };
+	            var handleTabPress = function () { return __awaiter(_this, void 0, void 0, function () {
+	                var _a, history, inputValue, currentPath, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1;
+	                var _c, _d;
+	                return __generator(this, function (_e) {
+	                    switch (_e.label) {
+	                        case 0:
+	                            _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, fileSystem = _a.fileSystem;
+	                            _b = inputValue.split(' '), commandName = _b[0], commandArgs = _b.slice(1);
+	                            commandTarget = commandArgs.pop() || '';
+	                            updatedState = {};
+	                            if (!(commandName === 'ls')) return [3 /*break*/, 5];
+	                            _e.label = 1;
+	                        case 1:
+	                            _e.trys.push([1, 3, , 4]);
+	                            return [4 /*yield*/, commands$1.lsAutoComplete(fileSystem, currentPath, commandTarget)];
+	                        case 2:
+	                            (_c = _e.sent(), commandResult = _c.commandResult, _d = _c.updatedState, updatedState = _d === void 0 ? {} : _d);
+	                            return [3 /*break*/, 4];
+	                        case 3:
+	                            e_1 = _e.sent();
+	                            commandResult = "Error: " + e_1;
+	                            return [3 /*break*/, 4];
+	                        case 4: return [3 /*break*/, 6];
+	                        case 5:
+	                            commandResult = "command not found: " + commandName;
+	                            _e.label = 6;
+	                        case 6:
+	                            this.setState(Object.assign({
+	                                currentCommandId: this.state.currentCommandId + 1,
+	                                currentHistoryId: this.state.currentCommandId,
+	                                history: history,
+	                                inputValue: '',
+	                                tabCompleteResult: commandResult,
+	                            }, updatedState));
+	                            return [2 /*return*/];
+	                    }
+	                });
+	            }); };
 	            if (event.keyCode == 38 || event.key === 'ArrowUp') {
 	                handleUpArrowKeyPress();
 	            }
 	            if (event.keyCode == 40 || event.key === 'ArrowDown') {
 	                handleDownArrowKeyPress();
 	            }
+	            if (event.keyCode == 9 || event.key === 'Tab') {
+	                handleTabPress();
+	            }
 	        };
 	        _this.handleSubmit = function (event) { return __awaiter(_this, void 0, void 0, function () {
-	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1, updatedHistory;
+	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_2, updatedHistory;
 	            var _c, _d;
 	            return __generator(this, function (_e) {
 	                switch (_e.label) {
@@ -29989,8 +30078,8 @@
 	                        (_c = _e.sent(), commandResult = _c.commandResult, _d = _c.updatedState, updatedState = _d === void 0 ? {} : _d);
 	                        return [3 /*break*/, 4];
 	                    case 3:
-	                        e_1 = _e.sent();
-	                        commandResult = "Error: " + e_1;
+	                        e_2 = _e.sent();
+	                        commandResult = "Error: " + e_2;
 	                        return [3 /*break*/, 4];
 	                    case 4: return [3 /*break*/, 6];
 	                    case 5:
@@ -30024,11 +30113,12 @@
 	        this.inputWrapper.current.scrollIntoView({ behavior: 'smooth' });
 	    };
 	    Terminal.prototype.render = function () {
-	        var _a = this.state, currentPath = _a.currentPath, history = _a.history, inputValue = _a.inputValue, inputPrompt = _a.inputPrompt;
+	        var _a = this.state, currentPath = _a.currentPath, history = _a.history, inputPrompt = _a.inputPrompt, inputValue = _a.inputValue, tabCompleteResult = _a.tabCompleteResult;
 	        return (react.createElement("div", { id: "terminal-wrapper" },
 	            react.createElement(History, { history: history }),
 	            react.createElement("div", { ref: this.inputWrapper },
-	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleKeyDown: this.handleKeyDown, handleKeyUp: this.handleKeyUp, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, ref: this.terminalInput, readOnly: false }))));
+	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleKeyDown: this.handleKeyDown, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, ref: this.terminalInput, readOnly: false })),
+	            react.createElement("div", { className: "tab-complete-result" }, tabCompleteResult)));
 	    };
 	    return Terminal;
 	}(react_2));

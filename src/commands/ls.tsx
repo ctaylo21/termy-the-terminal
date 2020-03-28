@@ -2,6 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
+import AutoCompleteList from '../components/AutoCompleteList';
 import LsResult from '../components/LsResult';
 import { CommandResponse, FileSystem, TerminalFolder } from '../index';
 
@@ -69,3 +70,47 @@ export default function ls(
     });
   });
 }
+
+/**
+ * Given a fileysystem, lists all items for a given directory
+ *
+ * @param fileSystem {object} - filesystem to ls upon
+ * @param currentPath {string} - current path within filesystem
+ * @param target {string} - potentially empty string to match autocomplete against
+ * @returns Promise<object> - resolves with contents of given path
+ */
+function lsAutoComplete(
+  fileSystem: FileSystem,
+  currentPath: string,
+  target = '',
+): Promise<CommandResponse> {
+  return new Promise((resolve): void => {
+    const externalFormatDir: LsResultType = {};
+
+    let targetFolderContents;
+    try {
+      targetFolderContents = getTargetFolder(fileSystem, currentPath, '');
+    } catch (e) {
+      resolve({ commandResult: '' });
+    }
+
+    for (const key in targetFolderContents) {
+      const lsKey =
+        targetFolderContents[key].type === 'FILE'
+          ? `${key}.${targetFolderContents[key].extension}`
+          : key;
+
+      if (lsKey.startsWith(target)) {
+        externalFormatDir[lsKey] = {
+          type: targetFolderContents[key].type,
+        };
+      }
+    }
+
+    resolve({
+      commandResult: <AutoCompleteList items={externalFormatDir} />,
+    });
+  });
+}
+
+export { ls, lsAutoComplete };

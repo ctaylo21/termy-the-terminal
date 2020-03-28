@@ -6,6 +6,7 @@ import {
   wait,
   findByLabelText,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
 jest.mock('../../images/dog.png', () => 'abc/dog.png');
@@ -63,6 +64,60 @@ describe('general', (): void => {
     const history = await findByLabelText(container, 'terminal-history');
 
     expect(history.innerHTML).toMatchSnapshot();
+  });
+});
+
+describe('autocomplete with tab', (): void => {
+  describe('ls', (): void => {
+    test('ls tab with no argument', async (): Promise<void> => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input');
+      await userEvent.type(input, 'ls ');
+
+      const keyDownEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      fireEvent(input, keyDownEvent);
+
+      const autoCopmleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      Object.keys(exampleFileSystem).forEach((item) => {
+        expect(autoCopmleteContent.innerHTML).toContain(item);
+      });
+      expect(autoCopmleteContent.innerHTML).toMatchSnapshot();
+    });
+  });
+
+  describe('general', (): void => {
+    test('should call "e.preventDefault" on tab key press', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+      const keyDownEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      Object.assign(keyDownEvent, { preventDefault: jest.fn() });
+
+      fireEvent(input, keyDownEvent);
+
+      await wait(() => {
+        expect(keyDownEvent.preventDefault).toHaveBeenCalledTimes(1);
+      });
+    });
   });
 });
 
@@ -552,7 +607,7 @@ describe('history', (): void => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     await wait(() => {
       expect(input.value).toBe('cd home');
     });
@@ -566,7 +621,7 @@ describe('history', (): void => {
     );
     const input = getByLabelText('terminal-input') as HTMLInputElement;
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     await wait(() => {
       expect(input.value).toBe('');
     });
@@ -594,8 +649,8 @@ describe('history', (): void => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     await wait(() => {
       expect(input.value).toBe('cd home');
     });
@@ -616,8 +671,8 @@ describe('history', (): void => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     await wait(() => {
       expect(input.value).toBe('cd home');
     });
@@ -689,9 +744,9 @@ describe('history', (): void => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
     await wait(() => {
       expect(input.value).toBe('pwd');
     });
@@ -712,9 +767,9 @@ describe('history', (): void => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
     await wait(() => {
       expect(input.value).toBe('');
     });
@@ -728,7 +783,7 @@ describe('history', (): void => {
     );
     const input = getByLabelText('terminal-input') as HTMLInputElement;
 
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
     await wait(() => {
       expect(input.value).toBe('');
     });
