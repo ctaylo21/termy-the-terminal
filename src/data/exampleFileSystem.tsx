@@ -50,6 +50,11 @@ const exampleFileSystem: FileSystem = {
         content: 'Contents of file 1',
         extension: 'txt',
       },
+      file5: {
+        type: 'FILE',
+        content: 'Contents of file 5',
+        extension: 'txt',
+      },
     },
   },
   docs: {

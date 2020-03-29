@@ -80,8 +80,8 @@ describe('ls suite', (): void => {
       const lsResult = await lsAutoComplete(exampleFileSystem, '/', 'fi');
       const { container } = render(lsResult.commandResult as JSX.Element);
 
-      expect(container.innerHTML).toContain('file3');
-      expect(container.innerHTML).toContain('file4');
+      expect(container.innerHTML).toContain('file3.txt');
+      expect(container.innerHTML).toContain('file4.txt');
       expect(container.innerHTML).not.toContain('blog');
       expect(container.innerHTML).not.toContain('docs');
       expect(container.innerHTML).not.toContain('home');
@@ -92,6 +92,28 @@ describe('ls suite', (): void => {
       const { container } = render(lsResult.commandResult as JSX.Element);
 
       expect(container.innerHTML).toBe('');
+    });
+
+    test('relative path', async (): Promise<void> => {
+      const lsResult = await lsAutoComplete(exampleFileSystem, '/', 'home/fi');
+      const { container } = render(lsResult.commandResult as JSX.Element);
+
+      expect(container.innerHTML).toContain('file1.txt');
+      expect(container.innerHTML).toContain('file5.txt');
+      expect(container.innerHTML).not.toContain('user');
+      expect(container.innerHTML).not.toContain('videos');
+      expect(container.innerHTML).not.toContain('dog.png');
+    });
+
+    test('absolute path', async (): Promise<void> => {
+      const lsResult = await lsAutoComplete(exampleFileSystem, '/', '/home/d');
+      const { container } = render(lsResult.commandResult as JSX.Element);
+
+      expect(container.innerHTML).toContain('dog.png');
+      expect(container.innerHTML).not.toContain('user');
+      expect(container.innerHTML).not.toContain('videos');
+      expect(container.innerHTML).not.toContain('file1.txt');
+      expect(container.innerHTML).not.toContain('file5.txt');
     });
   });
 });

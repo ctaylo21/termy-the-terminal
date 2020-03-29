@@ -74,15 +74,15 @@ describe('autocomplete with tab', (): void => {
         <Terminal fileSystem={exampleFileSystem} />,
       );
 
-      const input = getByLabelText('terminal-input');
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
       await userEvent.type(input, 'ls ');
 
-      const keyDownEvent = new KeyboardEvent('keydown', {
+      const tabEvent = new KeyboardEvent('keydown', {
         bubbles: true,
         code: '9',
         key: 'Tab',
       });
-      fireEvent(input, keyDownEvent);
+      fireEvent(input, tabEvent);
 
       const autoCopmleteContent = await findByLabelText(
         container,
@@ -93,6 +93,35 @@ describe('autocomplete with tab', (): void => {
         expect(autoCopmleteContent.innerHTML).toContain(item);
       });
       expect(autoCopmleteContent.innerHTML).toMatchSnapshot();
+      expect(input.value).toBe('ls ');
+    });
+
+    test('ls tab with argument and relative nested path', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/fi');
+
+      const tabEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      fireEvent(input, tabEvent);
+
+      const autoCopmleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCopmleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCopmleteContent.innerHTML).toContain('file5.txt');
+      expect(autoCopmleteContent.innerHTML).toMatchSnapshot();
+      expect(input.value).toBe('ls home/fi');
     });
   });
 

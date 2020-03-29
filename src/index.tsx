@@ -140,13 +140,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     };
 
     const handleTabPress = async (): Promise<void> => {
-      const {
-        history,
-
-        inputValue,
-        currentPath,
-        fileSystem,
-      } = this.state;
+      const { history, inputValue, currentPath, fileSystem } = this.state;
       const [commandName, ...commandArgs] = inputValue.split(' ');
       const commandTarget = commandArgs.pop() || '';
 
@@ -173,7 +167,6 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             currentCommandId: this.state.currentCommandId + 1,
             currentHistoryId: this.state.currentCommandId,
             history: history,
-            inputValue: '',
             tabCompleteResult: commandResult,
           },
           updatedState,
