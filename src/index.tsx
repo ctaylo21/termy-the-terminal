@@ -3,6 +3,7 @@ import { History } from './components/History';
 import Input from './components/Input';
 import commands from './commands';
 import './styles/Terminal.scss';
+import { parseCommand } from './commands/utilities/index';
 
 export interface TerminalState {
   currentCommandId: number;
@@ -141,24 +142,20 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
     const handleTabPress = async (): Promise<void> => {
       const { history, inputValue, currentPath, fileSystem } = this.state;
-      const [commandName, ...commandArgs] = inputValue.split(' ');
-      const commandTarget = commandArgs.pop() || '';
+      const { commandName, commandTargets } = parseCommand(inputValue);
 
       let commandResult: CommandResponse['commandResult'];
       let updatedState: CommandResponse['updatedState'] = {};
 
       if (commandName === 'ls') {
-        try {
-          ({ commandResult, updatedState = {} } = await commands.lsAutoComplete(
-            fileSystem,
-            currentPath,
-            commandTarget,
-          ));
-        } catch (e) {
-          commandResult = `Error: ${e}`;
-        }
+        ({ commandResult, updatedState = {} } = await commands.lsAutoComplete(
+          fileSystem,
+          currentPath,
+          commandTargets[0],
+        ));
       } else {
-        commandResult = `command not found: ${commandName}`;
+        // Do nothing if tab is not supported
+        return;
       }
 
       this.setState(
@@ -199,8 +196,9 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       inputPrompt,
       fileSystem,
     } = this.state;
-    const [commandName, ...commandArgs] = inputValue.split(' ');
-    const commandTarget = commandArgs.pop() || '';
+    const { commandName, commandOptions, commandTargets } = parseCommand(
+      inputValue,
+    );
 
     let commandResult: CommandResponse['commandResult'];
     let updatedState: CommandResponse['updatedState'] = {};
@@ -208,7 +206,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       try {
         ({ commandResult, updatedState = {} } = await commands[
           commandName as keyof typeof commands
-        ](fileSystem, currentPath, commandTarget, ...commandArgs));
+        ](fileSystem, currentPath, commandTargets[0], ...commandOptions));
       } catch (e) {
         commandResult = `Error: ${e}`;
       }
@@ -237,6 +235,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
           currentHistoryId: this.state.currentCommandId,
           history: updatedHistory,
           inputValue: '',
+          tabCompleteResult: '',
         },
         updatedState,
       ) as TerminalState,

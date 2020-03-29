@@ -147,6 +147,64 @@ describe('autocomplete with tab', (): void => {
         expect(keyDownEvent.preventDefault).toHaveBeenCalledTimes(1);
       });
     });
+
+    test('should clear preview display once command is executed', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/u');
+
+      const tabEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      fireEvent(input, tabEvent);
+
+      const autoCopmleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCopmleteContent.innerHTML).toContain('user');
+      await userEvent.type(input, 'ls home/user');
+      fireEvent.submit(input);
+
+      await wait();
+
+      expect(autoCopmleteContent.innerHTML).toBe('');
+      expect(input.value).toBe('');
+    });
+
+    test('tab when no autocomplete command exists should do nothing', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'help');
+
+      const tabEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      fireEvent(input, tabEvent);
+
+      const autoCopmleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCopmleteContent.innerHTML).toBe('');
+      expect(input.value).toBe('help');
+    });
   });
 });
 
