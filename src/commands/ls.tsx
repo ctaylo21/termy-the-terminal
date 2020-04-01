@@ -2,9 +2,13 @@ import React from 'react';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
-import AutoCompleteList from '../components/AutoCompleteList';
 import LsResult from '../components/LsResult';
-import { CommandResponse, FileSystem, TerminalFolder } from '../index';
+import {
+  AutoCompleteResponse,
+  CommandResponse,
+  FileSystem,
+  TerminalFolder,
+} from '../index';
 
 export interface LsResultType {
   [index: string]: {
@@ -101,7 +105,7 @@ function lsAutoComplete(
   fileSystem: FileSystem,
   currentPath: string,
   target = '',
-): Promise<CommandResponse> {
+): Promise<AutoCompleteResponse> {
   return new Promise((resolve): void => {
     // Default to searching in currenty directory with simple target
     // that contains no path
@@ -125,17 +129,16 @@ function lsAutoComplete(
         targetPath,
       );
     } catch (e) {
-      return resolve({ commandResult: '' });
+      return resolve();
     }
 
     const matchFilterFn = (item: LsResultType): boolean =>
       Object.keys(item)[0].startsWith(autoCompleteMatch);
 
     resolve({
-      commandResult: (
-        <AutoCompleteList
-          items={buildLsFormatDirectory(targetFolderContents, matchFilterFn)}
-        />
+      commandResult: buildLsFormatDirectory(
+        targetFolderContents,
+        matchFilterFn,
       ),
     });
   });

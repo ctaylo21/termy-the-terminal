@@ -68,6 +68,18 @@ describe('general', (): void => {
 });
 
 describe('autocomplete with tab', (): void => {
+  const fireTabInput = async (input: HTMLInputElement): Promise<boolean> => {
+    const tabEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      code: '9',
+      key: 'Tab',
+    });
+
+    return new Promise((resolve) => {
+      resolve(fireEvent(input, tabEvent));
+    });
+  };
+
   describe('ls', (): void => {
     test('ls tab with no argument', async (): Promise<void> => {
       const { container, getByLabelText } = render(
@@ -76,23 +88,17 @@ describe('autocomplete with tab', (): void => {
 
       const input = getByLabelText('terminal-input') as HTMLInputElement;
       await userEvent.type(input, 'ls ');
+      await fireTabInput(input);
 
-      const tabEvent = new KeyboardEvent('keydown', {
-        bubbles: true,
-        code: '9',
-        key: 'Tab',
-      });
-      fireEvent(input, tabEvent);
-
-      const autoCopmleteContent = await findByLabelText(
+      const autoCompleteContent = await findByLabelText(
         container,
         'autocomplete-preview',
       );
 
       Object.keys(exampleFileSystem).forEach((item) => {
-        expect(autoCopmleteContent.innerHTML).toContain(item);
+        expect(autoCompleteContent.innerHTML).toContain(item);
       });
-      expect(autoCopmleteContent.innerHTML).toMatchSnapshot();
+      expect(autoCompleteContent.innerHTML).toMatchSnapshot();
       expect(input.value).toBe('ls ');
     });
 
@@ -105,23 +111,63 @@ describe('autocomplete with tab', (): void => {
 
       const input = getByLabelText('terminal-input') as HTMLInputElement;
       await userEvent.type(input, 'ls home/fi');
+      await fireTabInput(input);
 
-      const tabEvent = new KeyboardEvent('keydown', {
-        bubbles: true,
-        code: '9',
-        key: 'Tab',
-      });
-      fireEvent(input, tabEvent);
-
-      const autoCopmleteContent = await findByLabelText(
+      const autoCompleteContent = await findByLabelText(
         container,
         'autocomplete-preview',
       );
 
-      expect(autoCopmleteContent.innerHTML).toContain('file1.txt');
-      expect(autoCopmleteContent.innerHTML).toContain('file5.txt');
-      expect(autoCopmleteContent.innerHTML).toMatchSnapshot();
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+      expect(autoCompleteContent.innerHTML).toMatchSnapshot();
       expect(input.value).toBe('ls home/fi');
+    });
+
+    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file3.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file4.txt');
+      expect(input.value).toBe('ls file3.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls file4.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls file3.txt');
+    });
+
+    test('tab with no argument should correctly cycle with more tabs', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls docs');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls file3.txt');
     });
   });
 
@@ -134,17 +180,17 @@ describe('autocomplete with tab', (): void => {
       );
       const input = getByLabelText('terminal-input') as HTMLInputElement;
 
-      const keyDownEvent = new KeyboardEvent('keydown', {
+      const tabEvent = new KeyboardEvent('keydown', {
         bubbles: true,
         code: '9',
         key: 'Tab',
       });
-      Object.assign(keyDownEvent, { preventDefault: jest.fn() });
+      Object.assign(tabEvent, { preventDefault: jest.fn() });
 
-      fireEvent(input, keyDownEvent);
+      fireEvent(input, tabEvent);
 
       await wait(() => {
-        expect(keyDownEvent.preventDefault).toHaveBeenCalledTimes(1);
+        expect(tabEvent.preventDefault).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -156,27 +202,24 @@ describe('autocomplete with tab', (): void => {
       );
 
       const input = getByLabelText('terminal-input') as HTMLInputElement;
-      await userEvent.type(input, 'ls home/u');
+      await userEvent.type(input, 'ls home/fi');
+      await fireTabInput(input);
 
-      const tabEvent = new KeyboardEvent('keydown', {
-        bubbles: true,
-        code: '9',
-        key: 'Tab',
-      });
-      fireEvent(input, tabEvent);
-
-      const autoCopmleteContent = await findByLabelText(
+      const autoCompleteContent = await findByLabelText(
         container,
         'autocomplete-preview',
       );
 
-      expect(autoCopmleteContent.innerHTML).toContain('user');
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+
+      input.value = '';
       await userEvent.type(input, 'ls home/user');
       fireEvent.submit(input);
 
       await wait();
 
-      expect(autoCopmleteContent.innerHTML).toBe('');
+      expect(autoCompleteContent.innerHTML).toBe('');
       expect(input.value).toBe('');
     });
 
@@ -189,21 +232,59 @@ describe('autocomplete with tab', (): void => {
 
       const input = getByLabelText('terminal-input') as HTMLInputElement;
       await userEvent.type(input, 'help');
+      await fireTabInput(input);
 
-      const tabEvent = new KeyboardEvent('keydown', {
-        bubbles: true,
-        code: '9',
-        key: 'Tab',
-      });
-      fireEvent(input, tabEvent);
-
-      const autoCopmleteContent = await findByLabelText(
+      const autoCompleteContent = await findByLabelText(
         container,
         'autocomplete-preview',
       );
 
-      expect(autoCopmleteContent.innerHTML).toBe('');
+      expect(autoCompleteContent.innerHTML).toBe('');
       expect(input.value).toBe('help');
+    });
+
+    test('tab press with single item should autofill it', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(input.value).toBe('ls home');
+      expect(autoCompleteContent.innerHTML).toBe('');
+    });
+
+    test('multiple tab presses with changing targets', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file3.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file4.txt');
+      expect(input.value).toBe('ls file3.txt');
+
+      input.value = '';
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home');
     });
   });
 });

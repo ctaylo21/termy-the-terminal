@@ -105,6 +105,10 @@
       &.ls-preview-file {
         color: map-get($themeDark, blue);
       }
+
+      &.active {
+        background-color: map-get($themeDark, highlight);
+      }
     }
 
 

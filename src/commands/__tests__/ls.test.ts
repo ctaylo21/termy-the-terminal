@@ -66,54 +66,69 @@ describe('ls suite', (): void => {
 
   describe('auto complete', (): void => {
     test('empty value', async (): Promise<void> => {
-      const lsResult = await lsAutoComplete(
+      const { commandResult } = await lsAutoComplete(
         exampleFileSystem,
         '/home/user',
         '',
       );
-      const { container } = render(lsResult.commandResult as JSX.Element);
 
-      expect(container.innerHTML).toContain('test');
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      expect(Object.keys(commandResult!)).toContain('test');
     });
 
     test('should filter single level target', async (): Promise<void> => {
-      const lsResult = await lsAutoComplete(exampleFileSystem, '/', 'fi');
-      const { container } = render(lsResult.commandResult as JSX.Element);
+      const { commandResult } = await lsAutoComplete(
+        exampleFileSystem,
+        '/',
+        'fi',
+      );
 
-      expect(container.innerHTML).toContain('file3.txt');
-      expect(container.innerHTML).toContain('file4.txt');
-      expect(container.innerHTML).not.toContain('blog');
-      expect(container.innerHTML).not.toContain('docs');
-      expect(container.innerHTML).not.toContain('home');
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('file3.txt');
+      expect(autoCompleteValues).toContain('file4.txt');
+      expect(autoCompleteValues).not.toContain('blog');
+      expect(autoCompleteValues).not.toContain('docs');
+      expect(autoCompleteValues).not.toContain('home');
     });
 
     test('invalid path should return nothing', async (): Promise<void> => {
       const lsResult = await lsAutoComplete(exampleFileSystem, '/bad/path', '');
-      const { container } = render(lsResult.commandResult as JSX.Element);
 
-      expect(container.innerHTML).toBe('');
+      expect(lsResult).toBeUndefined();
     });
 
     test('relative path', async (): Promise<void> => {
-      const lsResult = await lsAutoComplete(exampleFileSystem, '/', 'home/fi');
-      const { container } = render(lsResult.commandResult as JSX.Element);
+      const { commandResult } = await lsAutoComplete(
+        exampleFileSystem,
+        '/',
+        'home/fi',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
 
-      expect(container.innerHTML).toContain('file1.txt');
-      expect(container.innerHTML).toContain('file5.txt');
-      expect(container.innerHTML).not.toContain('user');
-      expect(container.innerHTML).not.toContain('videos');
-      expect(container.innerHTML).not.toContain('dog.png');
+      expect(autoCompleteValues).toContain('file1.txt');
+      expect(autoCompleteValues).toContain('file5.txt');
+      expect(autoCompleteValues).not.toContain('user');
+      expect(autoCompleteValues).not.toContain('videos');
+      expect(autoCompleteValues).not.toContain('dog.png');
     });
 
     test('absolute path', async (): Promise<void> => {
-      const lsResult = await lsAutoComplete(exampleFileSystem, '/', '/home/d');
-      const { container } = render(lsResult.commandResult as JSX.Element);
+      const { commandResult } = await lsAutoComplete(
+        exampleFileSystem,
+        '/',
+        '/home/d',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
 
-      expect(container.innerHTML).toContain('dog.png');
-      expect(container.innerHTML).not.toContain('user');
-      expect(container.innerHTML).not.toContain('videos');
-      expect(container.innerHTML).not.toContain('file1.txt');
-      expect(container.innerHTML).not.toContain('file5.txt');
+      expect(autoCompleteValues).toContain('dog.png');
+      expect(autoCompleteValues).not.toContain('user');
+      expect(autoCompleteValues).not.toContain('videos');
+      expect(autoCompleteValues).not.toContain('file1.txt');
+      expect(autoCompleteValues).not.toContain('file5.txt');
     });
   });
 });

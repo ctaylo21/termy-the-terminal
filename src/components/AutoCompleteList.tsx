@@ -8,25 +8,40 @@ export interface AutoCompleteList {
 
 interface AutoCompleteListProps {
   items: AutoCompleteList;
+  activeItemIndex?: number;
 }
 
 const AutoCompleteList: React.FC<AutoCompleteListProps> = (
   props,
 ): JSX.Element => {
-  const { items } = props;
+  const { items, activeItemIndex } = props;
 
   const autoCompleteItems = Object.keys(items).map(
-    (key): JSX.Element => {
+    (key, index): JSX.Element => {
       if (items[key].type === 'FOLDER') {
         return (
-          <span className="ls-preview-folder" key={key}>
+          <span
+            className={
+              activeItemIndex === index
+                ? 'ls-preview-folder active'
+                : 'ls-preview-folder'
+            }
+            key={key}
+          >
             {key}/
           </span>
         );
       }
 
       return (
-        <span className="ls-preview-file" key={key}>
+        <span
+          className={
+            activeItemIndex === index
+              ? 'ls-preview-file active'
+              : 'ls-preview-file'
+          }
+          key={key}
+        >
           {key}
         </span>
       );
