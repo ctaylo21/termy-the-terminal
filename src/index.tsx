@@ -166,65 +166,116 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       } = this.state;
       const { commandName, commandTargets } = parseCommand(inputValue);
 
-      let newAutoCompleteActiveItem = 0;
-      if (autoCompleteIsActive && autoCompleteItems) {
-        const previewItemCount = Object.keys(autoCompleteItems).length;
+      const formatItemForAutoComplete = (
+        fileSystem: AutoCompleteListData,
+        itemKey: number,
+      ): string => {
+        const targetRawName = Object.keys(fileSystem)[itemKey];
+        return fileSystem[targetRawName].type === 'FOLDER'
+          ? `${targetRawName}/`
+          : targetRawName;
+      };
 
+      const cycleThroughAutoCompleteItems = (
+        itemList: AutoCompleteListData,
+      ): void => {
+        const previewItemCount = Object.keys(itemList).length;
+
+        let newAutoCompleteActiveItemIndex = 0;
         if (autoCompleteActiveItem < previewItemCount - 1) {
-          newAutoCompleteActiveItem = autoCompleteActiveItem + 1;
+          newAutoCompleteActiveItemIndex = autoCompleteActiveItem + 1;
         }
 
-        let newInputValue = `${inputValue}${
-          Object.keys(autoCompleteItems)[newAutoCompleteActiveItem]
-        }`;
+        const targetFormattedName = formatItemForAutoComplete(
+          itemList,
+          newAutoCompleteActiveItemIndex,
+        );
 
-        if (commandTargets[0].length > 0) {
-          newInputValue = inputValue.replace(
-            commandTargets[0],
-            Object.keys(autoCompleteItems)[newAutoCompleteActiveItem],
+        const targetPathToUpdate = commandTargets[0]
+          .replace(/\/$/, '')
+          .split('/')
+          .slice(-1)
+          .pop() as string;
+
+        /* if (
+          Object.keys(itemList).includes(commandTargets[0].replace(/\/$/, ''))
+        ) {
+          targetPathToUpdate = commandTargets[0];
+        } */
+
+        let updatedInputValue = inputValue + targetFormattedName;
+        if (
+          targetPathToUpdate &&
+          targetPathToUpdate === Object.keys(itemList)[autoCompleteActiveItem]
+        ) {
+          updatedInputValue = inputValue.replace(
+            targetPathToUpdate,
+            targetFormattedName,
           );
         }
 
         this.setState(
           Object.assign({
-            autoCompleteActiveItem: newAutoCompleteActiveItem,
-            inputValue: newInputValue,
+            autoCompleteActiveItem: newAutoCompleteActiveItemIndex,
+            inputValue: updatedInputValue,
           }),
         );
+      };
 
-        return;
-      }
-
-      let commandResult: AutoCompleteResponse['commandResult'];
-      if (commands[`${commandName}AutoComplete`]) {
-        ({ commandResult } = await commands[`${commandName}AutoComplete`](
-          fileSystem,
-          currentPath,
-          commandTargets[0],
-        ));
-      } else {
-        // Do nothing if tab is not supported
-        return;
-      }
-
-      if (commandResult) {
-        if (Object.keys(commandResult).length === 1) {
-          this.setState(
-            Object.assign({
-              inputValue: inputValue.replace(
-                commandTargets[0],
-                Object.keys(commandResult)[0],
-              ),
-            }),
-          );
+      const generateAutoCompleteList = async (): Promise<void> => {
+        let commandResult: AutoCompleteResponse['commandResult'];
+        if (commands[`${commandName}AutoComplete`]) {
+          ({ commandResult } = await commands[`${commandName}AutoComplete`](
+            fileSystem,
+            currentPath,
+            commandTargets[0],
+          ));
         } else {
-          this.setState(
-            Object.assign({
-              autoCompleteIsActive: true,
-              autoCompleteItems: commandResult,
-            }),
-          );
+          // Do nothing if tab is not supported
+          return;
         }
+
+        if (commandResult) {
+          if (Object.keys(commandResult).length === 1) {
+            const targetPathToUpdate = commandTargets[0]
+              .split('/')
+              .slice(-1)
+              .pop() as string;
+
+            const targetFormattedName = formatItemForAutoComplete(
+              commandResult,
+              0,
+            );
+
+            let updatedInputValue = inputValue + targetFormattedName;
+            if (targetPathToUpdate) {
+              updatedInputValue = inputValue.replace(
+                targetPathToUpdate,
+                targetFormattedName,
+              );
+            }
+
+            this.setState(
+              Object.assign({
+                inputValue: updatedInputValue,
+              }),
+            );
+          } else {
+            this.setState(
+              Object.assign({
+                autoCompleteIsActive: true,
+                autoCompleteItems: commandResult,
+              }),
+            );
+          }
+        }
+      };
+
+      // Autocomplete menu is visible, handle tabbing through options
+      if (autoCompleteIsActive && autoCompleteItems) {
+        cycleThroughAutoCompleteItems(autoCompleteItems);
+      } else {
+        generateAutoCompleteList();
       }
     };
 

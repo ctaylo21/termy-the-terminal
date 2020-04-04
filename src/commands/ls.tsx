@@ -3,12 +3,7 @@ import get from 'lodash/get';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
 import LsResult from '../components/LsResult';
-import {
-  AutoCompleteResponse,
-  CommandResponse,
-  FileSystem,
-  TerminalFolder,
-} from '../index';
+import { AutoCompleteResponse, CommandResponse, FileSystem } from '../index';
 
 export interface LsResultType {
   [index: string]: {
@@ -16,7 +11,7 @@ export interface LsResultType {
   };
 }
 
-function getTargetFolder(
+function getTarget(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
@@ -27,32 +22,42 @@ function getTargetFolder(
     return fileSystem;
   } else if (has(fileSystem, internalPath)) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return (get(fileSystem, internalPath) as TerminalFolder).children!;
+    const target = get(fileSystem, internalPath);
+    if (target.type === 'FILE') {
+      const [fileName] = internalPath.split('.').slice(-1);
+      return { [fileName]: target };
+    } else {
+      if (target.children) {
+        return target.children;
+      } else {
+        throw new Error('Nothing to show here');
+      }
+    }
   }
 
   throw new Error('Target folder does not exist');
 }
 
 /**
- * Takes an internally formatted directory and formats it into the
+ * Takes an internally formatted filesystem and formats it into the
  * expected format for an ls command. Optionally takes a function to apply
  * to the intiial result to filter out certain items.
  *
- * @param directory {object} - internally formatted directory
+ * @param directory {object} - internally formatted filesystem
  * @param filterFn {function} - optional fn to filter certain items
  */
 function buildLsFormatDirectory(
-  directory: FileSystem,
+  fileSystem: FileSystem,
   filterFn: (item: LsResultType) => boolean = (): boolean => true,
 ): LsResultType {
   return Object.assign(
     {},
-    ...Object.keys(directory)
+    ...Object.keys(fileSystem)
       .map((item) => ({
-        [directory[item].type === 'FILE'
-          ? `${item}.${directory[item].extension}`
+        [fileSystem[item].type === 'FILE'
+          ? `${item}.${fileSystem[item].extension}`
           : item]: {
-          type: directory[item].type,
+          type: fileSystem[item].type,
         },
       }))
       .filter(filterFn),
@@ -75,11 +80,7 @@ export default function ls(
   return new Promise((resolve, reject): void => {
     let targetFolderContents;
     try {
-      targetFolderContents = getTargetFolder(
-        fileSystem,
-        currentPath,
-        targetPath,
-      );
+      targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
     } catch (e) {
       return reject(e.message);
     }
@@ -104,7 +105,7 @@ export default function ls(
 function lsAutoComplete(
   fileSystem: FileSystem,
   currentPath: string,
-  target = '',
+  target: string,
 ): Promise<AutoCompleteResponse> {
   return new Promise((resolve): void => {
     // Default to searching in currenty directory with simple target
@@ -123,11 +124,7 @@ function lsAutoComplete(
 
     let targetFolderContents;
     try {
-      targetFolderContents = getTargetFolder(
-        fileSystem,
-        currentPath,
-        targetPath,
-      );
+      targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
     } catch (e) {
       return resolve();
     }

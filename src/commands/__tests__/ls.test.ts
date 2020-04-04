@@ -53,7 +53,7 @@ describe('ls suite', (): void => {
     expect(container.innerHTML).toContain('file1.txt');
   });
 
-  test('should reject if invalid directory given', async (): Promise<void> => {
+  test('should reject if invalid target given', async (): Promise<void> => {
     return expect(ls(exampleFileSystem, '/invalid')).rejects.toMatchSnapshot();
   });
 
@@ -62,6 +62,21 @@ describe('ls suite', (): void => {
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('test');
+  });
+
+  test('should return file if given', async (): Promise<void> => {
+    const lsResult = await ls(exampleFileSystem, '/', 'file4.txt');
+    const { container } = render(lsResult.commandResult as JSX.Element);
+
+    expect(container.innerHTML).toContain('file4.txt');
+  });
+
+  test('should return message if directory and empty', async (): Promise<
+    void
+  > => {
+    return expect(
+      ls(exampleFileSystem, '/home', 'user/test'),
+    ).rejects.toMatchSnapshot();
   });
 
   describe('auto complete', (): void => {

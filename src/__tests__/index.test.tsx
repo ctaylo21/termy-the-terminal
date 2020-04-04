@@ -161,10 +161,10 @@ describe('autocomplete with tab', (): void => {
       await fireTabInput(input);
       await fireTabInput(input);
 
-      expect(input.value).toBe('ls home');
+      expect(input.value).toBe('ls home/');
 
       await fireTabInput(input);
-      expect(input.value).toBe('ls docs');
+      expect(input.value).toBe('ls docs/');
 
       await fireTabInput(input);
       expect(input.value).toBe('ls file3.txt');
@@ -257,7 +257,7 @@ describe('autocomplete with tab', (): void => {
         container,
         'autocomplete-preview',
       );
-      expect(input.value).toBe('ls home');
+      expect(input.value).toBe('ls home/');
       expect(autoCompleteContent.innerHTML).toBe('');
     });
 
@@ -284,7 +284,84 @@ describe('autocomplete with tab', (): void => {
       await userEvent.type(input, 'ls ho');
       await fireTabInput(input);
 
-      expect(input.value).toBe('ls home');
+      expect(input.value).toBe('ls home/');
+    });
+
+    test('tab multiple times to complete a nested path single options', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/');
+
+      await userEvent.type(input, 'vi');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/videos/');
+
+      await userEvent.type(input, 'file');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/videos/file2.txt');
+    });
+
+    test('tab multiple times to complete a nested path multiple options', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/');
+
+      await userEvent.type(input, 'fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/file1.txt');
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+    });
+
+    test.only('tab multiple times with nested folders', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/user/');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/videos/');
+    });
+
+    test('tab with .. in the nested path', async (): Promise<void> => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/user/../u');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/user/../user');
     });
   });
 });
