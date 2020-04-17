@@ -3,7 +3,7 @@ import {
   cleanup,
   fireEvent,
   render,
-  wait,
+  waitFor,
   findByLabelText,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -189,7 +189,7 @@ describe('autocomplete with tab', (): void => {
 
       fireEvent(input, tabEvent);
 
-      await wait(() => {
+      await waitFor(() => {
         expect(tabEvent.preventDefault).toHaveBeenCalledTimes(1);
       });
     });
@@ -217,10 +217,10 @@ describe('autocomplete with tab', (): void => {
       await userEvent.type(input, 'ls home/user');
       fireEvent.submit(input);
 
-      await wait();
-
-      expect(autoCompleteContent.innerHTML).toBe('');
-      expect(input.value).toBe('');
+      await waitFor(() => {
+        expect(autoCompleteContent.innerHTML).toBe('');
+        expect(input.value).toBe('');
+      });
     });
 
     test('tab when no autocomplete command exists should do nothing', async (): Promise<
@@ -524,7 +524,9 @@ describe('pwd', (): void => {
     fireEvent.change(input, { target: { value: 'cd home/user/test' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
+
     fireEvent.change(input, { target: { value: 'pwd' } });
     fireEvent.submit(input);
 
@@ -547,6 +549,9 @@ describe('ls', (): void => {
 
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
+
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'ls' } });
     fireEvent.submit(input);
@@ -585,7 +590,8 @@ describe('ls', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'ls user' } });
     fireEvent.submit(input);
@@ -607,7 +613,8 @@ describe('ls', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'ls /home/user' } });
     fireEvent.submit(input);
@@ -781,7 +788,8 @@ describe('rm', (): void => {
     fireEvent.change(input, { target: { value: 'cd home/user' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'rm -r ../../docs' } });
     fireEvent.submit(input);
@@ -891,12 +899,12 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('cd home');
     });
   });
@@ -910,7 +918,7 @@ describe('history', (): void => {
     const input = getByLabelText('terminal-input') as HTMLInputElement;
 
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
   });
@@ -926,20 +934,20 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.change(input, { target: { value: 'pwd' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('cd home');
     });
   });
@@ -955,13 +963,13 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('cd home');
     });
   });
@@ -983,7 +991,7 @@ describe('history', (): void => {
 
     fireEvent(input, keyDownEvent);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(keyDownEvent.preventDefault).toHaveBeenCalledTimes(1);
     });
   });
@@ -1005,7 +1013,7 @@ describe('history', (): void => {
 
     fireEvent(input, keyDownEvent);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(keyDownEvent.preventDefault).not.toHaveBeenCalled();
     });
   });
@@ -1021,21 +1029,21 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.change(input, { target: { value: 'pwd' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('pwd');
     });
   });
@@ -1051,14 +1059,14 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
     fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
     fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
   });
@@ -1072,7 +1080,7 @@ describe('history', (): void => {
     const input = getByLabelText('terminal-input') as HTMLInputElement;
 
     fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
   });

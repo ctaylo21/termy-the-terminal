@@ -130,11 +130,43 @@ describe('ls suite', (): void => {
       expect(autoCompleteValues).not.toContain('dog.png');
     });
 
+    test('relative path with dotdot', async (): Promise<void> => {
+      const { commandResult } = await lsAutoComplete(
+        exampleFileSystem,
+        '/',
+        'home/../home/fi',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('file1.txt');
+      expect(autoCompleteValues).toContain('file5.txt');
+      expect(autoCompleteValues).not.toContain('user');
+      expect(autoCompleteValues).not.toContain('videos');
+      expect(autoCompleteValues).not.toContain('dog.png');
+    });
+
     test('absolute path', async (): Promise<void> => {
       const { commandResult } = await lsAutoComplete(
         exampleFileSystem,
         '/',
         '/home/d',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('dog.png');
+      expect(autoCompleteValues).not.toContain('user');
+      expect(autoCompleteValues).not.toContain('videos');
+      expect(autoCompleteValues).not.toContain('file1.txt');
+      expect(autoCompleteValues).not.toContain('file5.txt');
+    });
+
+    test('absolute path with ..', async (): Promise<void> => {
+      const { commandResult } = await lsAutoComplete(
+        exampleFileSystem,
+        '/',
+        '/home/user/../d',
       );
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const autoCompleteValues = Object.keys(commandResult!);
