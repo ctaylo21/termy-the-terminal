@@ -5,6 +5,11 @@ import Input from './components/Input';
 import commands from './commands';
 import './styles/Terminal.scss';
 import { parseCommand } from './commands/utilities/index';
+import {
+  formatItem,
+  getTargetPath,
+  getUpdatedInputValueFromTarget,
+} from './helpers/autoComplete';
 
 export interface TerminalState {
   autoCompleteIsActive: boolean;
@@ -166,37 +171,18 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       } = this.state;
       const { commandName, commandTargets } = parseCommand(inputValue);
 
-      const formatItemForAutoComplete = (
-        fileSystem: AutoCompleteListData,
-        itemKey: number,
-      ): string => {
-        const targetRawName = Object.keys(fileSystem)[itemKey];
-        return fileSystem[targetRawName].type === 'FOLDER'
-          ? `${targetRawName}/`
-          : targetRawName;
-      };
-
       const cycleThroughAutoCompleteItems = (
         itemList: AutoCompleteListData,
       ): void => {
-        const previewItemCount = Object.keys(itemList).length;
-
         let newAutoCompleteActiveItemIndex = 0;
-        if (autoCompleteActiveItem < previewItemCount - 1) {
+        if (autoCompleteActiveItem < Object.keys(itemList).length - 1) {
           newAutoCompleteActiveItemIndex = autoCompleteActiveItem + 1;
         }
 
-        const targetFormattedName = formatItemForAutoComplete(
-          itemList,
-          newAutoCompleteActiveItemIndex,
-        );
-
-        let targetPathToUpdate = commandTargets[0]
-          .replace(/\/$/, '')
-          .split('/')
-          .slice(-1)
-          .pop();
-
+        // If the current target isn't in AC list and ends with a "/",
+        // it must be part of the base path and thus we append to it
+        // instead of replacing it
+        let targetPathToUpdate = getTargetPath(commandTargets[0]);
         if (
           targetPathToUpdate !==
             Object.keys(itemList)[autoCompleteActiveItem] &&
@@ -205,22 +191,12 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
           targetPathToUpdate = '';
         }
 
-        // Cases:
-        // 1) Matching a partial like "fi" when "file1.txt" is an option
-        // 2) Replacing last value full file path like /home/user/ when user/ is AC option
-        // 3) Appending onto path like "home/" when "home" isn't in AC and is part of base path
-        let updatedInputValue = inputValue + targetFormattedName;
-        if (targetPathToUpdate) {
-          const isCurrentItemFolder = commandTargets[0].endsWith('/');
-          updatedInputValue = inputValue.replace(
-            new RegExp(
-              isCurrentItemFolder
-                ? `${targetPathToUpdate}\/$`
-                : `${targetPathToUpdate}$`,
-            ),
-            targetFormattedName,
-          );
-        }
+        const updatedInputValue = getUpdatedInputValueFromTarget(
+          inputValue,
+          commandTargets[0],
+          formatItem(itemList, newAutoCompleteActiveItemIndex),
+          targetPathToUpdate,
+        );
 
         this.setState(
           Object.assign({
@@ -244,29 +220,14 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         }
 
         if (commandResult) {
+          // If only one autocomplete option is available, just use it
           if (Object.keys(commandResult).length === 1) {
-            const targetPathToUpdate = commandTargets[0]
-              .split('/')
-              .slice(-1)
-              .pop() as string;
-
-            const targetFormattedName = formatItemForAutoComplete(
-              commandResult,
-              0,
+            const updatedInputValue = getUpdatedInputValueFromTarget(
+              inputValue,
+              commandTargets[0],
+              formatItem(commandResult, 0),
+              getTargetPath(commandTargets[0]),
             );
-
-            let updatedInputValue = inputValue + targetFormattedName;
-            if (targetPathToUpdate) {
-              const isCurrentItemFolder = commandTargets[0].endsWith('/');
-              updatedInputValue = inputValue.replace(
-                new RegExp(
-                  isCurrentItemFolder
-                    ? `${targetPathToUpdate}\/$`
-                    : `${targetPathToUpdate}$`,
-                ),
-                targetFormattedName,
-              );
-            }
 
             this.setState(
               Object.assign({
@@ -274,6 +235,7 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
               }),
             );
           } else {
+            // Else show all autocomplete options
             this.setState(
               Object.assign({
                 autoCompleteIsActive: true,
@@ -284,7 +246,6 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         }
       };
 
-      // Autocomplete menu is visible, handle tabbing through options
       if (autoCompleteIsActive && autoCompleteItems) {
         cycleThroughAutoCompleteItems(autoCompleteItems);
       } else {

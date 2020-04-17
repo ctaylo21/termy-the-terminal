@@ -30000,6 +30000,65 @@
 
 	var commands$1 = { cd: cd$1, ls: ls, lsAutoComplete: lsAutoComplete, mkdir: mkdir, cat: cat, help: help, pwd: pwd, rm: rm };
 
+	/**
+	 * Given a input value for a command with a target, return the new value
+	 * for a tab press.
+	 *
+	 * Cases:
+	 *  1) Matching a partial target like "fi" when "file1.txt" is an option
+	 *  2) Replacing last value full file path like "/home/user/"" when "user/"" is AC option
+	 *  3) Appending onto path like "home/" when "home" isn't in AC and is part of base path
+	 *
+	 * @param currentInputValue {string} - Current full input value
+	 * @param currentTargetPath {string} - Current full path of command target
+	 * @param targetFormattedName {string} - Full target name (include "/" for folders and file extensions)
+	 * @param targetPathToUpdate {string} - Section of target path to update
+	 * @returns {string} - Updated value to put in input
+	 */
+	function getUpdatedInputValueFromTarget(currentInputValue, currentTargetPath, targetFormattedName, targetPathToUpdate) {
+	    var updatedInputValue = currentInputValue + targetFormattedName;
+	    if (targetPathToUpdate) {
+	        var isCurrentItemFolder = currentTargetPath.endsWith('/');
+	        updatedInputValue = currentInputValue.replace(new RegExp(isCurrentItemFolder
+	            ? targetPathToUpdate + "/$"
+	            : targetPathToUpdate + "$"), targetFormattedName);
+	    }
+	    return updatedInputValue;
+	}
+	/**
+	 * Given a list of files/folders and a key, return the user-friendly version
+	 * of that given item. This includes a trailing "/" for folders.
+	 *
+	 * @param fileSystem {object} - list of files/folders
+	 * @param itemKey {string} - key to grab from file system
+	 * @returns {string} - user-friendly item name
+	 */
+	function formatItem(fileSystem, itemKey) {
+	    var targetRawName = Object.keys(fileSystem)[itemKey];
+	    return fileSystem[targetRawName].type === 'FOLDER'
+	        ? targetRawName + "/"
+	        : targetRawName;
+	}
+	/**
+	 * Given the current target path for an autocomplete command, return the section
+	 * of the target path to update. Splits a nested path into parts and grabs the last
+	 * part of the path
+	 *
+	 * Example:
+	 * "home/us" => "us"
+	 * "home/user/test/" => "test"
+	 * "home" => "home"
+	 *
+	 * @param currentTargetPath
+	 */
+	function getTargetPath(currentTargetPath) {
+	    return currentTargetPath
+	        .replace(/\/$/, '')
+	        .split('/')
+	        .slice(-1)
+	        .pop();
+	}
+
 	var Terminal = /** @class */ (function (_super) {
 	    __extends(Terminal, _super);
 	    function Terminal() {
@@ -30065,52 +30124,33 @@
 	                }
 	            };
 	            var handleTabPress = function () { return __awaiter(_this, void 0, void 0, function () {
-	                var _a, autoCompleteActiveItem, autoCompleteIsActive, autoCompleteItems, inputValue, currentPath, fileSystem, _b, commandName, commandTargets, formatItemForAutoComplete, cycleThroughAutoCompleteItems, generateAutoCompleteList;
+	                var _a, autoCompleteActiveItem, autoCompleteIsActive, autoCompleteItems, inputValue, currentPath, fileSystem, _b, commandName, commandTargets, cycleThroughAutoCompleteItems, generateAutoCompleteList;
 	                var _this = this;
 	                return __generator(this, function (_c) {
 	                    _a = this.state, autoCompleteActiveItem = _a.autoCompleteActiveItem, autoCompleteIsActive = _a.autoCompleteIsActive, autoCompleteItems = _a.autoCompleteItems, inputValue = _a.inputValue, currentPath = _a.currentPath, fileSystem = _a.fileSystem;
 	                    _b = parseCommand(inputValue), commandName = _b.commandName, commandTargets = _b.commandTargets;
-	                    formatItemForAutoComplete = function (fileSystem, itemKey) {
-	                        var targetRawName = Object.keys(fileSystem)[itemKey];
-	                        return fileSystem[targetRawName].type === 'FOLDER'
-	                            ? targetRawName + "/"
-	                            : targetRawName;
-	                    };
 	                    cycleThroughAutoCompleteItems = function (itemList) {
-	                        var previewItemCount = Object.keys(itemList).length;
 	                        var newAutoCompleteActiveItemIndex = 0;
-	                        if (autoCompleteActiveItem < previewItemCount - 1) {
+	                        if (autoCompleteActiveItem < Object.keys(itemList).length - 1) {
 	                            newAutoCompleteActiveItemIndex = autoCompleteActiveItem + 1;
 	                        }
-	                        var targetFormattedName = formatItemForAutoComplete(itemList, newAutoCompleteActiveItemIndex);
-	                        var targetPathToUpdate = commandTargets[0]
-	                            .replace(/\/$/, '')
-	                            .split('/')
-	                            .slice(-1)
-	                            .pop();
+	                        // If the current target isn't in AC list and ends with a "/",
+	                        // it must be part of the base path and thus we append to it
+	                        // instead of replacing it
+	                        var targetPathToUpdate = getTargetPath(commandTargets[0]);
 	                        if (targetPathToUpdate !==
 	                            Object.keys(itemList)[autoCompleteActiveItem] &&
 	                            commandTargets[0].endsWith('/')) {
 	                            targetPathToUpdate = '';
 	                        }
-	                        // Cases:
-	                        // 1) Matching a partial like "fi" when "file1.txt" is an option
-	                        // 2) Replacing last value full file path like /home/user/ when user/ is AC option
-	                        // 3) Appending onto path like "home/" when "home" isn't in AC and is part of base path
-	                        var updatedInputValue = inputValue + targetFormattedName;
-	                        if (targetPathToUpdate) {
-	                            var isCurrentItemFolder = commandTargets[0].endsWith('/');
-	                            updatedInputValue = inputValue.replace(new RegExp(isCurrentItemFolder
-	                                ? targetPathToUpdate + "/$"
-	                                : targetPathToUpdate + "$"), targetFormattedName);
-	                        }
+	                        var updatedInputValue = getUpdatedInputValueFromTarget(inputValue, commandTargets[0], formatItem(itemList, newAutoCompleteActiveItemIndex), targetPathToUpdate);
 	                        _this.setState(Object.assign({
 	                            autoCompleteActiveItem: newAutoCompleteActiveItemIndex,
 	                            inputValue: updatedInputValue,
 	                        }));
 	                    };
 	                    generateAutoCompleteList = function () { return __awaiter(_this, void 0, void 0, function () {
-	                        var commandResult, targetPathToUpdate, targetFormattedName, updatedInputValue, isCurrentItemFolder;
+	                        var commandResult, updatedInputValue;
 	                        return __generator(this, function (_a) {
 	                            switch (_a.label) {
 	                                case 0:
@@ -30124,24 +30164,15 @@
 	                                return [2 /*return*/];
 	                                case 3:
 	                                    if (commandResult) {
+	                                        // If only one autocomplete option is available, just use it
 	                                        if (Object.keys(commandResult).length === 1) {
-	                                            targetPathToUpdate = commandTargets[0]
-	                                                .split('/')
-	                                                .slice(-1)
-	                                                .pop();
-	                                            targetFormattedName = formatItemForAutoComplete(commandResult, 0);
-	                                            updatedInputValue = inputValue + targetFormattedName;
-	                                            if (targetPathToUpdate) {
-	                                                isCurrentItemFolder = commandTargets[0].endsWith('/');
-	                                                updatedInputValue = inputValue.replace(new RegExp(isCurrentItemFolder
-	                                                    ? targetPathToUpdate + "/$"
-	                                                    : targetPathToUpdate + "$"), targetFormattedName);
-	                                            }
+	                                            updatedInputValue = getUpdatedInputValueFromTarget(inputValue, commandTargets[0], formatItem(commandResult, 0), getTargetPath(commandTargets[0]));
 	                                            this.setState(Object.assign({
 	                                                inputValue: updatedInputValue,
 	                                            }));
 	                                        }
 	                                        else {
+	                                            // Else show all autocomplete options
 	                                            this.setState(Object.assign({
 	                                                autoCompleteIsActive: true,
 	                                                autoCompleteItems: commandResult,
@@ -30152,7 +30183,6 @@
 	                            }
 	                        });
 	                    }); };
-	                    // Autocomplete menu is visible, handle tabbing through options
 	                    if (autoCompleteIsActive && autoCompleteItems) {
 	                        cycleThroughAutoCompleteItems(autoCompleteItems);
 	                    }
