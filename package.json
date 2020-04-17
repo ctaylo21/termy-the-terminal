@@ -51,8 +51,7 @@
       "eslint"
     ],
     "*.{js,jsx,ts,tsx,json,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "author": "Caleb Taylor <caleb89taylor@gmail.com>",
