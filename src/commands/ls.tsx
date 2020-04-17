@@ -126,7 +126,7 @@ function lsAutoComplete(
     try {
       targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
     } catch (e) {
-      return resolve();
+      return resolve({ commandResult: undefined });
     }
 
     const matchFilterFn = (item: LsResultType): boolean =>

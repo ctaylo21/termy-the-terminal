@@ -26386,6 +26386,23 @@
 	    return r;
 	}
 
+	var AutoCompleteList = function (props) {
+	    var items = props.items, activeItemIndex = props.activeItemIndex;
+	    var autoCompleteItems = Object.keys(items).map(function (key, index) {
+	        if (items[key].type === 'FOLDER') {
+	            return (react.createElement("span", { className: activeItemIndex === index
+	                    ? 'ls-preview-folder active'
+	                    : 'ls-preview-folder', key: key },
+	                key,
+	                "/"));
+	        }
+	        return (react.createElement("span", { className: activeItemIndex === index
+	                ? 'ls-preview-file active'
+	                : 'ls-preview-file', key: key }, key));
+	    });
+	    return react.createElement("div", { className: "preview-list" }, autoCompleteItems);
+	};
+
 	var History = function (props) {
 	    var history = props.history;
 	    var commandList = history.map(function (command) { return (react.createElement("li", { key: command.id },
@@ -27896,6 +27913,23 @@
 	    var imageExtensions = ['png', 'jpg', 'gif'];
 	    return imageExtensions.includes(extension);
 	}
+	/**
+	 * Parses a given string into the command name, the options (specified with leading "-"),
+	 * and the command targets
+	 *
+	 * @param command - input string to parse
+	 * @returns {object} - the parsed command
+	 */
+	function parseCommand(command) {
+	    var _a = command.split(' '), commandName = _a[0], args = _a.slice(1);
+	    var commandOptions = args.filter(function (arg) { return arg.startsWith('-'); });
+	    var commandTargets = args.filter(function (arg) { return !arg.startsWith('-'); });
+	    return {
+	        commandName: commandName,
+	        commandOptions: commandOptions,
+	        commandTargets: commandTargets,
+	    };
+	}
 
 	/**
 	 * Given a file system, validates if changing directories from a given path
@@ -27930,19 +27964,6 @@
 	        reject("path does not exist: " + targetPath);
 	    });
 	}
-
-	var AutoCompleteList = function (props) {
-	    var items = props.items;
-	    var autoCompleteItems = Object.keys(items).map(function (key) {
-	        if (items[key].type === 'FOLDER') {
-	            return (react.createElement("span", { className: "ls-preview-folder", key: key },
-	                key,
-	                "/"));
-	        }
-	        return (react.createElement("span", { className: "ls-preview-file", key: key }, key));
-	    });
-	    return react.createElement("div", { className: "preview-list" }, autoCompleteItems);
-	};
 
 	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -27985,15 +28006,52 @@
 	    return react.createElement("ul", { className: "terminal-ls-list" }, lsItems);
 	};
 
-	function getTargetFolder(fileSystem, currentPath, targetPath) {
+	function getTarget(fileSystem, currentPath, targetPath) {
+	    var _a;
 	    var internalPath = getInternalPath(currentPath, targetPath);
 	    if (internalPath === '/' || !internalPath) {
 	        return fileSystem;
 	    }
 	    else if (has_1(fileSystem, internalPath)) {
-	        return get_1(fileSystem, internalPath).children;
+	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	        var target = get_1(fileSystem, internalPath);
+	        if (target.type === 'FILE') {
+	            var fileName = internalPath.split('.').slice(-1)[0];
+	            return _a = {}, _a[fileName] = target, _a;
+	        }
+	        else {
+	            if (target.children) {
+	                return target.children;
+	            }
+	            else {
+	                throw new Error('Nothing to show here');
+	            }
+	        }
 	    }
 	    throw new Error('Target folder does not exist');
+	}
+	/**
+	 * Takes an internally formatted filesystem and formats it into the
+	 * expected format for an ls command. Optionally takes a function to apply
+	 * to the intiial result to filter out certain items.
+	 *
+	 * @param directory {object} - internally formatted filesystem
+	 * @param filterFn {function} - optional fn to filter certain items
+	 */
+	function buildLsFormatDirectory(fileSystem, filterFn) {
+	    if (filterFn === void 0) { filterFn = function () { return true; }; }
+	    return Object.assign.apply(Object, __spreadArrays([{}], Object.keys(fileSystem)
+	        .map(function (item) {
+	        var _a;
+	        return (_a = {},
+	            _a[fileSystem[item].type === 'FILE'
+	                ? item + "." + fileSystem[item].extension
+	                : item] = {
+	                type: fileSystem[item].type,
+	            },
+	            _a);
+	    })
+	        .filter(filterFn)));
 	}
 	/**
 	 * Given a fileysystem, lists all items for a given directory
@@ -28006,59 +28064,53 @@
 	function ls(fileSystem, currentPath, targetPath) {
 	    if (targetPath === void 0) { targetPath = ''; }
 	    return new Promise(function (resolve, reject) {
-	        var externalFormatDir = {};
 	        var targetFolderContents;
 	        try {
-	            targetFolderContents = getTargetFolder(fileSystem, currentPath, targetPath);
+	            targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
 	        }
 	        catch (e) {
-	            reject(e.message);
-	        }
-	        for (var key in targetFolderContents) {
-	            var lsKey = targetFolderContents[key].type === 'FILE'
-	                ? key + "." + targetFolderContents[key].extension
-	                : key;
-	            externalFormatDir[lsKey] = {
-	                type: targetFolderContents[key].type,
-	            };
+	            return reject(e.message);
 	        }
 	        resolve({
-	            commandResult: react.createElement(LsResult, { lsResult: externalFormatDir }),
+	            commandResult: (react.createElement(LsResult, { lsResult: buildLsFormatDirectory(targetFolderContents) })),
 	        });
 	    });
 	}
 	/**
-	 * Given a fileysystem, lists all items for a given directory
+	 * Given a fileysystem, current path, and target, list the items in the desired
+	 * folder that start with target string
 	 *
 	 * @param fileSystem {object} - filesystem to ls upon
 	 * @param currentPath {string} - current path within filesystem
-	 * @param target {string} - potentially empty string to match autocomplete against
-	 * @returns Promise<object> - resolves with contents of given path
+	 * @param target {string} - string to match against (maybe be path)
+	 * @returns Promise<object> - resolves with contents that match target in path
 	 */
 	function lsAutoComplete(fileSystem, currentPath, target) {
-	    if (target === void 0) { target = ''; }
-	    return new Promise(function (resolve, reject) {
-	        var externalFormatDir = {};
+	    return new Promise(function (resolve) {
+	        // Default to searching in currenty directory with simple target
+	        // that contains no path
+	        var autoCompleteMatch = target;
+	        var targetPath = '';
+	        // Handle case where target is a nested path and
+	        // we need to pull off last part of path to match against
+	        var pathParts = target.split('/');
+	        if (pathParts.length > 1) {
+	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	            autoCompleteMatch = pathParts.pop();
+	            targetPath = pathParts.join('/');
+	        }
 	        var targetFolderContents;
 	        try {
-	            targetFolderContents = getTargetFolder(fileSystem, currentPath, '');
+	            targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
 	        }
 	        catch (e) {
-	            reject(e.message);
+	            return resolve({ commandResult: undefined });
 	        }
-	        for (var key in targetFolderContents) {
-	            var lsKey = targetFolderContents[key].type === 'FILE'
-	                ? key + "." + targetFolderContents[key].extension
-	                : key;
-	            if (lsKey.startsWith(target)) {
-	                externalFormatDir[lsKey] = {
-	                    type: targetFolderContents[key].type,
-	                };
-	            }
-	        }
-	        console.log('tab ls results', externalFormatDir);
+	        var matchFilterFn = function (item) {
+	            return Object.keys(item)[0].startsWith(autoCompleteMatch);
+	        };
 	        resolve({
-	            commandResult: react.createElement(AutoCompleteList, { items: externalFormatDir }),
+	            commandResult: buildLsFormatDirectory(targetFolderContents, matchFilterFn),
 	        });
 	    });
 	}
@@ -29953,6 +30005,8 @@
 	    function Terminal() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
 	        _this.state = {
+	            autoCompleteIsActive: false,
+	            autoCompleteActiveItem: -1,
 	            currentCommandId: 0,
 	            currentPath: '/',
 	            currentHistoryId: -1,
@@ -30011,43 +30065,111 @@
 	                }
 	            };
 	            var handleTabPress = function () { return __awaiter(_this, void 0, void 0, function () {
-	                var _a, history, inputValue, currentPath, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_1;
-	                var _c, _d;
-	                return __generator(this, function (_e) {
-	                    switch (_e.label) {
-	                        case 0:
-	                            _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, fileSystem = _a.fileSystem;
-	                            _b = inputValue.split(' '), commandName = _b[0], commandArgs = _b.slice(1);
-	                            commandTarget = commandArgs.pop() || '';
-	                            updatedState = {};
-	                            if (!(commandName === 'ls')) return [3 /*break*/, 5];
-	                            _e.label = 1;
-	                        case 1:
-	                            _e.trys.push([1, 3, , 4]);
-	                            return [4 /*yield*/, commands$1.lsAutoComplete(fileSystem, currentPath, commandTarget)];
-	                        case 2:
-	                            (_c = _e.sent(), commandResult = _c.commandResult, _d = _c.updatedState, updatedState = _d === void 0 ? {} : _d);
-	                            return [3 /*break*/, 4];
-	                        case 3:
-	                            e_1 = _e.sent();
-	                            commandResult = "Error: " + e_1;
-	                            return [3 /*break*/, 4];
-	                        case 4: return [3 /*break*/, 6];
-	                        case 5:
-	                            commandResult = "command not found: " + commandName;
-	                            _e.label = 6;
-	                        case 6:
-	                            this.setState(Object.assign({
-	                                currentCommandId: this.state.currentCommandId + 1,
-	                                currentHistoryId: this.state.currentCommandId,
-	                                history: history,
-	                                inputValue: '',
-	                                tabCompleteResult: commandResult,
-	                            }, updatedState));
-	                            return [2 /*return*/];
+	                var _a, autoCompleteActiveItem, autoCompleteIsActive, autoCompleteItems, inputValue, currentPath, fileSystem, _b, commandName, commandTargets, formatItemForAutoComplete, cycleThroughAutoCompleteItems, generateAutoCompleteList;
+	                var _this = this;
+	                return __generator(this, function (_c) {
+	                    _a = this.state, autoCompleteActiveItem = _a.autoCompleteActiveItem, autoCompleteIsActive = _a.autoCompleteIsActive, autoCompleteItems = _a.autoCompleteItems, inputValue = _a.inputValue, currentPath = _a.currentPath, fileSystem = _a.fileSystem;
+	                    _b = parseCommand(inputValue), commandName = _b.commandName, commandTargets = _b.commandTargets;
+	                    formatItemForAutoComplete = function (fileSystem, itemKey) {
+	                        var targetRawName = Object.keys(fileSystem)[itemKey];
+	                        return fileSystem[targetRawName].type === 'FOLDER'
+	                            ? targetRawName + "/"
+	                            : targetRawName;
+	                    };
+	                    cycleThroughAutoCompleteItems = function (itemList) {
+	                        var previewItemCount = Object.keys(itemList).length;
+	                        var newAutoCompleteActiveItemIndex = 0;
+	                        if (autoCompleteActiveItem < previewItemCount - 1) {
+	                            newAutoCompleteActiveItemIndex = autoCompleteActiveItem + 1;
+	                        }
+	                        var targetFormattedName = formatItemForAutoComplete(itemList, newAutoCompleteActiveItemIndex);
+	                        var targetPathToUpdate = commandTargets[0]
+	                            .replace(/\/$/, '')
+	                            .split('/')
+	                            .slice(-1)
+	                            .pop();
+	                        if (targetPathToUpdate !==
+	                            Object.keys(itemList)[autoCompleteActiveItem] &&
+	                            commandTargets[0].endsWith('/')) {
+	                            targetPathToUpdate = '';
+	                        }
+	                        // Cases:
+	                        // 1) Matching a partial like "fi" when "file1.txt" is an option
+	                        // 2) Replacing last value full file path like /home/user/ when user/ is AC option
+	                        // 3) Appending onto path like "home/" when "home" isn't in AC and is part of base path
+	                        var updatedInputValue = inputValue + targetFormattedName;
+	                        if (targetPathToUpdate) {
+	                            var isCurrentItemFolder = commandTargets[0].endsWith('/');
+	                            updatedInputValue = inputValue.replace(new RegExp(isCurrentItemFolder
+	                                ? targetPathToUpdate + "/$"
+	                                : targetPathToUpdate + "$"), targetFormattedName);
+	                        }
+	                        _this.setState(Object.assign({
+	                            autoCompleteActiveItem: newAutoCompleteActiveItemIndex,
+	                            inputValue: updatedInputValue,
+	                        }));
+	                    };
+	                    generateAutoCompleteList = function () { return __awaiter(_this, void 0, void 0, function () {
+	                        var commandResult, targetPathToUpdate, targetFormattedName, updatedInputValue, isCurrentItemFolder;
+	                        return __generator(this, function (_a) {
+	                            switch (_a.label) {
+	                                case 0:
+	                                    if (!commands$1[commandName + "AutoComplete"]) return [3 /*break*/, 2];
+	                                    return [4 /*yield*/, commands$1[commandName + "AutoComplete"](fileSystem, currentPath, commandTargets[0])];
+	                                case 1:
+	                                    (commandResult = (_a.sent()).commandResult);
+	                                    return [3 /*break*/, 3];
+	                                case 2: 
+	                                // Do nothing if tab is not supported
+	                                return [2 /*return*/];
+	                                case 3:
+	                                    if (commandResult) {
+	                                        if (Object.keys(commandResult).length === 1) {
+	                                            targetPathToUpdate = commandTargets[0]
+	                                                .split('/')
+	                                                .slice(-1)
+	                                                .pop();
+	                                            targetFormattedName = formatItemForAutoComplete(commandResult, 0);
+	                                            updatedInputValue = inputValue + targetFormattedName;
+	                                            if (targetPathToUpdate) {
+	                                                isCurrentItemFolder = commandTargets[0].endsWith('/');
+	                                                updatedInputValue = inputValue.replace(new RegExp(isCurrentItemFolder
+	                                                    ? targetPathToUpdate + "/$"
+	                                                    : targetPathToUpdate + "$"), targetFormattedName);
+	                                            }
+	                                            this.setState(Object.assign({
+	                                                inputValue: updatedInputValue,
+	                                            }));
+	                                        }
+	                                        else {
+	                                            this.setState(Object.assign({
+	                                                autoCompleteIsActive: true,
+	                                                autoCompleteItems: commandResult,
+	                                            }));
+	                                        }
+	                                    }
+	                                    return [2 /*return*/];
+	                            }
+	                        });
+	                    }); };
+	                    // Autocomplete menu is visible, handle tabbing through options
+	                    if (autoCompleteIsActive && autoCompleteItems) {
+	                        cycleThroughAutoCompleteItems(autoCompleteItems);
 	                    }
+	                    else {
+	                        generateAutoCompleteList();
+	                    }
+	                    return [2 /*return*/];
 	                });
 	            }); };
+	            // If we do anything other than tab, clear autocomplete state
+	            if (!(event.keyCode == 9 || event.key === 'Tab')) {
+	                _this.setState(Object.assign({
+	                    autoCompleteActiveItem: -1,
+	                    autoCompleteIsActive: false,
+	                    autoCompleteItems: undefined,
+	                }));
+	            }
 	            if (event.keyCode == 38 || event.key === 'ArrowUp') {
 	                handleUpArrowKeyPress();
 	            }
@@ -30059,27 +30181,28 @@
 	            }
 	        };
 	        _this.handleSubmit = function (event) { return __awaiter(_this, void 0, void 0, function () {
-	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandArgs, commandTarget, commandResult, updatedState, e_2, updatedHistory;
+	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandOptions, commandTargets, commandResult, updatedState, e_1, updatedHistory;
 	            var _c, _d;
 	            return __generator(this, function (_e) {
 	                switch (_e.label) {
 	                    case 0:
 	                        event.preventDefault();
 	                        _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, inputPrompt = _a.inputPrompt, fileSystem = _a.fileSystem;
-	                        _b = inputValue.split(' '), commandName = _b[0], commandArgs = _b.slice(1);
-	                        commandTarget = commandArgs.pop() || '';
+	                        _b = parseCommand(inputValue), commandName = _b.commandName, commandOptions = _b.commandOptions, commandTargets = _b.commandTargets;
 	                        updatedState = {};
 	                        if (!(commandName in commands$1)) return [3 /*break*/, 5];
 	                        _e.label = 1;
 	                    case 1:
 	                        _e.trys.push([1, 3, , 4]);
-	                        return [4 /*yield*/, commands$1[commandName].apply(commands$1, __spreadArrays([fileSystem, currentPath, commandTarget], commandArgs))];
+	                        return [4 /*yield*/, commands$1[commandName].apply(commands$1, __spreadArrays([fileSystem,
+	                                currentPath,
+	                                commandTargets[0]], commandOptions))];
 	                    case 2:
 	                        (_c = _e.sent(), commandResult = _c.commandResult, _d = _c.updatedState, updatedState = _d === void 0 ? {} : _d);
 	                        return [3 /*break*/, 4];
 	                    case 3:
-	                        e_2 = _e.sent();
-	                        commandResult = "Error: " + e_2;
+	                        e_1 = _e.sent();
+	                        commandResult = "Error: " + e_1;
 	                        return [3 /*break*/, 4];
 	                    case 4: return [3 /*break*/, 6];
 	                    case 5:
@@ -30093,10 +30216,12 @@
 	                            value: inputValue,
 	                        });
 	                        this.setState(Object.assign({
+	                            autoCompleteIsActive: false,
 	                            currentCommandId: this.state.currentCommandId + 1,
 	                            currentHistoryId: this.state.currentCommandId,
 	                            history: updatedHistory,
 	                            inputValue: '',
+	                            autoCompleteItems: undefined,
 	                        }, updatedState));
 	                        return [2 /*return*/];
 	                }
@@ -30113,12 +30238,12 @@
 	        this.inputWrapper.current.scrollIntoView({ behavior: 'smooth' });
 	    };
 	    Terminal.prototype.render = function () {
-	        var _a = this.state, currentPath = _a.currentPath, history = _a.history, inputPrompt = _a.inputPrompt, inputValue = _a.inputValue, tabCompleteResult = _a.tabCompleteResult;
+	        var _a = this.state, autoCompleteActiveItem = _a.autoCompleteActiveItem, currentPath = _a.currentPath, history = _a.history, inputPrompt = _a.inputPrompt, inputValue = _a.inputValue, autoCompleteItems = _a.autoCompleteItems;
 	        return (react.createElement("div", { id: "terminal-wrapper" },
 	            react.createElement(History, { history: history }),
 	            react.createElement("div", { ref: this.inputWrapper },
 	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleKeyDown: this.handleKeyDown, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, ref: this.terminalInput, readOnly: false })),
-	            react.createElement("div", { className: "tab-complete-result" }, tabCompleteResult)));
+	            react.createElement("div", { "aria-label": "autocomplete-preview", className: "tab-complete-result" }, autoCompleteItems && (react.createElement(AutoCompleteList, { items: autoCompleteItems, activeItemIndex: autoCompleteActiveItem })))));
 	    };
 	    return Terminal;
 	}(react_2));
@@ -30164,6 +30289,11 @@
 	                content: 'Contents of file 1',
 	                extension: 'txt',
 	            },
+	            file5: {
+	                type: 'FILE',
+	                content: 'Contents of file 5',
+	                extension: 'txt',
+	            },
 	        },
 	    },
 	    docs: {
@@ -30173,6 +30303,11 @@
 	    file3: {
 	        type: 'FILE',
 	        content: 'Contents of file 3',
+	        extension: 'txt',
+	    },
+	    file4: {
+	        type: 'FILE',
+	        content: 'Contents of file 4',
 	        extension: 'txt',
 	    },
 	    blog: {

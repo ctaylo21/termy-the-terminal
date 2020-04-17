@@ -111,7 +111,7 @@ describe('ls suite', (): void => {
     test('invalid path should return nothing', async (): Promise<void> => {
       const lsResult = await lsAutoComplete(exampleFileSystem, '/bad/path', '');
 
-      expect(lsResult).toBeUndefined();
+      expect(lsResult.commandResult).toBeUndefined();
     });
 
     test('relative path', async (): Promise<void> => {

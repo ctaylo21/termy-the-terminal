@@ -62,3 +62,5 @@
       color: #f99157; }
     #terminal-wrapper .preview-list span.ls-preview-file {
       color: #5fb3b3; }
+    #terminal-wrapper .preview-list span.active {
+      background-color: #4F5B66; }

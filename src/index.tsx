@@ -69,7 +69,7 @@ export type CommandResponse = {
 };
 
 export type AutoCompleteResponse = {
-  commandResult?: AutoCompleteListData;
+  commandResult?: AutoCompleteListData | null;
 };
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
@@ -191,25 +191,33 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
           newAutoCompleteActiveItemIndex,
         );
 
-        const targetPathToUpdate = commandTargets[0]
+        let targetPathToUpdate = commandTargets[0]
           .replace(/\/$/, '')
           .split('/')
           .slice(-1)
-          .pop() as string;
+          .pop();
 
-        /* if (
-          Object.keys(itemList).includes(commandTargets[0].replace(/\/$/, ''))
-        ) {
-          targetPathToUpdate = commandTargets[0];
-        } */
-
-        let updatedInputValue = inputValue + targetFormattedName;
         if (
-          targetPathToUpdate &&
-          targetPathToUpdate === Object.keys(itemList)[autoCompleteActiveItem]
+          targetPathToUpdate !==
+            Object.keys(itemList)[autoCompleteActiveItem] &&
+          commandTargets[0].endsWith('/')
         ) {
+          targetPathToUpdate = '';
+        }
+
+        // Cases:
+        // 1) Matching a partial like "fi" when "file1.txt" is an option
+        // 2) Replacing last value full file path like /home/user/ when user/ is AC option
+        // 3) Appending onto path like "home/" when "home" isn't in AC and is part of base path
+        let updatedInputValue = inputValue + targetFormattedName;
+        if (targetPathToUpdate) {
+          const isCurrentItemFolder = commandTargets[0].endsWith('/');
           updatedInputValue = inputValue.replace(
-            targetPathToUpdate,
+            new RegExp(
+              isCurrentItemFolder
+                ? `${targetPathToUpdate}\/$`
+                : `${targetPathToUpdate}$`,
+            ),
             targetFormattedName,
           );
         }
@@ -249,8 +257,13 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
             let updatedInputValue = inputValue + targetFormattedName;
             if (targetPathToUpdate) {
+              const isCurrentItemFolder = commandTargets[0].endsWith('/');
               updatedInputValue = inputValue.replace(
-                targetPathToUpdate,
+                new RegExp(
+                  isCurrentItemFolder
+                    ? `${targetPathToUpdate}\/$`
+                    : `${targetPathToUpdate}$`,
+                ),
                 targetFormattedName,
               );
             }
