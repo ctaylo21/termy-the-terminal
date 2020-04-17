@@ -49,6 +49,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
     - [Terminal Props](#terminal-props)
   - [General](#general)
     - [Command History](#command-history)
+    - [Auto Complete](#auto-complete)
   - [Commands](#commands)
     - [cd [DIRECTORY]](#cd-directory)
     - [pwd](#pwd)
@@ -141,6 +142,10 @@ The following sections include general features that Termy supports outside of t
 ### Command History
 
 Termy supports using the arrow keys (up and down) to move through the command history.
+
+### Auto Complete
+
+Termy supports using the `tab` key to trigger autocomplete for commands to complete a target path. This includes using multiple `tab` presses to cycle through the possible auto-complete options for a given command.
 
 ## Commands
 
