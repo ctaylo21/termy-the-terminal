@@ -113,3 +113,28 @@ export function isImageExtension(extension: string): boolean {
 
   return imageExtensions.includes(extension);
 }
+
+type ParsedCommand = {
+  commandName: string;
+  commandOptions: string[];
+  commandTargets: string[];
+};
+
+/**
+ * Parses a given string into the command name, the options (specified with leading "-"),
+ * and the command targets
+ *
+ * @param command - input string to parse
+ * @returns {object} - the parsed command
+ */
+export function parseCommand(command: string): ParsedCommand {
+  const [commandName, ...args] = command.split(' ');
+  const commandOptions = args.filter((arg: string) => arg.startsWith('-'));
+  const commandTargets = args.filter((arg: string) => !arg.startsWith('-'));
+
+  return {
+    commandName,
+    commandOptions,
+    commandTargets,
+  };
+}

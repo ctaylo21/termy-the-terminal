@@ -3,9 +3,10 @@ import {
   cleanup,
   fireEvent,
   render,
-  wait,
+  waitFor,
   findByLabelText,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
 jest.mock('../../images/dog.png', () => 'abc/dog.png');
@@ -63,6 +64,348 @@ describe('general', (): void => {
     const history = await findByLabelText(container, 'terminal-history');
 
     expect(history.innerHTML).toMatchSnapshot();
+  });
+});
+
+describe('autocomplete with tab', (): void => {
+  const fireTabInput = async (input: HTMLInputElement): Promise<boolean> => {
+    const tabEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      code: '9',
+      key: 'Tab',
+    });
+
+    return new Promise((resolve) => {
+      resolve(fireEvent(input, tabEvent));
+    });
+  };
+
+  describe('ls', (): void => {
+    test('ls tab with no argument', async (): Promise<void> => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      Object.keys(exampleFileSystem).forEach((item) => {
+        expect(autoCompleteContent.innerHTML).toContain(item);
+      });
+      expect(autoCompleteContent.innerHTML).toMatchSnapshot();
+      expect(input.value).toBe('ls ');
+    });
+
+    test('ls tab with argument and relative nested path', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/fi');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+      expect(autoCompleteContent.innerHTML).toMatchSnapshot();
+      expect(input.value).toBe('ls home/fi');
+    });
+
+    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file3.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file4.txt');
+      expect(input.value).toBe('ls file3.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls file4.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls file3.txt');
+    });
+
+    test('tab with no argument should correctly cycle with more tabs', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls docs/');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls file3.txt');
+    });
+  });
+
+  describe('general', (): void => {
+    test('should call "e.preventDefault" on tab key press', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+      const tabEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      Object.assign(tabEvent, { preventDefault: jest.fn() });
+
+      fireEvent(input, tabEvent);
+
+      await waitFor(() => {
+        expect(tabEvent.preventDefault).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('should clear preview display once command is executed', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/fi');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+
+      input.value = '';
+      await userEvent.type(input, 'ls home/user');
+      fireEvent.submit(input);
+
+      await waitFor(() => {
+        expect(autoCompleteContent.innerHTML).toBe('');
+        expect(input.value).toBe('');
+      });
+    });
+
+    test('tab when no autocomplete command exists should do nothing', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'help');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toBe('');
+      expect(input.value).toBe('help');
+    });
+
+    test('tab press with single item should autofill it', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(input.value).toBe('ls home/');
+      expect(autoCompleteContent.innerHTML).toBe('');
+    });
+
+    test('multiple tab presses with changing targets', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file3.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file4.txt');
+      expect(input.value).toBe('ls file3.txt');
+
+      input.value = '';
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/');
+    });
+
+    test('tab multiple times to complete a nested path single options', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/');
+
+      await userEvent.type(input, 'vi');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/videos/');
+
+      await userEvent.type(input, 'file');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/videos/file2.txt');
+    });
+
+    test('tab multiple times to complete a nested path multiple options', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls ho');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/');
+
+      await userEvent.type(input, 'fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/file1.txt');
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+    });
+
+    test('tab multiple times with nested folders', async (): Promise<void> => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/user/');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/videos/');
+    });
+
+    test('tab with .. in the nested path with partial match', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/user/../u');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/user/../user/');
+    });
+
+    test('tab with .. in the nested path from root', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/user/../');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('user/');
+      expect(autoCompleteContent.innerHTML).toContain('videos/');
+      expect(autoCompleteContent.innerHTML).toContain('dog.png');
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('ls home/user/../user/');
+    });
+
+    test('tab with empty folder target', async (): Promise<void> => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'ls home/user/test');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('ls home/user/test/');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(input.value).toBe('ls home/user/test/');
+      expect(autoCompleteContent.innerHTML).toBe('');
+    });
   });
 });
 
@@ -181,7 +524,9 @@ describe('pwd', (): void => {
     fireEvent.change(input, { target: { value: 'cd home/user/test' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
+
     fireEvent.change(input, { target: { value: 'pwd' } });
     fireEvent.submit(input);
 
@@ -204,6 +549,9 @@ describe('ls', (): void => {
 
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
+
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'ls' } });
     fireEvent.submit(input);
@@ -242,7 +590,8 @@ describe('ls', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'ls user' } });
     fireEvent.submit(input);
@@ -264,7 +613,8 @@ describe('ls', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'ls /home/user' } });
     fireEvent.submit(input);
@@ -438,7 +788,8 @@ describe('rm', (): void => {
     fireEvent.change(input, { target: { value: 'cd home/user' } });
     fireEvent.submit(input);
 
-    await wait();
+    /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+    await waitFor(() => {});
 
     fireEvent.change(input, { target: { value: 'rm -r ../../docs' } });
     fireEvent.submit(input);
@@ -548,12 +899,12 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    await waitFor(() => {
       expect(input.value).toBe('cd home');
     });
   });
@@ -566,8 +917,8 @@ describe('history', (): void => {
     );
     const input = getByLabelText('terminal-input') as HTMLInputElement;
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
   });
@@ -583,20 +934,20 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.change(input, { target: { value: 'pwd' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    await waitFor(() => {
       expect(input.value).toBe('cd home');
     });
   });
@@ -612,13 +963,13 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    await waitFor(() => {
       expect(input.value).toBe('cd home');
     });
   });
@@ -640,7 +991,7 @@ describe('history', (): void => {
 
     fireEvent(input, keyDownEvent);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(keyDownEvent.preventDefault).toHaveBeenCalledTimes(1);
     });
   });
@@ -662,7 +1013,7 @@ describe('history', (): void => {
 
     fireEvent(input, keyDownEvent);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(keyDownEvent.preventDefault).not.toHaveBeenCalled();
     });
   });
@@ -678,21 +1029,21 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
     fireEvent.change(input, { target: { value: 'pwd' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
+    await waitFor(() => {
       expect(input.value).toBe('pwd');
     });
   });
@@ -708,14 +1059,14 @@ describe('history', (): void => {
     fireEvent.change(input, { target: { value: 'cd home' } });
     fireEvent.submit(input);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
 
-    fireEvent.keyUp(input, { key: 'ArrowUp', code: 38 });
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowUp', code: 38 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
   });
@@ -728,8 +1079,8 @@ describe('history', (): void => {
     );
     const input = getByLabelText('terminal-input') as HTMLInputElement;
 
-    fireEvent.keyUp(input, { key: 'ArrowDown', code: 40 });
-    await wait(() => {
+    fireEvent.keyDown(input, { key: 'ArrowDown', code: 40 });
+    await waitFor(() => {
       expect(input.value).toBe('');
     });
   });

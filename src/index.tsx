@@ -1,17 +1,27 @@
 import React, { ChangeEvent, Component, FormEvent, KeyboardEvent } from 'react';
-import { History } from './components/History';
+import AutoCompleteList from './components/AutoCompleteList';
+import History from './components/History';
 import Input from './components/Input';
 import commands from './commands';
 import './styles/Terminal.scss';
+import { parseCommand } from './commands/utilities/index';
+import {
+  formatItem,
+  getTargetPath,
+  getUpdatedInputValueFromTarget,
+} from './helpers/autoComplete';
 
 export interface TerminalState {
+  autoCompleteIsActive: boolean;
+  autoCompleteActiveItem: number;
   currentCommandId: number;
   currentHistoryId: number;
   currentPath: string;
-  history: HistoryItem[];
-  inputValue: string;
-  inputPrompt: string;
   fileSystem: FileSystem;
+  history: HistoryItem[];
+  inputPrompt: string;
+  inputValue: string;
+  autoCompleteItems?: AutoCompleteListData;
 }
 
 export interface HistoryItem {
@@ -52,20 +62,32 @@ export interface TerminalFolder {
   children: FileSystem | null;
 }
 
+export interface AutoCompleteListData {
+  [index: string]: {
+    type: 'FOLDER' | 'FILE';
+  };
+}
+
 export type CommandResponse = {
   updatedState?: Partial<TerminalState>;
   commandResult?: JSX.Element | string;
 };
 
+export type AutoCompleteResponse = {
+  commandResult?: AutoCompleteListData | null;
+};
+
 export class Terminal extends Component<TerminalProps, TerminalState> {
   public readonly state: TerminalState = {
+    autoCompleteIsActive: false,
+    autoCompleteActiveItem: -1,
     currentCommandId: 0,
     currentPath: '/',
     currentHistoryId: -1,
-    history: [],
-    inputValue: '',
-    inputPrompt: this.props.inputPrompt || '$>',
     fileSystem: this.props.fileSystem,
+    history: [],
+    inputPrompt: this.props.inputPrompt || '$>',
+    inputValue: '',
   };
 
   private inputWrapper = React.createRef<HTMLDivElement>();
@@ -90,13 +112,14 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
   private handleKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
     // Prevent behavior of up arrow moving cursor to beginning of line in Chrome (and possibly others)
-    if (event.keyCode == 38 || event.key === 'ArrowUp') {
+    if (
+      event.keyCode == 38 ||
+      event.key === 'ArrowUp' ||
+      event.keyCode == 9 ||
+      event.key === 'Tab'
+    ) {
       event.preventDefault();
     }
-  };
-
-  private handleKeyUp = (event: KeyboardEvent<HTMLInputElement>): void => {
-    event.preventDefault();
 
     const handleUpArrowKeyPress = (): void => {
       // Handle no history item to show
@@ -137,12 +160,120 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       }
     };
 
+    const handleTabPress = async (): Promise<void> => {
+      const {
+        autoCompleteActiveItem,
+        autoCompleteIsActive,
+        autoCompleteItems,
+        inputValue,
+        currentPath,
+        fileSystem,
+      } = this.state;
+      const { commandName, commandTargets } = parseCommand(inputValue);
+
+      const cycleThroughAutoCompleteItems = (
+        itemList: AutoCompleteListData,
+      ): void => {
+        let newAutoCompleteActiveItemIndex = 0;
+        if (autoCompleteActiveItem < Object.keys(itemList).length - 1) {
+          newAutoCompleteActiveItemIndex = autoCompleteActiveItem + 1;
+        }
+
+        // If the current target isn't in AC list and ends with a "/",
+        // it must be part of the base path and thus we append to it
+        // instead of replacing it
+        let targetPathToUpdate = getTargetPath(commandTargets[0]);
+        if (
+          targetPathToUpdate !==
+            Object.keys(itemList)[autoCompleteActiveItem] &&
+          commandTargets[0].endsWith('/')
+        ) {
+          targetPathToUpdate = '';
+        }
+
+        const updatedInputValue = getUpdatedInputValueFromTarget(
+          inputValue,
+          commandTargets[0],
+          formatItem(itemList, newAutoCompleteActiveItemIndex),
+          targetPathToUpdate,
+        );
+
+        this.setState(
+          Object.assign({
+            autoCompleteActiveItem: newAutoCompleteActiveItemIndex,
+            inputValue: updatedInputValue,
+          }),
+        );
+      };
+
+      const generateAutoCompleteList = async (): Promise<void> => {
+        let commandResult: AutoCompleteResponse['commandResult'];
+        if (commands[`${commandName}AutoComplete`]) {
+          ({ commandResult } = await commands[`${commandName}AutoComplete`](
+            fileSystem,
+            currentPath,
+            commandTargets[0],
+          ));
+        } else {
+          // Do nothing if tab is not supported
+          return;
+        }
+
+        if (commandResult) {
+          // If only one autocomplete option is available, just use it
+          if (Object.keys(commandResult).length === 1) {
+            const updatedInputValue = getUpdatedInputValueFromTarget(
+              inputValue,
+              commandTargets[0],
+              formatItem(commandResult, 0),
+              getTargetPath(commandTargets[0]),
+            );
+
+            this.setState(
+              Object.assign({
+                inputValue: updatedInputValue,
+              }),
+            );
+          } else {
+            // Else show all autocomplete options
+            this.setState(
+              Object.assign({
+                autoCompleteIsActive: true,
+                autoCompleteItems: commandResult,
+              }),
+            );
+          }
+        }
+      };
+
+      if (autoCompleteIsActive && autoCompleteItems) {
+        cycleThroughAutoCompleteItems(autoCompleteItems);
+      } else {
+        generateAutoCompleteList();
+      }
+    };
+
+    // If we do anything other than tab, clear autocomplete state
+    if (!(event.keyCode == 9 || event.key === 'Tab')) {
+      this.setState(
+        Object.assign({
+          autoCompleteActiveItem: -1,
+          autoCompleteIsActive: false,
+          autoCompleteItems: undefined,
+        }),
+      );
+    }
+
     if (event.keyCode == 38 || event.key === 'ArrowUp') {
       handleUpArrowKeyPress();
     }
 
     if (event.keyCode == 40 || event.key === 'ArrowDown') {
       handleDownArrowKeyPress();
+    }
+
+    if (event.keyCode == 9 || event.key === 'Tab') {
+      handleTabPress();
     }
   };
 
@@ -158,16 +289,20 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       inputPrompt,
       fileSystem,
     } = this.state;
-    const [commandName, ...commandArgs] = inputValue.split(' ');
-    const commandTarget = commandArgs.pop() || '';
+    const { commandName, commandOptions, commandTargets } = parseCommand(
+      inputValue,
+    );
 
     let commandResult: CommandResponse['commandResult'];
     let updatedState: CommandResponse['updatedState'] = {};
     if (commandName in commands) {
       try {
-        ({ commandResult, updatedState = {} } = await commands[
-          commandName as keyof typeof commands
-        ](fileSystem, currentPath, commandTarget, ...commandArgs));
+        ({ commandResult, updatedState = {} } = await commands[commandName](
+          fileSystem,
+          currentPath,
+          commandTargets[0],
+          ...commandOptions,
+        ));
       } catch (e) {
         commandResult = `Error: ${e}`;
       }
@@ -192,10 +327,12 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     this.setState(
       Object.assign(
         {
+          autoCompleteIsActive: false,
           currentCommandId: this.state.currentCommandId + 1,
           currentHistoryId: this.state.currentCommandId,
           history: updatedHistory,
           inputValue: '',
+          autoCompleteItems: undefined,
         },
         updatedState,
       ) as TerminalState,
@@ -203,7 +340,15 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   };
 
   public render(): JSX.Element {
-    const { currentPath, history, inputValue, inputPrompt } = this.state;
+    const {
+      autoCompleteActiveItem,
+      currentPath,
+      history,
+      inputPrompt,
+      inputValue,
+      autoCompleteItems,
+    } = this.state;
+
     return (
       <div id="terminal-wrapper">
         <History history={history} />
@@ -212,13 +357,20 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
             currentPath={currentPath}
             handleChange={this.handleChange}
             handleKeyDown={this.handleKeyDown}
-            handleKeyUp={this.handleKeyUp}
             handleSubmit={this.handleSubmit}
             inputValue={inputValue}
             inputPrompt={inputPrompt}
             ref={this.terminalInput}
             readOnly={false}
           />
+        </div>
+        <div aria-label="autocomplete-preview" className="tab-complete-result">
+          {autoCompleteItems && (
+            <AutoCompleteList
+              items={autoCompleteItems}
+              activeItemIndex={autoCompleteActiveItem}
+            />
+          )}
         </div>
       </div>
     );

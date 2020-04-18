@@ -22,3 +22,5 @@ export const History: React.FC<HistoryProps> = (props): JSX.Element => {
     </div>
   );
 };
+
+export default History;

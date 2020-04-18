@@ -10,7 +10,9 @@ describe('help suite', (): void => {
     const { container } = render(helpResult.commandResult as JSX.Element);
 
     Object.keys(services).forEach((service): void => {
-      expect(container.innerHTML).toContain(service);
+      if (service.indexOf('AutoComplete') === -1) {
+        expect(container.innerHTML).toContain(service);
+      }
     });
   });
 });
