@@ -184,7 +184,7 @@ export function getTarget(
  * Takes an internally formatted filesystem and formats it into an
  * an item list.
  *
- * @param directory {object} - internally formatted filesystem
+ * @param fileSystem {object} - internally formatted filesystem
  * @returns {object} - fomratted list of files/folders
  */
 export function buildItemList(fileSystem: FileSystem): ItemListType {

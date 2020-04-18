@@ -552,6 +552,7 @@ describe('autocomplete with tab', (): void => {
       expect(autoCompleteContent.innerHTML).toBe('');
       expect(input.value).toEqual('cd home/user/test/');
     });
+
     test('tab press with single item should autofill it', async (): Promise<
       void
     > => {
@@ -586,7 +587,7 @@ describe('autocomplete with tab', (): void => {
         'autocomplete-preview',
       );
       expect(autoCompleteContent.innerHTML).toContain('home/');
-      expect(autoCompleteContent.innerHTML).toContain('docs');
+      expect(autoCompleteContent.innerHTML).toContain('docs/');
       expect(input.value).toBe('cd home/');
 
       input.value = '';
