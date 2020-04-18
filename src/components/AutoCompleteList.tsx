@@ -23,8 +23,8 @@ const AutoCompleteList: React.FC<AutoCompleteListProps> = (
           <span
             className={
               activeItemIndex === index
-                ? 'ls-preview-folder active'
-                : 'ls-preview-folder'
+                ? 'auto-preview-folder active'
+                : 'auto-preview-folder'
             }
             key={key}
           >
@@ -37,8 +37,8 @@ const AutoCompleteList: React.FC<AutoCompleteListProps> = (
         <span
           className={
             activeItemIndex === index
-              ? 'ls-preview-file active'
-              : 'ls-preview-file'
+              ? 'auto-preview-file active'
+              : 'auto-preview-file'
           }
           key={key}
         >

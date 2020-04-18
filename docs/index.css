@@ -58,9 +58,9 @@
           width: 24px; }
   #terminal-wrapper .preview-list span {
     margin: 0px 10px; }
-    #terminal-wrapper .preview-list span.ls-preview-folder {
+    #terminal-wrapper .preview-list span.auto-preview-folder {
       color: #f99157; }
-    #terminal-wrapper .preview-list span.ls-preview-file {
+    #terminal-wrapper .preview-list span.auto-preview-file {
       color: #5fb3b3; }
     #terminal-wrapper .preview-list span.active {
       background-color: #4F5B66; }

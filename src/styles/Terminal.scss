@@ -98,11 +98,11 @@
     span {
       margin: 0px 10px;
 
-      &.ls-preview-folder {
+      &.auto-preview-folder {
         color: map-get($themeDark, orange);
       }
 
-      &.ls-preview-file {
+      &.auto-preview-file {
         color: map-get($themeDark, blue);
       }
 

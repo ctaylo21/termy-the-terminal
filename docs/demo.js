@@ -26391,14 +26391,14 @@
 	    var autoCompleteItems = Object.keys(items).map(function (key, index) {
 	        if (items[key].type === 'FOLDER') {
 	            return (react.createElement("span", { className: activeItemIndex === index
-	                    ? 'ls-preview-folder active'
-	                    : 'ls-preview-folder', key: key },
+	                    ? 'auto-preview-folder active'
+	                    : 'auto-preview-folder', key: key },
 	                key,
 	                "/"));
 	        }
 	        return (react.createElement("span", { className: activeItemIndex === index
-	                ? 'ls-preview-file active'
-	                : 'ls-preview-file', key: key }, key));
+	                ? 'auto-preview-file active'
+	                : 'auto-preview-file', key: key }, key));
 	    });
 	    return react.createElement("div", { className: "preview-list" }, autoCompleteItems);
 	};
