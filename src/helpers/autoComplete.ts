@@ -1,4 +1,4 @@
-import { AutoCompleteListData } from '../index';
+import { ItemListType } from '../';
 
 /**
  * Given a input value for a command with a target, return the new value
@@ -45,10 +45,7 @@ export function getUpdatedInputValueFromTarget(
  * @param itemKey {string} - key to grab from file system
  * @returns {string} - user-friendly item name
  */
-export function formatItem(
-  fileSystem: AutoCompleteListData,
-  itemKey: number,
-): string {
+export function formatItem(fileSystem: ItemListType, itemKey: number): string {
   const targetRawName = Object.keys(fileSystem)[itemKey];
   return fileSystem[targetRawName].type === 'FOLDER'
     ? `${targetRawName}/`

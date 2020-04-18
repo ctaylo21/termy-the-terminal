@@ -1,4 +1,4 @@
-import cd from '../cd';
+import { cd, cdAutoComplete } from '../cd';
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { FileSystem } from '../../index';
 
@@ -103,6 +103,112 @@ describe('cd suite', (): void => {
       return expect(
         cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
       ).rejects.toMatchSnapshot();
+    });
+  });
+
+  describe('auto complete', (): void => {
+    test('empty value', async (): Promise<void> => {
+      const { commandResult } = await cdAutoComplete(
+        exampleFileSystem,
+        '/home',
+        '',
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const items = Object.keys(commandResult!);
+
+      expect(items).toContain('user');
+      expect(items).toContain('videos');
+      expect(items).not.toContain('file1.txt');
+      expect(items).not.toContain('file5.txt');
+      expect(items).not.toContain('dog.png');
+    });
+
+    test('should filter single level target', async (): Promise<void> => {
+      const { commandResult } = await cdAutoComplete(
+        exampleFileSystem,
+        '/',
+        'ho',
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('home');
+      expect(autoCompleteValues).not.toContain('file3.txt');
+      expect(autoCompleteValues).not.toContain('file4.txt');
+      expect(autoCompleteValues).not.toContain('blog');
+      expect(autoCompleteValues).not.toContain('docs');
+    });
+
+    test('invalid path should return nothing', async (): Promise<void> => {
+      const lsResult = await cdAutoComplete(exampleFileSystem, '/bad/path', '');
+
+      expect(lsResult.commandResult).toBeUndefined();
+    });
+
+    test('relative path', async (): Promise<void> => {
+      const { commandResult } = await cdAutoComplete(
+        exampleFileSystem,
+        '/',
+        'home/us',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('user');
+      expect(autoCompleteValues).not.toContain('dog.png');
+      expect(autoCompleteValues).not.toContain('file1.txt');
+      expect(autoCompleteValues).not.toContain('file5.txt');
+      expect(autoCompleteValues).not.toContain('videos');
+    });
+
+    test('relative path with dotdot', async (): Promise<void> => {
+      const { commandResult } = await cdAutoComplete(
+        exampleFileSystem,
+        '/',
+        'home/../home/us',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('user');
+      expect(autoCompleteValues).not.toContain('dog.png');
+      expect(autoCompleteValues).not.toContain('file1.txt');
+      expect(autoCompleteValues).not.toContain('file5.txt');
+      expect(autoCompleteValues).not.toContain('videos');
+    });
+
+    test('absolute path', async (): Promise<void> => {
+      const { commandResult } = await cdAutoComplete(
+        exampleFileSystem,
+        '/',
+        '/home/us',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('user');
+      expect(autoCompleteValues).not.toContain('dog.png');
+      expect(autoCompleteValues).not.toContain('file1.txt');
+      expect(autoCompleteValues).not.toContain('file5.txt');
+      expect(autoCompleteValues).not.toContain('videos');
+    });
+
+    test('absolute path with ..', async (): Promise<void> => {
+      const { commandResult } = await cdAutoComplete(
+        exampleFileSystem,
+        '/',
+        '/home/user/../us',
+      );
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const autoCompleteValues = Object.keys(commandResult!);
+
+      expect(autoCompleteValues).toContain('user');
+      expect(autoCompleteValues).not.toContain('dog.png');
+      expect(autoCompleteValues).not.toContain('file1.txt');
+      expect(autoCompleteValues).not.toContain('file5.txt');
+      expect(autoCompleteValues).not.toContain('videos');
     });
   });
 });

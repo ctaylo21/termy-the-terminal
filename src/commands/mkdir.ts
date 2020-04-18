@@ -2,7 +2,14 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import { getInternalPath } from './utilities/index';
-import { CommandResponse, FileSystem, TerminalFolder } from '../index';
+import {
+  AutoCompleteResponse,
+  CommandResponse,
+  FileSystem,
+  ItemListType,
+  TerminalFolder,
+} from '../index';
+import autoComplete from './autoComplete';
 
 /**
  * Given a folder path, creates that folder for the given file system and
@@ -39,3 +46,25 @@ export default function mkdir(
     });
   });
 }
+
+/**
+ * Given a fileysystem, current path, and target, list the items in the desired
+ * folder that start with target string
+ *
+ * @param fileSystem {object} - filesystem to ls upon
+ * @param currentPath {string} - current path within filesystem
+ * @param target {string} - string to match against (maybe be path)
+ * @returns Promise<object> - resolves with contents that match target in path
+ */
+function mkdirAutoComplete(
+  fileSystem: FileSystem,
+  currentPath: string,
+  target: string,
+): Promise<AutoCompleteResponse> {
+  const filterNonFilesFn = (item: ItemListType): boolean =>
+    item[Object.keys(item)[0]].type === 'FOLDER';
+
+  return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
+}
+
+export { mkdir, mkdirAutoComplete };

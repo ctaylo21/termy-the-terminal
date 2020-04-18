@@ -1,4 +1,4 @@
-import { CommandResponse, FileSystem } from '../index';
+import { AutoCompleteResponse, CommandResponse, FileSystem } from '../index';
 
 /**
  * Returns current directory
@@ -15,3 +15,22 @@ export default function pwd(
     });
   });
 }
+
+/**
+ * Do nothing for pwd autocomplete
+ */
+function pwdAutoComplete(
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  _fileSystem: FileSystem,
+  _currentPath: string,
+  _target: string,
+  /* eslint-enable @typescript-eslint/no-unused-vars */
+): Promise<AutoCompleteResponse> {
+  return new Promise((resolve): void => {
+    resolve({
+      commandResult: null,
+    });
+  });
+}
+
+export { pwd, pwdAutoComplete };

@@ -1,9 +1,10 @@
-import { CommandResponse, FileSystem } from '../index';
+import { AutoCompleteResponse, CommandResponse, FileSystem } from '../index';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import unset from 'lodash/unset';
 import { getInternalPath } from './utilities/index';
+import autoComplete from './autoComplete';
 
 /**
  * Deletes path from given filesystem and returns updatd filesystem
@@ -64,3 +65,22 @@ export default function rm(
     reject(`Can't remove ${targetPath}. No such file or directory.`);
   });
 }
+
+/**
+ * Given a fileysystem, current path, and target, list the items in the desired
+ * folder that start with target string
+ *
+ * @param fileSystem {object} - filesystem to ls upon
+ * @param currentPath {string} - current path within filesystem
+ * @param target {string} - string to match against (maybe be path)
+ * @returns Promise<object> - resolves with contents that match target in path
+ */
+function rmAutoComplete(
+  fileSystem: FileSystem,
+  currentPath: string,
+  target: string,
+): Promise<AutoCompleteResponse> {
+  return autoComplete(fileSystem, currentPath, target);
+}
+
+export { rm, rmAutoComplete };

@@ -21,7 +21,7 @@ export interface TerminalState {
   history: HistoryItem[];
   inputPrompt: string;
   inputValue: string;
-  autoCompleteItems?: AutoCompleteListData;
+  autoCompleteItems?: ItemListType;
 }
 
 export interface HistoryItem {
@@ -62,19 +62,19 @@ export interface TerminalFolder {
   children: FileSystem | null;
 }
 
-export interface AutoCompleteListData {
-  [index: string]: {
-    type: 'FOLDER' | 'FILE';
-  };
-}
-
 export type CommandResponse = {
   updatedState?: Partial<TerminalState>;
   commandResult?: JSX.Element | string;
 };
 
+export interface ItemListType {
+  [index: string]: {
+    type: 'FOLDER' | 'FILE';
+  };
+}
+
 export type AutoCompleteResponse = {
-  commandResult?: AutoCompleteListData | null;
+  commandResult?: ItemListType | null;
 };
 
 export class Terminal extends Component<TerminalProps, TerminalState> {
@@ -171,9 +171,12 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       } = this.state;
       const { commandName, commandTargets } = parseCommand(inputValue);
 
-      const cycleThroughAutoCompleteItems = (
-        itemList: AutoCompleteListData,
-      ): void => {
+      // Tab pressed before a target is available so just return
+      if (commandTargets.length < 1) {
+        return;
+      }
+
+      const cycleThroughAutoCompleteItems = (itemList: ItemListType): void => {
         let newAutoCompleteActiveItemIndex = 0;
         if (autoCompleteActiveItem < Object.keys(itemList).length - 1) {
           newAutoCompleteActiveItemIndex = autoCompleteActiveItem + 1;
@@ -222,11 +225,17 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         if (commandResult) {
           // If only one autocomplete option is available, just use it
           if (Object.keys(commandResult).length === 1) {
+            // If the last part of current target path is a folder,
+            // set target path to empty
+            let targetPathToUpdate = getTargetPath(commandTargets[0]);
+            if (commandTargets[0].endsWith('/')) {
+              targetPathToUpdate = '';
+            }
             const updatedInputValue = getUpdatedInputValueFromTarget(
               inputValue,
               commandTargets[0],
               formatItem(commandResult, 0),
-              getTargetPath(commandTargets[0]),
+              targetPathToUpdate,
             );
 
             this.setState(

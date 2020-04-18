@@ -65,6 +65,20 @@ describe('general', (): void => {
 
     expect(history.innerHTML).toMatchSnapshot();
   });
+
+  test('invalid command', async (): Promise<void> => {
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'invalid-command' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toMatchSnapshot();
+  });
 });
 
 describe('autocomplete with tab', (): void => {
@@ -79,6 +93,142 @@ describe('autocomplete with tab', (): void => {
       resolve(fireEvent(input, tabEvent));
     });
   };
+
+  describe('general', (): void => {
+    test('tab without space for target should do nothing', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'rm -r');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toBe('');
+      expect(input.value).toBe('rm -r');
+    });
+
+    test('should call "e.preventDefault" on tab key press', async (): Promise<
+      void
+    > => {
+      const { getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+      const tabEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        code: '9',
+        key: 'Tab',
+      });
+      Object.assign(tabEvent, { preventDefault: jest.fn() });
+
+      fireEvent(input, tabEvent);
+
+      await waitFor(() => {
+        expect(tabEvent.preventDefault).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('should do nothing on tab with invalid command', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+      fireEvent.change(input, { target: { value: 'invalid ' } });
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toBe('');
+      expect(input.value).toBe('invalid ');
+    });
+  });
+
+  describe('rm', (): void => {
+    test('rm tab with argument and relative nested path', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'rm home/fi');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toContain('file1.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file5.txt');
+      expect(autoCompleteContent.innerHTML).toMatchSnapshot();
+      expect(input.value).toBe('rm home/fi');
+    });
+
+    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'rm fi');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('file3.txt');
+      expect(autoCompleteContent.innerHTML).toContain('file4.txt');
+      expect(input.value).toBe('rm file3.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('rm file4.txt');
+
+      await fireTabInput(input);
+      expect(input.value).toBe('rm file3.txt');
+    });
+
+    test('rm tab with no target but command args', async (): Promise<void> => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'rm -r ');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      Object.keys(exampleFileSystem).forEach((item) => {
+        expect(autoCompleteContent.innerHTML).toContain(item);
+      });
+      expect(autoCompleteContent.innerHTML).toMatchSnapshot();
+      expect(input.value).toBe('rm -r ');
+    });
+  });
 
   describe('ls', (): void => {
     test('ls tab with no argument', async (): Promise<void> => {
@@ -168,30 +318,6 @@ describe('autocomplete with tab', (): void => {
 
       await fireTabInput(input);
       expect(input.value).toBe('ls file3.txt');
-    });
-  });
-
-  describe('general', (): void => {
-    test('should call "e.preventDefault" on tab key press', async (): Promise<
-      void
-    > => {
-      const { getByLabelText } = render(
-        <Terminal fileSystem={exampleFileSystem} />,
-      );
-      const input = getByLabelText('terminal-input') as HTMLInputElement;
-
-      const tabEvent = new KeyboardEvent('keydown', {
-        bubbles: true,
-        code: '9',
-        key: 'Tab',
-      });
-      Object.assign(tabEvent, { preventDefault: jest.fn() });
-
-      fireEvent(input, tabEvent);
-
-      await waitFor(() => {
-        expect(tabEvent.preventDefault).toHaveBeenCalledTimes(1);
-      });
     });
 
     test('should clear preview display once command is executed', async (): Promise<
@@ -405,6 +531,70 @@ describe('autocomplete with tab', (): void => {
       );
       expect(input.value).toBe('ls home/user/test/');
       expect(autoCompleteContent.innerHTML).toBe('');
+    });
+  });
+
+  describe('cd', (): void => {
+    test('nested path with a single option', async (): Promise<void> => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'cd home/user/');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toBe('');
+      expect(input.value).toEqual('cd home/user/test/');
+    });
+
+    test('tab press with single item should autofill it', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'cd ho');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(input.value).toBe('cd home/');
+      expect(autoCompleteContent.innerHTML).toBe('');
+    });
+
+    test('multiple tab presses with changing targets', async (): Promise<
+      void
+    > => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'cd ');
+      await fireTabInput(input);
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+      expect(autoCompleteContent.innerHTML).toContain('home/');
+      expect(autoCompleteContent.innerHTML).toContain('docs/');
+      expect(input.value).toBe('cd home/');
+
+      input.value = '';
+      await userEvent.type(input, 'cd do');
+      await fireTabInput(input);
+
+      expect(input.value).toBe('cd docs/');
     });
   });
 });
@@ -727,6 +917,24 @@ describe('mkdir', (): void => {
 
     const history = await findByLabelText(container, 'terminal-history');
 
+    expect(history.innerHTML).toMatchSnapshot();
+  });
+});
+
+describe('cat', (): void => {
+  test('should handle cat with no space', async (): Promise<void> => {
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} />,
+    );
+
+    const input = getByLabelText('terminal-input');
+
+    fireEvent.change(input, { target: { value: 'cat' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toContain('Error: Invalid target path');
     expect(history.innerHTML).toMatchSnapshot();
   });
 });
