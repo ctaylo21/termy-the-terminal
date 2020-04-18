@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.0 - 2020-4-18
+
+### Added
+
+- Added autocomplete feature with <tab> keypress for all commands
+
 ## 1.1.1 - 2020-3-22
 
 ### Fixed
