@@ -30294,7 +30294,7 @@
 	                        }));
 	                    };
 	                    generateAutoCompleteList = function () { return __awaiter(_this, void 0, void 0, function () {
-	                        var commandResult, updatedInputValue;
+	                        var commandResult, targetPathToUpdate, updatedInputValue;
 	                        return __generator(this, function (_a) {
 	                            switch (_a.label) {
 	                                case 0:
@@ -30310,7 +30310,11 @@
 	                                    if (commandResult) {
 	                                        // If only one autocomplete option is available, just use it
 	                                        if (Object.keys(commandResult).length === 1) {
-	                                            updatedInputValue = getUpdatedInputValueFromTarget(inputValue, commandTargets[0], formatItem(commandResult, 0), getTargetPath(commandTargets[0]));
+	                                            targetPathToUpdate = getTargetPath(commandTargets[0]);
+	                                            if (commandTargets[0].endsWith('/')) {
+	                                                targetPathToUpdate = '';
+	                                            }
+	                                            updatedInputValue = getUpdatedInputValueFromTarget(inputValue, commandTargets[0], formatItem(commandResult, 0), targetPathToUpdate);
 	                                            this.setState(Object.assign({
 	                                                inputValue: updatedInputValue,
 	                                            }));
