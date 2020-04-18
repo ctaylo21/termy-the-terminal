@@ -1,6 +1,6 @@
 import React from 'react';
 import HelpMenu from '../components/HelpMenu';
-import { CommandResponse } from '../index';
+import { AutoCompleteResponse, CommandResponse, FileSystem } from '../index';
 
 /**
  * Returns help menu for system commands
@@ -14,3 +14,22 @@ export default function help(): Promise<CommandResponse> {
     });
   });
 }
+
+/**
+ * Do nothing for pwd autocomplete
+ */
+function helpAutoComplete(
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  _fileSystem: FileSystem,
+  _currentPath: string,
+  _target: string,
+  /* eslint-enable @typescript-eslint/no-unused-vars */
+): Promise<AutoCompleteResponse> {
+  return new Promise((resolve): void => {
+    resolve({
+      commandResult: null,
+    });
+  });
+}
+
+export { help, helpAutoComplete };

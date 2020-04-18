@@ -1,3 +1,7 @@
+import { FileSystem, ItemListType } from '../../index';
+import get from 'lodash/get';
+import has from 'lodash/has';
+
 /**
  * Takes a valid Unix path and converts it into a format
  * that matches the internal data structure. Including replacing "/"
@@ -137,4 +141,61 @@ export function parseCommand(command: string): ParsedCommand {
     commandOptions,
     commandTargets,
   };
+}
+
+/**
+ * Given a filesystem and current path, return the target item from the
+ * filesystem for a given garget path if it exists, or throw an error if
+ * it doesn't.
+ *
+ * @param fileSystem {object} - Filesystem to search
+ * @param currentPath {string} - Curernt path in filesystem
+ * @param targetPath {string} - Path to target
+ * @return {object} - Internal formatted filesystem from target
+ */
+export function getTarget(
+  fileSystem: FileSystem,
+  currentPath: string,
+  targetPath: string,
+): FileSystem {
+  const internalPath = getInternalPath(currentPath, targetPath);
+
+  if (internalPath === '/' || !internalPath) {
+    return fileSystem;
+  } else if (has(fileSystem, internalPath)) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const target = get(fileSystem, internalPath);
+    if (target.type === 'FILE') {
+      const [fileName] = internalPath.split('.').slice(-1);
+      return { [fileName]: target };
+    } else {
+      if (target.children) {
+        return target.children;
+      } else {
+        throw new Error('Nothing to show here');
+      }
+    }
+  }
+
+  throw new Error('Target folder does not exist');
+}
+
+/**
+ * Takes an internally formatted filesystem and formats it into an
+ * an item list.
+ *
+ * @param directory {object} - internally formatted filesystem
+ * @returns {object} - fomratted list of files/folders
+ */
+export function buildItemList(fileSystem: FileSystem): ItemListType {
+  return Object.assign(
+    {},
+    ...Object.keys(fileSystem).map((item) => ({
+      [fileSystem[item].type === 'FILE'
+        ? `${item}.${fileSystem[item].extension}`
+        : item]: {
+        type: fileSystem[item].type,
+      },
+    })),
+  );
 }

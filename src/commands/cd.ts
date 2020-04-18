@@ -1,10 +1,16 @@
 import get from 'lodash/get';
 import has from 'lodash/has';
-import { CommandResponse, FileSystem } from '../index';
+import {
+  AutoCompleteResponse,
+  CommandResponse,
+  FileSystem,
+  ItemListType,
+} from '../index';
 import {
   convertInternalPathToExternal,
   getInternalPath,
 } from './utilities/index';
+import autoComplete from './autoComplete';
 
 /**
  * Given a file system, validates if changing directories from a given path
@@ -48,3 +54,25 @@ export default function cd(
     reject(`path does not exist: ${targetPath}`);
   });
 }
+
+/**
+ * Given a fileysystem, current path, and target, list the items in the desired
+ * folder that start with target string
+ *
+ * @param fileSystem {object} - filesystem to ls upon
+ * @param currentPath {string} - current path within filesystem
+ * @param target {string} - string to match against (maybe be path)
+ * @returns Promise<object> - resolves with contents that match target in path
+ */
+function cdAutoComplete(
+  fileSystem: FileSystem,
+  currentPath: string,
+  target: string,
+): Promise<AutoCompleteResponse> {
+  const filterNonFilesFn = (item: ItemListType): boolean =>
+    item[Object.keys(item)[0]].type === 'FOLDER';
+
+  return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
+}
+
+export { cd, cdAutoComplete };

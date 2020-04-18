@@ -1,10 +1,10 @@
 import React from 'react';
 import FolderIcon from '../images/folder.svg';
 import FileIcon from '../images/file.svg';
-import { LsResultType } from '../commands/ls';
+import { ItemListType } from '../';
 
 interface LsResultProps {
-  lsResult: LsResultType;
+  lsResult: ItemListType;
 }
 
 const LsResult: React.FC<LsResultProps> = (props): JSX.Element => {

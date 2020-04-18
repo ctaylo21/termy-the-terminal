@@ -1,4 +1,4 @@
-import help from '../help';
+import { help, helpAutoComplete } from '../help';
 import { render } from '@testing-library/react';
 import services from '..';
 
@@ -14,5 +14,11 @@ describe('help suite', (): void => {
         expect(container.innerHTML).toContain(service);
       }
     });
+  });
+
+  it('autocomplete should do nothing', async (): Promise<void> => {
+    const result = await helpAutoComplete({}, '/home', '');
+
+    expect(result).toStrictEqual({ commandResult: null });
   });
 });

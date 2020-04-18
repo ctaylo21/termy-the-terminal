@@ -27930,6 +27930,122 @@
 	        commandTargets: commandTargets,
 	    };
 	}
+	/**
+	 * Given a filesystem and current path, return the target item from the
+	 * filesystem for a given garget path if it exists, or throw an error if
+	 * it doesn't.
+	 *
+	 * @param fileSystem {object} - Filesystem to search
+	 * @param currentPath {string} - Curernt path in filesystem
+	 * @param targetPath {string} - Path to target
+	 * @return {object} - Internal formatted filesystem from target
+	 */
+	function getTarget(fileSystem, currentPath, targetPath) {
+	    var _a;
+	    var internalPath = getInternalPath(currentPath, targetPath);
+	    if (internalPath === '/' || !internalPath) {
+	        return fileSystem;
+	    }
+	    else if (has_1(fileSystem, internalPath)) {
+	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	        var target = get_1(fileSystem, internalPath);
+	        if (target.type === 'FILE') {
+	            var fileName = internalPath.split('.').slice(-1)[0];
+	            return _a = {}, _a[fileName] = target, _a;
+	        }
+	        else {
+	            if (target.children) {
+	                return target.children;
+	            }
+	            else {
+	                throw new Error('Nothing to show here');
+	            }
+	        }
+	    }
+	    throw new Error('Target folder does not exist');
+	}
+	/**
+	 * Takes an internally formatted filesystem and formats it into an
+	 * an item list.
+	 *
+	 * @param directory {object} - internally formatted filesystem
+	 * @returns {object} - fomratted list of files/folders
+	 */
+	function buildItemList(fileSystem) {
+	    return Object.assign.apply(Object, __spreadArrays([{}], Object.keys(fileSystem).map(function (item) {
+	        var _a;
+	        return (_a = {},
+	            _a[fileSystem[item].type === 'FILE'
+	                ? item + "." + fileSystem[item].extension
+	                : item] = {
+	                type: fileSystem[item].type,
+	            },
+	            _a);
+	    })));
+	}
+
+	/**
+	 * Takes an internally formatted filesystem and formats it into the
+	 * expected format for an ls command. Optionally takes a function to apply
+	 * to the intiial result to filter out certain items.
+	 *
+	 * @param directory {object} - internally formatted filesystem
+	 * @param filterFn {function} - optional fn to filter certain items
+	 */
+	function buildAutoCompleteData(fileSystem, autoCompleteMatch, filterFn) {
+	    var autoCompleteMatchFn = function (item) {
+	        return Object.keys(item)[0].startsWith(autoCompleteMatch);
+	    };
+	    return Object.assign.apply(Object, __spreadArrays([{}], Object.keys(fileSystem)
+	        .map(function (item) {
+	        var _a;
+	        return (_a = {},
+	            _a[fileSystem[item].type === 'FILE'
+	                ? item + "." + fileSystem[item].extension
+	                : item] = {
+	                type: fileSystem[item].type,
+	            },
+	            _a);
+	    })
+	        .filter(autoCompleteMatchFn)
+	        .filter(filterFn)));
+	}
+	/**
+	 * Given a fileysystem, current path, and target, list the items in the desired
+	 * folder that start with target string
+	 *
+	 * @param fileSystem {object} - filesystem to ls upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param target {string} - string to match against (maybe be path)
+	 * @returns Promise<object> - resolves with contents that match target in path
+	 */
+	function autoComplete(fileSystem, currentPath, target, filterFn) {
+	    if (filterFn === void 0) { filterFn = function () { return true; }; }
+	    return new Promise(function (resolve) {
+	        // Default to searching in currenty directory with simple target
+	        // that contains no path
+	        var autoCompleteMatch = target;
+	        var targetPath = '';
+	        // Handle case where target is a nested path and
+	        // we need to pull off last part of path to match against
+	        var pathParts = target.split('/');
+	        if (pathParts.length > 1) {
+	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	            autoCompleteMatch = pathParts.pop();
+	            targetPath = pathParts.join('/');
+	        }
+	        var targetFolderContents;
+	        try {
+	            targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
+	        }
+	        catch (e) {
+	            return resolve({ commandResult: undefined });
+	        }
+	        resolve({
+	            commandResult: buildAutoCompleteData(targetFolderContents, autoCompleteMatch, filterFn),
+	        });
+	    });
+	}
 
 	/**
 	 * Given a file system, validates if changing directories from a given path
@@ -27963,6 +28079,21 @@
 	        }
 	        reject("path does not exist: " + targetPath);
 	    });
+	}
+	/**
+	 * Given a fileysystem, current path, and target, list the items in the desired
+	 * folder that start with target string
+	 *
+	 * @param fileSystem {object} - filesystem to ls upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param target {string} - string to match against (maybe be path)
+	 * @returns Promise<object> - resolves with contents that match target in path
+	 */
+	function cdAutoComplete(fileSystem, currentPath, target) {
+	    var filterNonFilesFn = function (item) {
+	        return item[Object.keys(item)[0]].type === 'FOLDER';
+	    };
+	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 	}
 
 	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -28006,53 +28137,6 @@
 	    return react.createElement("ul", { className: "terminal-ls-list" }, lsItems);
 	};
 
-	function getTarget(fileSystem, currentPath, targetPath) {
-	    var _a;
-	    var internalPath = getInternalPath(currentPath, targetPath);
-	    if (internalPath === '/' || !internalPath) {
-	        return fileSystem;
-	    }
-	    else if (has_1(fileSystem, internalPath)) {
-	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	        var target = get_1(fileSystem, internalPath);
-	        if (target.type === 'FILE') {
-	            var fileName = internalPath.split('.').slice(-1)[0];
-	            return _a = {}, _a[fileName] = target, _a;
-	        }
-	        else {
-	            if (target.children) {
-	                return target.children;
-	            }
-	            else {
-	                throw new Error('Nothing to show here');
-	            }
-	        }
-	    }
-	    throw new Error('Target folder does not exist');
-	}
-	/**
-	 * Takes an internally formatted filesystem and formats it into the
-	 * expected format for an ls command. Optionally takes a function to apply
-	 * to the intiial result to filter out certain items.
-	 *
-	 * @param directory {object} - internally formatted filesystem
-	 * @param filterFn {function} - optional fn to filter certain items
-	 */
-	function buildLsFormatDirectory(fileSystem, filterFn) {
-	    if (filterFn === void 0) { filterFn = function () { return true; }; }
-	    return Object.assign.apply(Object, __spreadArrays([{}], Object.keys(fileSystem)
-	        .map(function (item) {
-	        var _a;
-	        return (_a = {},
-	            _a[fileSystem[item].type === 'FILE'
-	                ? item + "." + fileSystem[item].extension
-	                : item] = {
-	                type: fileSystem[item].type,
-	            },
-	            _a);
-	    })
-	        .filter(filterFn)));
-	}
 	/**
 	 * Given a fileysystem, lists all items for a given directory
 	 *
@@ -28072,7 +28156,7 @@
 	            return reject(e.message);
 	        }
 	        resolve({
-	            commandResult: (react.createElement(LsResult, { lsResult: buildLsFormatDirectory(targetFolderContents) })),
+	            commandResult: (react.createElement(LsResult, { lsResult: buildItemList(targetFolderContents) })),
 	        });
 	    });
 	}
@@ -28086,33 +28170,7 @@
 	 * @returns Promise<object> - resolves with contents that match target in path
 	 */
 	function lsAutoComplete(fileSystem, currentPath, target) {
-	    return new Promise(function (resolve) {
-	        // Default to searching in currenty directory with simple target
-	        // that contains no path
-	        var autoCompleteMatch = target;
-	        var targetPath = '';
-	        // Handle case where target is a nested path and
-	        // we need to pull off last part of path to match against
-	        var pathParts = target.split('/');
-	        if (pathParts.length > 1) {
-	            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-	            autoCompleteMatch = pathParts.pop();
-	            targetPath = pathParts.join('/');
-	        }
-	        var targetFolderContents;
-	        try {
-	            targetFolderContents = getTarget(fileSystem, currentPath, targetPath);
-	        }
-	        catch (e) {
-	            return resolve({ commandResult: undefined });
-	        }
-	        var matchFilterFn = function (item) {
-	            return Object.keys(item)[0].startsWith(autoCompleteMatch);
-	        };
-	        resolve({
-	            commandResult: buildLsFormatDirectory(targetFolderContents, matchFilterFn),
-	        });
-	    });
+	    return autoComplete(fileSystem, currentPath, target);
 	}
 
 	/**
@@ -29752,6 +29810,21 @@
 	        });
 	    });
 	}
+	/**
+	 * Given a fileysystem, current path, and target, list the items in the desired
+	 * folder that start with target string
+	 *
+	 * @param fileSystem {object} - filesystem to ls upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param target {string} - string to match against (maybe be path)
+	 * @returns Promise<object> - resolves with contents that match target in path
+	 */
+	function mkdirAutoComplete(fileSystem, currentPath, target) {
+	    var filterNonFilesFn = function (item) {
+	        return item[Object.keys(item)[0]].type === 'FOLDER';
+	    };
+	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
+	}
 
 	var TerminalImage = function (_a) {
 	    var src = _a.src;
@@ -29768,6 +29841,9 @@
 	 */
 	function cat(fileSystem, currentPath, targetPath) {
 	    return new Promise(function (resolve, reject) {
+	        if (!targetPath) {
+	            reject('Invalid target path');
+	        }
 	        var pathWithoutExtension = stripFileExtension(targetPath);
 	        var file = get_1(fileSystem, getInternalPath(currentPath, pathWithoutExtension));
 	        if (!file) {
@@ -29787,6 +29863,18 @@
 	        }
 	        reject('Target is not a file');
 	    });
+	}
+	/**
+	 * Given a fileysystem, current path, and target, list the items in the desired
+	 * folder that start with target string
+	 *
+	 * @param fileSystem {object} - filesystem to ls upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param target {string} - string to match against (maybe be path)
+	 * @returns Promise<object> - resolves with contents that match target in path
+	 */
+	function catAutoComplete(fileSystem, currentPath, target) {
+	    return autoComplete(fileSystem, currentPath, target);
 	}
 
 	var commands = {
@@ -29820,6 +29908,18 @@
 	        });
 	    });
 	}
+	/**
+	 * Do nothing for pwd autocomplete
+	 */
+	function helpAutoComplete(
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	_fileSystem, _currentPath, _target) {
+	    return new Promise(function (resolve) {
+	        resolve({
+	            commandResult: null,
+	        });
+	    });
+	}
 
 	/**
 	 * Returns current directory
@@ -29830,6 +29930,18 @@
 	    return new Promise(function (resolve) {
 	        resolve({
 	            commandResult: currentPath,
+	        });
+	    });
+	}
+	/**
+	 * Do nothing for pwd autocomplete
+	 */
+	function pwdAutoComplete(
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	_fileSystem, _currentPath, _target) {
+	    return new Promise(function (resolve) {
+	        resolve({
+	            commandResult: null,
 	        });
 	    });
 	}
@@ -29997,8 +30109,35 @@
 	        reject("Can't remove " + targetPath + ". No such file or directory.");
 	    });
 	}
+	/**
+	 * Given a fileysystem, current path, and target, list the items in the desired
+	 * folder that start with target string
+	 *
+	 * @param fileSystem {object} - filesystem to ls upon
+	 * @param currentPath {string} - current path within filesystem
+	 * @param target {string} - string to match against (maybe be path)
+	 * @returns Promise<object> - resolves with contents that match target in path
+	 */
+	function rmAutoComplete(fileSystem, currentPath, target) {
+	    return autoComplete(fileSystem, currentPath, target);
+	}
 
-	var commands$1 = { cd: cd$1, ls: ls, lsAutoComplete: lsAutoComplete, mkdir: mkdir, cat: cat, help: help, pwd: pwd, rm: rm };
+	var commands$1 = {
+	    cat: cat,
+	    catAutoComplete: catAutoComplete,
+	    cd: cd$1,
+	    cdAutoComplete: cdAutoComplete,
+	    help: help,
+	    helpAutoComplete: helpAutoComplete,
+	    ls: ls,
+	    lsAutoComplete: lsAutoComplete,
+	    mkdir: mkdir,
+	    mkdirAutoComplete: mkdirAutoComplete,
+	    pwd: pwd,
+	    pwdAutoComplete: pwdAutoComplete,
+	    rm: rm,
+	    rmAutoComplete: rmAutoComplete,
+	};
 
 	/**
 	 * Given a input value for a command with a target, return the new value
@@ -30049,7 +30188,8 @@
 	 * "home/user/test/" => "test"
 	 * "home" => "home"
 	 *
-	 * @param currentTargetPath
+	 * @param currentTargetPath {string} - current target path, may include multiple levels
+	 * @returns {string} - last part of the given path
 	 */
 	function getTargetPath(currentTargetPath) {
 	    return currentTargetPath
@@ -30129,6 +30269,10 @@
 	                return __generator(this, function (_c) {
 	                    _a = this.state, autoCompleteActiveItem = _a.autoCompleteActiveItem, autoCompleteIsActive = _a.autoCompleteIsActive, autoCompleteItems = _a.autoCompleteItems, inputValue = _a.inputValue, currentPath = _a.currentPath, fileSystem = _a.fileSystem;
 	                    _b = parseCommand(inputValue), commandName = _b.commandName, commandTargets = _b.commandTargets;
+	                    // Tab pressed before a target is available so just return
+	                    if (commandTargets.length < 1) {
+	                        return [2 /*return*/];
+	                    }
 	                    cycleThroughAutoCompleteItems = function (itemList) {
 	                        var newAutoCompleteActiveItemIndex = 0;
 	                        if (autoCompleteActiveItem < Object.keys(itemList).length - 1) {
