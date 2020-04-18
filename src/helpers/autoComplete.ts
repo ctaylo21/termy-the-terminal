@@ -65,7 +65,8 @@ export function formatItem(
  * "home/user/test/" => "test"
  * "home" => "home"
  *
- * @param currentTargetPath
+ * @param currentTargetPath {string} - current target path, may include multiple levels
+ * @returns {string} - last part of the given path
  */
 export function getTargetPath(currentTargetPath: string): string {
   return currentTargetPath
