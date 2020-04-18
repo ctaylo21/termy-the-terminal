@@ -535,6 +535,23 @@ describe('autocomplete with tab', (): void => {
   });
 
   describe('cd', (): void => {
+    test('nested path with a single option', async (): Promise<void> => {
+      const { container, getByLabelText } = render(
+        <Terminal fileSystem={exampleFileSystem} />,
+      );
+
+      const input = getByLabelText('terminal-input') as HTMLInputElement;
+      await userEvent.type(input, 'cd home/user/');
+      await fireTabInput(input);
+
+      const autoCompleteContent = await findByLabelText(
+        container,
+        'autocomplete-preview',
+      );
+
+      expect(autoCompleteContent.innerHTML).toBe('');
+      expect(input.value).toEqual('cd home/user/test/');
+    });
     test('tab press with single item should autofill it', async (): Promise<
       void
     > => {

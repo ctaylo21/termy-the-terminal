@@ -225,11 +225,17 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
         if (commandResult) {
           // If only one autocomplete option is available, just use it
           if (Object.keys(commandResult).length === 1) {
+            // If the last part of current target path is a folder,
+            // set target path to empty
+            let targetPathToUpdate = getTargetPath(commandTargets[0]);
+            if (commandTargets[0].endsWith('/')) {
+              targetPathToUpdate = '';
+            }
             const updatedInputValue = getUpdatedInputValueFromTarget(
               inputValue,
               commandTargets[0],
               formatItem(commandResult, 0),
-              getTargetPath(commandTargets[0]),
+              targetPathToUpdate,
             );
 
             this.setState(
