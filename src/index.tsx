@@ -10,6 +10,7 @@ import {
   getTargetPath,
   getUpdatedInputValueFromTarget,
 } from './helpers/autoComplete';
+import TerminalContext from './context/TerminalContext';
 
 let commandList = commands;
 
@@ -41,9 +42,9 @@ export interface HistoryItem {
 
 export interface CommandHandler {
   (
-    fileSystem: FileSystem,
-    currentPath: string,
-    targetPath: string,
+    fileSystem?: FileSystem,
+    currentPath?: string,
+    targetPath?: string,
     options?: string,
   ): Promise<CommandResponse>;
 }
@@ -55,8 +56,9 @@ export interface CommandAutoCompleteHandler {
 }
 
 export interface Command {
-  handler: CommandHandler;
   autoCompleteHandler?: CommandAutoCompleteHandler;
+  description?: string;
+  handler: CommandHandler;
 }
 
 export interface TerminalProps {
@@ -399,29 +401,34 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     } = this.state;
 
     return (
-      <div id="terminal-wrapper">
-        <History history={history} />
-        <div ref={this.inputWrapper}>
-          <Input
-            currentPath={currentPath}
-            handleChange={this.handleChange}
-            handleKeyDown={this.handleKeyDown}
-            handleSubmit={this.handleSubmit}
-            inputValue={inputValue}
-            inputPrompt={inputPrompt}
-            ref={this.terminalInput}
-            readOnly={false}
-          />
-        </div>
-        <div aria-label="autocomplete-preview" className="tab-complete-result">
-          {autoCompleteItems && (
-            <AutoCompleteList
-              items={autoCompleteItems}
-              activeItemIndex={autoCompleteActiveItem}
+      <TerminalContext.Provider value={commandList}>
+        <div id="terminal-wrapper">
+          <History history={history} />
+          <div ref={this.inputWrapper}>
+            <Input
+              currentPath={currentPath}
+              handleChange={this.handleChange}
+              handleKeyDown={this.handleKeyDown}
+              handleSubmit={this.handleSubmit}
+              inputValue={inputValue}
+              inputPrompt={inputPrompt}
+              ref={this.terminalInput}
+              readOnly={false}
             />
-          )}
+          </div>
+          <div
+            aria-label="autocomplete-preview"
+            className="tab-complete-result"
+          >
+            {autoCompleteItems && (
+              <AutoCompleteList
+                items={autoCompleteItems}
+                activeItemIndex={autoCompleteActiveItem}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </TerminalContext.Provider>
     );
   }
 }

@@ -68,6 +68,7 @@ function mkdirAutoComplete(
 }
 
 export default {
-  handler: mkdir,
   autoCompleteHandler: mkdirAutoComplete,
+  description: 'Creates a folder for a given path in the filesystem',
+  handler: mkdir,
 };

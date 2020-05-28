@@ -78,6 +78,7 @@ function catAutoComplete(
 }
 
 export default {
-  handler: cat,
   autoCompleteHandler: catAutoComplete,
+  description: 'Shows the contents of a file',
+  handler: cat,
 };

@@ -33,6 +33,7 @@ function helpAutoComplete(
 }
 
 export default {
-  handler: help,
   autoCompleteHandler: helpAutoComplete,
+  description: 'Prints list of available commands',
+  handler: help,
 };

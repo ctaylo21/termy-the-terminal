@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { CommandResponse, Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
 import autoComplete from '../commands/autoComplete';
+import commands from '../commands';
 jest.mock('../../images/dog.png', () => 'abc/dog.png');
 
 beforeAll((): void => {
@@ -845,6 +846,11 @@ describe('help', (): void => {
     const history = await findByLabelText(container, 'terminal-history');
 
     expect(history.innerHTML).toMatchSnapshot();
+    Object.keys(commands).forEach((service): void => {
+      if (service.indexOf('AutoComplete') === -1) {
+        expect(container.innerHTML).toContain(service);
+      }
+    });
   });
 });
 
@@ -1323,6 +1329,37 @@ describe('custom commands', (): void => {
 
     expect(history.innerHTML).toMatchSnapshot();
     expect(history.innerHTML).toContain('world');
+  });
+
+  test('should allow for commands to be added to help result with a description', async (): Promise<
+    void
+  > => {
+    const hello = {
+      hello: {
+        handler: function hello(): Promise<CommandResponse> {
+          return new Promise((resolve): void => {
+            resolve({
+              commandResult: 'world',
+            });
+          });
+        },
+        description: "don't panic",
+      },
+    };
+
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} customCommands={hello} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'help' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toContain("don't panic");
+    expect(history.innerHTML).toContain('hello');
   });
 
   test('should use custom autoComplete method', async (): Promise<void> => {

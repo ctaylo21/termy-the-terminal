@@ -51,7 +51,7 @@ function lsAutoComplete(
 }
 
 export default {
-  command: 'ls',
-  handler: ls,
   autoCompleteHandler: lsAutoComplete,
+  description: 'Lists the contents of the given directory',
+  handler: ls,
 };

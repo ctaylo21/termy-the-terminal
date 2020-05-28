@@ -76,6 +76,7 @@ function cdAutoComplete(
 }
 
 export default {
-  handler: cd,
   autoCompleteHandler: cdAutoComplete,
+  description: 'Changes the current working directory',
+  handler: cd,
 };

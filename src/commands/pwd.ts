@@ -31,6 +31,7 @@ function pwdAutoComplete(
 }
 
 export default {
-  handler: pwd,
   autoCompleteHandler: pwdAutoComplete,
+  description: 'Prints the current working directory',
+  handler: pwd,
 };

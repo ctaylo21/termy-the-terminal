@@ -84,6 +84,7 @@ function rmAutoComplete(
 }
 
 export default {
-  handler: rm,
   autoCompleteHandler: rmAutoComplete,
+  description: 'Removes a file or directory',
+  handler: rm,
 };

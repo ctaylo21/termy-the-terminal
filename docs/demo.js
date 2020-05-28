@@ -28096,8 +28096,9 @@
 	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 	}
 	var cd$2 = {
-	    handler: cd$1,
 	    autoCompleteHandler: cdAutoComplete,
+	    description: 'Changes the current working directory',
+	    handler: cd$1,
 	};
 
 	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -28177,9 +28178,9 @@
 	    return autoComplete(fileSystem, currentPath, target);
 	}
 	var ls$1 = {
-	    command: 'ls',
-	    handler: ls,
 	    autoCompleteHandler: lsAutoComplete,
+	    description: 'Lists the contents of the given directory',
+	    handler: ls,
 	};
 
 	/**
@@ -29835,8 +29836,9 @@
 	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 	}
 	var mkdir$1 = {
-	    handler: mkdir,
 	    autoCompleteHandler: mkdirAutoComplete,
+	    description: 'Creates a folder for a given path in the filesystem',
+	    handler: mkdir,
 	};
 
 	var TerminalImage = function (_a) {
@@ -29890,27 +29892,22 @@
 	    return autoComplete(fileSystem, currentPath, target);
 	}
 	var cat$1 = {
-	    handler: cat,
 	    autoCompleteHandler: catAutoComplete,
+	    description: 'Shows the contents of a file',
+	    handler: cat,
 	};
 
-	var commands = {
-	    cd: 'Changes the current working directory',
-	    pwd: 'Prints the current working directory',
-	    ls: 'Lists the contents of the given directory',
-	    mkdir: 'Creates a folder for a given path in the filesystem',
-	    cat: 'Shows the contents of a file',
-	    rm: 'Removes a file or directory',
-	    help: 'Prints list of available commands',
-	};
+	var TerminalContext = react.createContext({});
+
 	var HelpMenu = function () {
-	    var commandList = Object.keys(commands).map(function (command) { return (react.createElement("li", { key: commands[command] },
-	        react.createElement("span", { className: "help-command-name" }, command),
-	        " -",
-	        ' ',
-	        react.createElement("span", null, commands[command]))); });
-	    return (react.createElement("div", { id: "help-container" },
-	        react.createElement("ul", { "aria-label": "help-menu" }, commandList)));
+	    return (react.createElement(TerminalContext.Consumer, null, function (commands) { return (react.createElement("div", { id: "help-container" },
+	        react.createElement("ul", { "aria-label": "help-menu" }, Object.keys(commands)
+	            .filter(function (command) { return commands[command].description; })
+	            .map(function (command) { return (react.createElement("li", { key: command },
+	            react.createElement("span", { className: "help-command-name" }, command),
+	            " -",
+	            ' ',
+	            react.createElement("span", null, commands[command].description))); })))); }));
 	};
 
 	/**
@@ -29938,8 +29935,9 @@
 	    });
 	}
 	var help$1 = {
-	    handler: help,
 	    autoCompleteHandler: helpAutoComplete,
+	    description: 'Prints list of available commands',
+	    handler: help,
 	};
 
 	/**
@@ -29967,8 +29965,9 @@
 	    });
 	}
 	var pwd$1 = {
-	    handler: pwd,
 	    autoCompleteHandler: pwdAutoComplete,
+	    description: 'Prints the current working directory',
+	    handler: pwd,
 	};
 
 	/**
@@ -30147,11 +30146,12 @@
 	    return autoComplete(fileSystem, currentPath, target);
 	}
 	var rm$1 = {
-	    handler: rm,
 	    autoCompleteHandler: rmAutoComplete,
+	    description: 'Removes a file or directory',
+	    handler: rm,
 	};
 
-	var commands$1 = {
+	var commands = {
 	    cat: cat$1,
 	    cd: cd$2,
 	    help: help$1,
@@ -30221,7 +30221,7 @@
 	        .pop();
 	}
 
-	var commandList = commands$1;
+	var commandList = commands;
 	var Terminal = /** @class */ (function (_super) {
 	    __extends(Terminal, _super);
 	    function Terminal() {
@@ -30445,11 +30445,12 @@
 	    };
 	    Terminal.prototype.render = function () {
 	        var _a = this.state, autoCompleteActiveItem = _a.autoCompleteActiveItem, currentPath = _a.currentPath, history = _a.history, inputPrompt = _a.inputPrompt, inputValue = _a.inputValue, autoCompleteItems = _a.autoCompleteItems;
-	        return (react.createElement("div", { id: "terminal-wrapper" },
-	            react.createElement(History, { history: history }),
-	            react.createElement("div", { ref: this.inputWrapper },
-	                react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleKeyDown: this.handleKeyDown, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, ref: this.terminalInput, readOnly: false })),
-	            react.createElement("div", { "aria-label": "autocomplete-preview", className: "tab-complete-result" }, autoCompleteItems && (react.createElement(AutoCompleteList, { items: autoCompleteItems, activeItemIndex: autoCompleteActiveItem })))));
+	        return (react.createElement(TerminalContext.Provider, { value: commandList },
+	            react.createElement("div", { id: "terminal-wrapper" },
+	                react.createElement(History, { history: history }),
+	                react.createElement("div", { ref: this.inputWrapper },
+	                    react.createElement(Input, { currentPath: currentPath, handleChange: this.handleChange, handleKeyDown: this.handleKeyDown, handleSubmit: this.handleSubmit, inputValue: inputValue, inputPrompt: inputPrompt, ref: this.terminalInput, readOnly: false })),
+	                react.createElement("div", { "aria-label": "autocomplete-preview", className: "tab-complete-result" }, autoCompleteItems && (react.createElement(AutoCompleteList, { items: autoCompleteItems, activeItemIndex: autoCompleteActiveItem }))))));
 	    };
 	    return Terminal;
 	}(react_2));

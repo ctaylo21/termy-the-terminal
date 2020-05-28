@@ -156,6 +156,7 @@ You can add custom commands to Termy by passing in your commands as the `customC
 ```jsx
 const hello = {
   hello: {
+    // Function that handles command execution
     handler: function hello(): Promise<CommandResponse> {
       return new Promise((resolve): void => {
         resolve({
@@ -225,7 +226,8 @@ const lengthCommand = {
         });
       });
     },
-    autoCompleteHandler: autoComplete,
+    autoCompleteHandler: autoComplete,  // Function that returns results for autocomplete for given command
+    description: 'Calculates the length of a given text file' // Description that will be show in "help" command
   },
 };
 
@@ -246,6 +248,7 @@ const customCommands = {
   length: {
     handler: // length handler defined here
     autoCompleteHandler: // autocomplete handler defined here for length command
+    description: 'Some description' // include a description if you want command to appear when "help" is executed
   }
 };
 ```
