@@ -234,7 +234,7 @@ ReactDOM.render(
   document.getElementById('terminal-container'),
 ```
 
-You can add multiple commands to your `customCommands` prop as each command name is just defined by the its key in the object you pass in.
+You can add multiple commands to your `customCommands` prop as each command name is just defined by its key in the object you pass in.
 
 ```jsx
 // Create two custom commands, "hello" and "length"
@@ -247,6 +247,7 @@ const customCommands = {
     handler: // length handler defined here
     autoCompleteHandler: // autocomplete handler defined here for length command
   }
+};
 ```
 
 ## Commands
