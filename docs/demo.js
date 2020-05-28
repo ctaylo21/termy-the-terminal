@@ -26312,122 +26312,6 @@
 	});
 	var reactDom_1 = reactDom.render;
 
-	/*! *****************************************************************************
-	Copyright (c) Microsoft Corporation. All rights reserved.
-	Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-	this file except in compliance with the License. You may obtain a copy of the
-	License at http://www.apache.org/licenses/LICENSE-2.0
-
-	THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-	WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-	MERCHANTABLITY OR NON-INFRINGEMENT.
-
-	See the Apache Version 2.0 License for specific language governing permissions
-	and limitations under the License.
-	***************************************************************************** */
-	/* global Reflect, Promise */
-
-	var extendStatics = function(d, b) {
-	    extendStatics = Object.setPrototypeOf ||
-	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-	    return extendStatics(d, b);
-	};
-
-	function __extends(d, b) {
-	    extendStatics(d, b);
-	    function __() { this.constructor = d; }
-	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-	}
-
-	function __awaiter(thisArg, _arguments, P, generator) {
-	    return new (P || (P = Promise))(function (resolve, reject) {
-	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-	        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-	        step((generator = generator.apply(thisArg, _arguments || [])).next());
-	    });
-	}
-
-	function __generator(thisArg, body) {
-	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-	    function verb(n) { return function (v) { return step([n, v]); }; }
-	    function step(op) {
-	        if (f) throw new TypeError("Generator is already executing.");
-	        while (_) try {
-	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-	            if (y = 0, t) op = [op[0] & 2, t.value];
-	            switch (op[0]) {
-	                case 0: case 1: t = op; break;
-	                case 4: _.label++; return { value: op[1], done: false };
-	                case 5: _.label++; y = op[1]; op = [0]; continue;
-	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-	                default:
-	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-	                    if (t[2]) _.ops.pop();
-	                    _.trys.pop(); continue;
-	            }
-	            op = body.call(thisArg, _);
-	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-	    }
-	}
-
-	function __spreadArrays() {
-	    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-	    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-	        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-	            r[k] = a[j];
-	    return r;
-	}
-
-	var AutoCompleteList = function (props) {
-	    var items = props.items, activeItemIndex = props.activeItemIndex;
-	    var autoCompleteItems = Object.keys(items).map(function (key, index) {
-	        if (items[key].type === 'FOLDER') {
-	            return (react.createElement("span", { className: activeItemIndex === index
-	                    ? 'auto-preview-folder active'
-	                    : 'auto-preview-folder', key: key },
-	                key,
-	                "/"));
-	        }
-	        return (react.createElement("span", { className: activeItemIndex === index
-	                ? 'auto-preview-file active'
-	                : 'auto-preview-file', key: key }, key));
-	    });
-	    return react.createElement("div", { className: "preview-list" }, autoCompleteItems);
-	};
-
-	var History = function (props) {
-	    var history = props.history;
-	    var commandList = history.map(function (command) { return (react.createElement("li", { key: command.id },
-	        command.input,
-	        react.createElement("span", { className: "commandResult" }, command.result))); });
-	    return (react.createElement("div", { id: "history-container" },
-	        react.createElement("ul", { "aria-label": "terminal-history" }, commandList)));
-	};
-
-	var InputPrompt = function (props) {
-	    var path = props.path, inputPrompt = props.inputPrompt;
-	    return (react.createElement(react.Fragment, null,
-	        react.createElement("span", { "data-testid": "input-prompt-path" }, path),
-	        "\u00A0",
-	        react.createElement("span", { id: "inputPrompt" }, inputPrompt)));
-	};
-
-	var Input = react.forwardRef(function Input(props, ref) {
-	    var currentPath = props.currentPath, handleChange = props.handleChange, handleKeyDown = props.handleKeyDown, handleKeyUp = props.handleKeyUp, handleSubmit = props.handleSubmit, inputValue = props.inputValue, inputPrompt = props.inputPrompt, readOnly = props.readOnly;
-	    return (react.createElement("div", { id: "input-container", spellCheck: false },
-	        react.createElement("form", { onSubmit: handleSubmit },
-	            react.createElement(InputPrompt, { path: currentPath, inputPrompt: inputPrompt }),
-	            react.createElement("input", { "aria-label": "terminal-input", autoComplete: "none", autoCapitalize: "none", autoCorrect: "off", type: "text", value: inputValue, onChange: handleChange, onKeyDown: handleKeyDown, onKeyUp: handleKeyUp, readOnly: readOnly, ref: ref }))));
-	});
-
 	/**
 	 * Checks if `value` is classified as an `Array` object.
 	 *
@@ -27615,6 +27499,122 @@
 
 	var get_1 = get;
 
+	/*! *****************************************************************************
+	Copyright (c) Microsoft Corporation. All rights reserved.
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of the
+	License at http://www.apache.org/licenses/LICENSE-2.0
+
+	THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+	WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+	MERCHANTABLITY OR NON-INFRINGEMENT.
+
+	See the Apache Version 2.0 License for specific language governing permissions
+	and limitations under the License.
+	***************************************************************************** */
+	/* global Reflect, Promise */
+
+	var extendStatics = function(d, b) {
+	    extendStatics = Object.setPrototypeOf ||
+	        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+	        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+	    return extendStatics(d, b);
+	};
+
+	function __extends(d, b) {
+	    extendStatics(d, b);
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	}
+
+	function __awaiter(thisArg, _arguments, P, generator) {
+	    return new (P || (P = Promise))(function (resolve, reject) {
+	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+	        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+	        step((generator = generator.apply(thisArg, _arguments || [])).next());
+	    });
+	}
+
+	function __generator(thisArg, body) {
+	    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+	    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+	    function verb(n) { return function (v) { return step([n, v]); }; }
+	    function step(op) {
+	        if (f) throw new TypeError("Generator is already executing.");
+	        while (_) try {
+	            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+	            if (y = 0, t) op = [op[0] & 2, t.value];
+	            switch (op[0]) {
+	                case 0: case 1: t = op; break;
+	                case 4: _.label++; return { value: op[1], done: false };
+	                case 5: _.label++; y = op[1]; op = [0]; continue;
+	                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+	                default:
+	                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+	                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+	                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+	                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+	                    if (t[2]) _.ops.pop();
+	                    _.trys.pop(); continue;
+	            }
+	            op = body.call(thisArg, _);
+	        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+	        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+	    }
+	}
+
+	function __spreadArrays() {
+	    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+	    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+	        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+	            r[k] = a[j];
+	    return r;
+	}
+
+	var AutoCompleteList = function (props) {
+	    var items = props.items, activeItemIndex = props.activeItemIndex;
+	    var autoCompleteItems = Object.keys(items).map(function (key, index) {
+	        if (items[key].type === 'FOLDER') {
+	            return (react.createElement("span", { className: activeItemIndex === index
+	                    ? 'auto-preview-folder active'
+	                    : 'auto-preview-folder', key: key },
+	                key,
+	                "/"));
+	        }
+	        return (react.createElement("span", { className: activeItemIndex === index
+	                ? 'auto-preview-file active'
+	                : 'auto-preview-file', key: key }, key));
+	    });
+	    return react.createElement("div", { className: "preview-list" }, autoCompleteItems);
+	};
+
+	var History = function (props) {
+	    var history = props.history;
+	    var commandList = history.map(function (command) { return (react.createElement("li", { key: command.id },
+	        command.input,
+	        react.createElement("span", { className: "commandResult" }, command.result))); });
+	    return (react.createElement("div", { id: "history-container" },
+	        react.createElement("ul", { "aria-label": "terminal-history" }, commandList)));
+	};
+
+	var InputPrompt = function (props) {
+	    var path = props.path, inputPrompt = props.inputPrompt;
+	    return (react.createElement(react.Fragment, null,
+	        react.createElement("span", { "data-testid": "input-prompt-path" }, path),
+	        "\u00A0",
+	        react.createElement("span", { id: "inputPrompt" }, inputPrompt)));
+	};
+
+	var Input = react.forwardRef(function Input(props, ref) {
+	    var currentPath = props.currentPath, handleChange = props.handleChange, handleKeyDown = props.handleKeyDown, handleKeyUp = props.handleKeyUp, handleSubmit = props.handleSubmit, inputValue = props.inputValue, inputPrompt = props.inputPrompt, readOnly = props.readOnly;
+	    return (react.createElement("div", { id: "input-container", spellCheck: false },
+	        react.createElement("form", { onSubmit: handleSubmit },
+	            react.createElement(InputPrompt, { path: currentPath, inputPrompt: inputPrompt }),
+	            react.createElement("input", { "aria-label": "terminal-input", autoComplete: "none", autoCapitalize: "none", autoCorrect: "off", type: "text", value: inputValue, onChange: handleChange, onKeyDown: handleKeyDown, onKeyUp: handleKeyUp, readOnly: readOnly, ref: ref }))));
+	});
+
 	/** Used for built-in method references. */
 	var objectProto$5 = Object.prototype;
 
@@ -28095,6 +28095,10 @@
 	    };
 	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 	}
+	var cd$2 = {
+	    handler: cd$1,
+	    autoCompleteHandler: cdAutoComplete,
+	};
 
 	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -28172,6 +28176,11 @@
 	function lsAutoComplete(fileSystem, currentPath, target) {
 	    return autoComplete(fileSystem, currentPath, target);
 	}
+	var ls$1 = {
+	    command: 'ls',
+	    handler: ls,
+	    autoCompleteHandler: lsAutoComplete,
+	};
 
 	/**
 	 * Removes all key-value entries from the stack.
@@ -29825,6 +29834,10 @@
 	    };
 	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 	}
+	var mkdir$1 = {
+	    handler: mkdir,
+	    autoCompleteHandler: mkdirAutoComplete,
+	};
 
 	var TerminalImage = function (_a) {
 	    var src = _a.src;
@@ -29876,6 +29889,10 @@
 	function catAutoComplete(fileSystem, currentPath, target) {
 	    return autoComplete(fileSystem, currentPath, target);
 	}
+	var cat$1 = {
+	    handler: cat,
+	    autoCompleteHandler: catAutoComplete,
+	};
 
 	var commands = {
 	    cd: 'Changes the current working directory',
@@ -29920,6 +29937,10 @@
 	        });
 	    });
 	}
+	var help$1 = {
+	    handler: help,
+	    autoCompleteHandler: helpAutoComplete,
+	};
 
 	/**
 	 * Returns current directory
@@ -29945,6 +29966,10 @@
 	        });
 	    });
 	}
+	var pwd$1 = {
+	    handler: pwd,
+	    autoCompleteHandler: pwdAutoComplete,
+	};
 
 	/**
 	 * Gets the last element of `array`.
@@ -30121,22 +30146,19 @@
 	function rmAutoComplete(fileSystem, currentPath, target) {
 	    return autoComplete(fileSystem, currentPath, target);
 	}
+	var rm$1 = {
+	    handler: rm,
+	    autoCompleteHandler: rmAutoComplete,
+	};
 
 	var commands$1 = {
-	    cat: cat,
-	    catAutoComplete: catAutoComplete,
-	    cd: cd$1,
-	    cdAutoComplete: cdAutoComplete,
-	    help: help,
-	    helpAutoComplete: helpAutoComplete,
-	    ls: ls,
-	    lsAutoComplete: lsAutoComplete,
-	    mkdir: mkdir,
-	    mkdirAutoComplete: mkdirAutoComplete,
-	    pwd: pwd,
-	    pwdAutoComplete: pwdAutoComplete,
-	    rm: rm,
-	    rmAutoComplete: rmAutoComplete,
+	    cat: cat$1,
+	    cd: cd$2,
+	    help: help$1,
+	    ls: ls$1,
+	    mkdir: mkdir$1,
+	    pwd: pwd$1,
+	    rm: rm$1,
 	};
 
 	/**
@@ -30199,6 +30221,7 @@
 	        .pop();
 	}
 
+	var commandList = commands$1;
 	var Terminal = /** @class */ (function (_super) {
 	    __extends(Terminal, _super);
 	    function Terminal() {
@@ -30294,14 +30317,16 @@
 	                        }));
 	                    };
 	                    generateAutoCompleteList = function () { return __awaiter(_this, void 0, void 0, function () {
-	                        var commandResult, targetPathToUpdate, updatedInputValue;
-	                        return __generator(this, function (_a) {
-	                            switch (_a.label) {
+	                        var commandResult, autoCompleteHandler, targetPathToUpdate, updatedInputValue;
+	                        var _a;
+	                        return __generator(this, function (_b) {
+	                            switch (_b.label) {
 	                                case 0:
-	                                    if (!commands$1[commandName + "AutoComplete"]) return [3 /*break*/, 2];
-	                                    return [4 /*yield*/, commands$1[commandName + "AutoComplete"](fileSystem, currentPath, commandTargets[0])];
+	                                    autoCompleteHandler = (_a = commandList[commandName]) === null || _a === void 0 ? void 0 : _a.autoCompleteHandler;
+	                                    if (!autoCompleteHandler) return [3 /*break*/, 2];
+	                                    return [4 /*yield*/, autoCompleteHandler(fileSystem, currentPath, commandTargets[0])];
 	                                case 1:
-	                                    (commandResult = (_a.sent()).commandResult);
+	                                    (commandResult = (_b.sent()).commandResult);
 	                                    return [3 /*break*/, 3];
 	                                case 2: 
 	                                // Do nothing if tab is not supported
@@ -30360,32 +30385,32 @@
 	        };
 	        _this.handleSubmit = function (event) { return __awaiter(_this, void 0, void 0, function () {
 	            var _a, history, inputValue, currentPath, inputPrompt, fileSystem, _b, commandName, commandOptions, commandTargets, commandResult, updatedState, e_1, updatedHistory;
-	            var _c, _d;
-	            return __generator(this, function (_e) {
-	                switch (_e.label) {
+	            var _c, _d, _e;
+	            return __generator(this, function (_f) {
+	                switch (_f.label) {
 	                    case 0:
 	                        event.preventDefault();
 	                        _a = this.state, history = _a.history, inputValue = _a.inputValue, currentPath = _a.currentPath, inputPrompt = _a.inputPrompt, fileSystem = _a.fileSystem;
 	                        _b = parseCommand(inputValue), commandName = _b.commandName, commandOptions = _b.commandOptions, commandTargets = _b.commandTargets;
 	                        updatedState = {};
-	                        if (!(commandName in commands$1)) return [3 /*break*/, 5];
-	                        _e.label = 1;
+	                        if (!(commandName in commandList)) return [3 /*break*/, 5];
+	                        _f.label = 1;
 	                    case 1:
-	                        _e.trys.push([1, 3, , 4]);
-	                        return [4 /*yield*/, commands$1[commandName].apply(commands$1, __spreadArrays([fileSystem,
+	                        _f.trys.push([1, 3, , 4]);
+	                        return [4 /*yield*/, (_c = commandList[commandName]).handler.apply(_c, __spreadArrays([fileSystem,
 	                                currentPath,
 	                                commandTargets[0]], commandOptions))];
 	                    case 2:
-	                        (_c = _e.sent(), commandResult = _c.commandResult, _d = _c.updatedState, updatedState = _d === void 0 ? {} : _d);
+	                        (_d = _f.sent(), commandResult = _d.commandResult, _e = _d.updatedState, updatedState = _e === void 0 ? {} : _e);
 	                        return [3 /*break*/, 4];
 	                    case 3:
-	                        e_1 = _e.sent();
+	                        e_1 = _f.sent();
 	                        commandResult = "Error: " + e_1;
 	                        return [3 /*break*/, 4];
 	                    case 4: return [3 /*break*/, 6];
 	                    case 5:
 	                        commandResult = "command not found: " + commandName;
-	                        _e.label = 6;
+	                        _f.label = 6;
 	                    case 6:
 	                        updatedHistory = history.concat({
 	                            input: (react.createElement(Input, { currentPath: currentPath, inputValue: inputValue, inputPrompt: inputPrompt, readOnly: true })),
@@ -30410,6 +30435,9 @@
 	    Terminal.prototype.componentDidMount = function () {
 	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	        this.terminalInput.current.focus();
+	        // Add custom user commands to command list
+	        var _a = this.props.customCommands, customCommands = _a === void 0 ? {} : _a;
+	        commandList = Object.assign({}, commandList, customCommands);
 	    };
 	    Terminal.prototype.componentDidUpdate = function () {
 	        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -30495,7 +30523,44 @@
 	    },
 	};
 
-	reactDom.render(react.createElement(Terminal, { fileSystem: exampleFileSystem }), document.getElementById('terminal-container'));
+	var getInternalPath$1 = getInternalPath, stripFileExtension$1 = stripFileExtension;
+	var hello = {
+	    hello: {
+	        handler: function hello() {
+	            return new Promise(function (resolve) {
+	                resolve({
+	                    commandResult: 'world',
+	                });
+	            });
+	        },
+	    },
+	    length: {
+	        handler: function length(fileSystem, currentPath, targetPath) {
+	            return new Promise(function (resolve, reject) {
+	                if (!targetPath) {
+	                    reject('Invalid target path');
+	                }
+	                var pathWithoutExtension = stripFileExtension$1(targetPath);
+	                var file = get_1(fileSystem, getInternalPath$1(currentPath, pathWithoutExtension));
+	                if (!file) {
+	                    reject('Invalid target path');
+	                }
+	                if (file.extension !== 'txt') {
+	                    reject('Target is not a .txt file');
+	                }
+	                var fileLength = 'Unknown length';
+	                if (typeof file.content === 'string') {
+	                    fileLength = '' + file.content.length;
+	                }
+	                resolve({
+	                    commandResult: fileLength,
+	                });
+	            });
+	        },
+	        autoCompleteHandler: autoComplete,
+	    },
+	};
+	reactDom.render(react.createElement(Terminal, { fileSystem: exampleFileSystem, customCommands: hello }), document.getElementById('terminal-container'));
 
 }());
 //# sourceMappingURL=demo.js.map

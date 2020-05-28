@@ -4,12 +4,20 @@ import History from './components/History';
 import Input from './components/Input';
 import commands from './commands';
 import './styles/Terminal.scss';
-import { parseCommand } from './commands/utilities/index';
+import { parseCommand } from './commands/utilities';
 import {
   formatItem,
   getTargetPath,
   getUpdatedInputValueFromTarget,
 } from './helpers/autoComplete';
+
+let commandList = commands;
+
+// Export utility methods for external use
+export * as utilities from './commands/utilities';
+
+// Export default autoComplete function for external use
+export { default as autoComplete } from './commands/autoComplete';
 
 export interface TerminalState {
   autoCompleteIsActive: boolean;
@@ -31,9 +39,32 @@ export interface HistoryItem {
   value: string;
 }
 
+export interface CommandHandler {
+  (
+    fileSystem: FileSystem,
+    currentPath: string,
+    targetPath: string,
+    options?: string,
+  ): Promise<CommandResponse>;
+}
+
+export interface CommandAutoCompleteHandler {
+  (fileSystem: FileSystem, currentPath: string, target: string): Promise<
+    AutoCompleteResponse
+  >;
+}
+
+export interface Command {
+  handler: CommandHandler;
+  autoCompleteHandler?: CommandAutoCompleteHandler;
+}
+
 export interface TerminalProps {
   fileSystem: FileSystem;
   inputPrompt?: string;
+  customCommands?: {
+    [key: string]: Command;
+  };
 }
 
 export interface FileSystem {
@@ -97,6 +128,10 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
   public componentDidMount(): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.terminalInput.current!.focus();
+
+    // Add custom user commands to command list
+    const { customCommands = {} } = this.props;
+    commandList = Object.assign({}, commandList, customCommands);
   }
 
   public componentDidUpdate(): void {
@@ -211,8 +246,11 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
       const generateAutoCompleteList = async (): Promise<void> => {
         let commandResult: AutoCompleteResponse['commandResult'];
-        if (commands[`${commandName}AutoComplete`]) {
-          ({ commandResult } = await commands[`${commandName}AutoComplete`](
+        const autoCompleteHandler =
+          commandList[commandName]?.autoCompleteHandler;
+
+        if (autoCompleteHandler) {
+          ({ commandResult } = await autoCompleteHandler(
             fileSystem,
             currentPath,
             commandTargets[0],
@@ -304,9 +342,11 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
 
     let commandResult: CommandResponse['commandResult'];
     let updatedState: CommandResponse['updatedState'] = {};
-    if (commandName in commands) {
+    if (commandName in commandList) {
       try {
-        ({ commandResult, updatedState = {} } = await commands[commandName](
+        ({ commandResult, updatedState = {} } = await commandList[
+          commandName
+        ].handler(
           fileSystem,
           currentPath,
           commandTargets[0],

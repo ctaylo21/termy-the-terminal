@@ -12,7 +12,7 @@ import autoComplete from './autoComplete';
  * @param targetPath {string} - path to list contents within
  * @returns Promise<object> - resolves with contents of given path
  */
-export default function ls(
+function ls(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath = '',
@@ -50,4 +50,8 @@ function lsAutoComplete(
   return autoComplete(fileSystem, currentPath, target);
 }
 
-export { ls, lsAutoComplete };
+export default {
+  command: 'ls',
+  handler: ls,
+  autoCompleteHandler: lsAutoComplete,
+};

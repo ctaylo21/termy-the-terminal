@@ -7,7 +7,7 @@ import { AutoCompleteResponse, CommandResponse, FileSystem } from '../index';
  *
  * @returns Promise<object> - resolves with list of system commands
  */
-export default function help(): Promise<CommandResponse> {
+function help(): Promise<CommandResponse> {
   return new Promise((resolve): void => {
     resolve({
       commandResult: <HelpMenu />,
@@ -32,4 +32,7 @@ function helpAutoComplete(
   });
 }
 
-export { help, helpAutoComplete };
+export default {
+  handler: help,
+  autoCompleteHandler: helpAutoComplete,
+};

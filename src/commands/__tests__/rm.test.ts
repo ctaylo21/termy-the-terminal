@@ -1,4 +1,5 @@
-import { rm, rmAutoComplete } from '../rm';
+import rm from '../rm';
+const { handler, autoCompleteHandler } = rm;
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { FileSystem } from '../../index';
 import cloneDeep from 'lodash/cloneDeep';
@@ -10,13 +11,13 @@ describe('rm suite', (): void => {
         const expectedFileSystem = cloneDeep(exampleFileSystem);
         delete expectedFileSystem.file3;
 
-        return expect(rm(exampleFileSystem, '/', 'file3.txt')).resolves.toEqual(
-          {
-            updatedState: {
-              fileSystem: expectedFileSystem,
-            },
+        return expect(
+          handler(exampleFileSystem, '/', 'file3.txt'),
+        ).resolves.toEqual({
+          updatedState: {
+            fileSystem: expectedFileSystem,
           },
-        );
+        });
       });
 
       it('should remove a nested file', async (): Promise<void> => {
@@ -25,7 +26,7 @@ describe('rm suite', (): void => {
           .children as FileSystem).file2;
 
         return expect(
-          rm(exampleFileSystem, '/', 'home/videos/file2.txt'),
+          handler(exampleFileSystem, '/', 'home/videos/file2.txt'),
         ).resolves.toEqual({
           updatedState: {
             fileSystem: expectedFileSystem,
@@ -38,7 +39,7 @@ describe('rm suite', (): void => {
         delete expectedFileSystem.file3;
 
         return expect(
-          rm(exampleFileSystem, '/home/videos', '../../file3.txt'),
+          handler(exampleFileSystem, '/home/videos', '../../file3.txt'),
         ).resolves.toEqual({
           updatedState: {
             fileSystem: expectedFileSystem,
@@ -53,7 +54,7 @@ describe('rm suite', (): void => {
         delete expectedFileSystem.docs;
 
         return expect(
-          rm(exampleFileSystem, '/', 'docs', '-r'),
+          handler(exampleFileSystem, '/', 'docs', '-r'),
         ).resolves.toEqual({
           updatedState: {
             fileSystem: expectedFileSystem,
@@ -66,7 +67,7 @@ describe('rm suite', (): void => {
         delete (expectedFileSystem.home.children as FileSystem).videos;
 
         return expect(
-          rm(exampleFileSystem, '/', 'home/videos', '-r'),
+          handler(exampleFileSystem, '/', 'home/videos', '-r'),
         ).resolves.toEqual({
           updatedState: {
             fileSystem: expectedFileSystem,
@@ -79,7 +80,7 @@ describe('rm suite', (): void => {
         delete expectedFileSystem.docs;
 
         return expect(
-          rm(exampleFileSystem, '/home/videos', '../../docs', '-r'),
+          handler(exampleFileSystem, '/home/videos', '../../docs', '-r'),
         ).resolves.toEqual({
           updatedState: {
             fileSystem: expectedFileSystem,
@@ -92,26 +93,28 @@ describe('rm suite', (): void => {
   describe('failure', (): void => {
     it('should reject if path is invalid', async (): Promise<void> => {
       return expect(
-        rm(exampleFileSystem, '/', 'invalid'),
+        handler(exampleFileSystem, '/', 'invalid'),
       ).rejects.toMatchSnapshot();
     });
 
     it('should reject if no target path provided', async (): Promise<void> => {
-      return expect(rm(exampleFileSystem, '/', '')).rejects.toMatchSnapshot();
+      return expect(
+        handler(exampleFileSystem, '/', ''),
+      ).rejects.toMatchSnapshot();
     });
 
     it('should reject if no options and target is a folder', async (): Promise<
       void
     > => {
       return expect(
-        rm(exampleFileSystem, '/', 'home'),
+        handler(exampleFileSystem, '/', 'home'),
       ).rejects.toMatchSnapshot();
     });
   });
 
   describe('auto complete', (): void => {
     test('empty value', async (): Promise<void> => {
-      const { commandResult } = await rmAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/home/user',
         '',
@@ -122,7 +125,7 @@ describe('rm suite', (): void => {
     });
 
     test('should filter single level target', async (): Promise<void> => {
-      const { commandResult } = await rmAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'fi',
@@ -139,13 +142,17 @@ describe('rm suite', (): void => {
     });
 
     test('invalid path should return nothing', async (): Promise<void> => {
-      const lsResult = await rmAutoComplete(exampleFileSystem, '/bad/path', '');
+      const lsResult = await autoCompleteHandler(
+        exampleFileSystem,
+        '/bad/path',
+        '',
+      );
 
       expect(lsResult.commandResult).toBeUndefined();
     });
 
     test('relative path', async (): Promise<void> => {
-      const { commandResult } = await rmAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/fi',
@@ -161,7 +168,7 @@ describe('rm suite', (): void => {
     });
 
     test('relative path with dotdot', async (): Promise<void> => {
-      const { commandResult } = await rmAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/../home/fi',
@@ -177,7 +184,7 @@ describe('rm suite', (): void => {
     });
 
     test('absolute path', async (): Promise<void> => {
-      const { commandResult } = await rmAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/d',
@@ -193,7 +200,7 @@ describe('rm suite', (): void => {
     });
 
     test('absolute path with ..', async (): Promise<void> => {
-      const { commandResult } = await rmAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/user/../d',

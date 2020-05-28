@@ -21,7 +21,7 @@ import autoComplete from './autoComplete';
  * @param targetPath  {string} - path to change to
  * @returns Promise<object> - resolves with new path if successful, rejects if not
  */
-export default function cd(
+function cd(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
@@ -75,4 +75,7 @@ function cdAutoComplete(
   return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 }
 
-export { cd, cdAutoComplete };
+export default {
+  handler: cd,
+  autoCompleteHandler: cdAutoComplete,
+};

@@ -22,7 +22,7 @@ import autoComplete from './autoComplete';
  * @param targetPath  {string} - path of file to cat
  * @returns Promise<object> - resolves with contents of file
  */
-export default function cat(
+function cat(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
@@ -77,4 +77,7 @@ function catAutoComplete(
   return autoComplete(fileSystem, currentPath, target);
 }
 
-export { cat, catAutoComplete };
+export default {
+  handler: cat,
+  autoCompleteHandler: catAutoComplete,
+};
