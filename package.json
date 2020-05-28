@@ -40,7 +40,7 @@
     "preversion": "npm run lint",
     "prepublishOnly": "npm test && npm run lint",
     "lint": "eslint src --ext ts,tsx",
-    "release": "release-it"
+    "release": "dotenv release-it"
   },
   "husky": {
     "hooks": {
@@ -78,6 +78,7 @@
     "commitizen": "^4.0.4",
     "coveralls": "^3.0.11",
     "cz-conventional-changelog": "^3.1.0",
+    "dotenv-cli": "^3.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-jest": "^23.8.2",

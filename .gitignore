@@ -13,3 +13,6 @@ coverage
 
 # Coveralls
 .coveralls.yml
+
+# Environment
+.env
