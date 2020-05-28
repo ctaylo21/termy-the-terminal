@@ -227,7 +227,7 @@ const lengthCommand = {
       });
     },
     autoCompleteHandler: autoComplete,  // Function that returns results for autocomplete for given command
-    description: 'Calculates the length of a given text file' // Description that will be show in "help" command
+    description: 'Calculates the length of a given text file' // Description that will be show from "help" command
   },
 };
 
