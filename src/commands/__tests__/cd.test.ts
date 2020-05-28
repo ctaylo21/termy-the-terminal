@@ -1,4 +1,5 @@
-import { cd, cdAutoComplete } from '../cd';
+import cd from '../cd';
+const { handler, autoCompleteHandler } = cd;
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { FileSystem } from '../../index';
 
@@ -13,7 +14,7 @@ describe('cd suite', (): void => {
           },
         };
 
-        return expect(cd(fileSystem, '/', 'home')).resolves.toEqual({
+        return expect(handler(fileSystem, '/', 'home')).resolves.toEqual({
           updatedState: {
             currentPath: '/home',
           },
@@ -22,7 +23,7 @@ describe('cd suite', (): void => {
 
       test('multi-level cd', async (): Promise<void> => {
         return expect(
-          cd(exampleFileSystem, '/', 'home/user/test'),
+          handler(exampleFileSystem, '/', 'home/user/test'),
         ).resolves.toEqual({
           updatedState: {
             currentPath: '/home/user/test',
@@ -31,7 +32,7 @@ describe('cd suite', (): void => {
       });
 
       test('.. above root level', async (): Promise<void> => {
-        return expect(cd(exampleFileSystem, '/', '..')).resolves.toEqual({
+        return expect(handler(exampleFileSystem, '/', '..')).resolves.toEqual({
           updatedState: {
             currentPath: '/',
           },
@@ -41,7 +42,9 @@ describe('cd suite', (): void => {
 
     describe('from nested path', (): void => {
       test('1 level cd', async (): Promise<void> => {
-        return expect(cd(exampleFileSystem, '/home', 'user')).resolves.toEqual({
+        return expect(
+          handler(exampleFileSystem, '/home', 'user'),
+        ).resolves.toEqual({
           updatedState: {
             currentPath: '/home/user',
           },
@@ -49,7 +52,9 @@ describe('cd suite', (): void => {
       });
 
       test('.. 1 level to root', async (): Promise<void> => {
-        return expect(cd(exampleFileSystem, '/home', '..')).resolves.toEqual({
+        return expect(
+          handler(exampleFileSystem, '/home', '..'),
+        ).resolves.toEqual({
           updatedState: {
             currentPath: '/',
           },
@@ -58,7 +63,7 @@ describe('cd suite', (): void => {
 
       test('.. 1 level', async (): Promise<void> => {
         return expect(
-          cd(exampleFileSystem, '/home/user/test', '..'),
+          handler(exampleFileSystem, '/home/user/test', '..'),
         ).resolves.toEqual({
           updatedState: {
             currentPath: '/home/user',
@@ -68,7 +73,7 @@ describe('cd suite', (): void => {
 
       test('.. multiple levels', async (): Promise<void> => {
         return expect(
-          cd(exampleFileSystem, '/home/folder1/folder2', '../..'),
+          handler(exampleFileSystem, '/home/folder1/folder2', '../..'),
         ).resolves.toEqual({
           updatedState: {
             currentPath: '/home',
@@ -78,7 +83,11 @@ describe('cd suite', (): void => {
 
       test('.. multiple levels in separate paths', (): Promise<void> => {
         return expect(
-          cd(exampleFileSystem, '/home/folder1/folder2', '../folder2/../../'),
+          handler(
+            exampleFileSystem,
+            '/home/folder1/folder2',
+            '../folder2/../../',
+          ),
         ).resolves.toEqual({
           updatedState: {
             currentPath: '/home',
@@ -96,19 +105,19 @@ describe('cd suite', (): void => {
           type: 'FOLDER',
         },
       };
-      return expect(cd(fileSystem, 'path', '')).rejects.toMatchSnapshot();
+      return expect(handler(fileSystem, 'path', '')).rejects.toMatchSnapshot();
     });
 
     test('nested cd to a file', async (): Promise<void> => {
       return expect(
-        cd(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
+        handler(exampleFileSystem, 'path', 'home/folder1/folder2/file1'),
       ).rejects.toMatchSnapshot();
     });
   });
 
   describe('auto complete', (): void => {
     test('empty value', async (): Promise<void> => {
-      const { commandResult } = await cdAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/home',
         '',
@@ -125,7 +134,7 @@ describe('cd suite', (): void => {
     });
 
     test('should filter single level target', async (): Promise<void> => {
-      const { commandResult } = await cdAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'ho',
@@ -142,13 +151,17 @@ describe('cd suite', (): void => {
     });
 
     test('invalid path should return nothing', async (): Promise<void> => {
-      const lsResult = await cdAutoComplete(exampleFileSystem, '/bad/path', '');
+      const lsResult = await autoCompleteHandler(
+        exampleFileSystem,
+        '/bad/path',
+        '',
+      );
 
       expect(lsResult.commandResult).toBeUndefined();
     });
 
     test('relative path', async (): Promise<void> => {
-      const { commandResult } = await cdAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/us',
@@ -164,7 +177,7 @@ describe('cd suite', (): void => {
     });
 
     test('relative path with dotdot', async (): Promise<void> => {
-      const { commandResult } = await cdAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/../home/us',
@@ -180,7 +193,7 @@ describe('cd suite', (): void => {
     });
 
     test('absolute path', async (): Promise<void> => {
-      const { commandResult } = await cdAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/us',
@@ -196,7 +209,7 @@ describe('cd suite', (): void => {
     });
 
     test('absolute path with ..', async (): Promise<void> => {
-      const { commandResult } = await cdAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/user/../us',

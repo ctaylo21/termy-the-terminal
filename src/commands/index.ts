@@ -1,24 +1,22 @@
-import { cd, cdAutoComplete } from './cd';
-import { ls, lsAutoComplete } from './ls';
-import { mkdir, mkdirAutoComplete } from './mkdir';
-import { cat, catAutoComplete } from './cat';
-import { help, helpAutoComplete } from './help';
-import { pwd, pwdAutoComplete } from './pwd';
-import { rm, rmAutoComplete } from './rm';
+import cd from './cd';
+import ls from './ls';
+import mkdir from './mkdir';
+import cat from './cat';
+import help from './help';
+import pwd from './pwd';
+import rm from './rm';
+import { Command } from '..';
 
-export default {
+const commands: {
+  [key: string]: Command;
+} = {
   cat,
-  catAutoComplete,
   cd,
-  cdAutoComplete,
   help,
-  helpAutoComplete,
   ls,
-  lsAutoComplete,
   mkdir,
-  mkdirAutoComplete,
   pwd,
-  pwdAutoComplete,
   rm,
-  rmAutoComplete,
 };
+
+export default commands;

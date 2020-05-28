@@ -5,10 +5,7 @@ import { AutoCompleteResponse, CommandResponse, FileSystem } from '../index';
  *
  * @returns Promise<object> - resolves with current directory
  */
-export default function pwd(
-  _f: FileSystem,
-  currentPath: string,
-): Promise<CommandResponse> {
+function pwd(_f: FileSystem, currentPath: string): Promise<CommandResponse> {
   return new Promise((resolve): void => {
     resolve({
       commandResult: currentPath,
@@ -33,4 +30,8 @@ function pwdAutoComplete(
   });
 }
 
-export { pwd, pwdAutoComplete };
+export default {
+  autoCompleteHandler: pwdAutoComplete,
+  description: 'Prints the current working directory',
+  handler: pwd,
+};

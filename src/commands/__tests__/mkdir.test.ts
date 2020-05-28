@@ -1,4 +1,5 @@
-import { mkdir, mkdirAutoComplete } from '../mkdir';
+import mkdir from '../mkdir';
+const { handler, autoCompleteHandler } = mkdir;
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import exampleFileSystem from '../../data/exampleFileSystem';
@@ -15,7 +16,7 @@ describe('mkdir suite', (): void => {
       });
 
       return expect(
-        mkdir(exampleFileSystem, '/', 'newDir'),
+        handler(exampleFileSystem, '/', 'newDir'),
       ).resolves.toStrictEqual({
         commandResult: 'Folder created: newDir',
         updatedState: {
@@ -34,7 +35,7 @@ describe('mkdir suite', (): void => {
       });
 
       return expect(
-        mkdir(exampleFileSystem, '/home', 'newDir'),
+        handler(exampleFileSystem, '/home', 'newDir'),
       ).resolves.toStrictEqual({
         commandResult: 'Folder created: newDir',
         updatedState: {
@@ -55,7 +56,7 @@ describe('mkdir suite', (): void => {
       });
 
       return expect(
-        mkdir(exampleFileSystem, '/', 'home/newDir'),
+        handler(exampleFileSystem, '/', 'home/newDir'),
       ).resolves.toStrictEqual({
         commandResult: 'Folder created: home/newDir',
         updatedState: {
@@ -68,14 +69,14 @@ describe('mkdir suite', (): void => {
   describe('failure', (): void => {
     it('should reject if path already exists', async (): Promise<void> => {
       return expect(
-        mkdir(exampleFileSystem, '/home', 'user'),
+        handler(exampleFileSystem, '/home', 'user'),
       ).rejects.toMatchSnapshot();
     });
   });
 
   describe('auto complete', (): void => {
     test('empty value', async (): Promise<void> => {
-      const { commandResult } = await mkdirAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/home',
         '',
@@ -92,7 +93,7 @@ describe('mkdir suite', (): void => {
     });
 
     test('should filter single level target', async (): Promise<void> => {
-      const { commandResult } = await mkdirAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'ho',
@@ -109,7 +110,7 @@ describe('mkdir suite', (): void => {
     });
 
     test('invalid path should return nothing', async (): Promise<void> => {
-      const lsResult = await mkdirAutoComplete(
+      const lsResult = await autoCompleteHandler(
         exampleFileSystem,
         '/bad/path',
         '',
@@ -119,7 +120,7 @@ describe('mkdir suite', (): void => {
     });
 
     test('relative path', async (): Promise<void> => {
-      const { commandResult } = await mkdirAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/us',
@@ -135,7 +136,7 @@ describe('mkdir suite', (): void => {
     });
 
     test('relative path with dotdot', async (): Promise<void> => {
-      const { commandResult } = await mkdirAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/../home/us',
@@ -151,7 +152,7 @@ describe('mkdir suite', (): void => {
     });
 
     test('absolute path', async (): Promise<void> => {
-      const { commandResult } = await mkdirAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/us',
@@ -167,7 +168,7 @@ describe('mkdir suite', (): void => {
     });
 
     test('absolute path with ..', async (): Promise<void> => {
-      const { commandResult } = await mkdirAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/user/../us',

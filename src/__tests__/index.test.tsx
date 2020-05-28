@@ -7,8 +7,10 @@ import {
   findByLabelText,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Terminal } from '..';
+import { CommandResponse, Terminal } from '..';
 import exampleFileSystem from '../data/exampleFileSystem';
+import autoComplete from '../commands/autoComplete';
+import commands from '../commands';
 jest.mock('../../images/dog.png', () => 'abc/dog.png');
 
 beforeAll((): void => {
@@ -20,6 +22,18 @@ afterEach(cleanup);
 afterAll(() => {
   jest.clearAllMocks();
 });
+
+const fireTabInput = async (input: HTMLInputElement): Promise<boolean> => {
+  const tabEvent = new KeyboardEvent('keydown', {
+    bubbles: true,
+    code: '9',
+    key: 'Tab',
+  });
+
+  return new Promise((resolve) => {
+    resolve(fireEvent(input, tabEvent));
+  });
+};
 
 describe('initialization', (): void => {
   test('custom input prompt', async (): Promise<void> => {
@@ -82,18 +96,6 @@ describe('general', (): void => {
 });
 
 describe('autocomplete with tab', (): void => {
-  const fireTabInput = async (input: HTMLInputElement): Promise<boolean> => {
-    const tabEvent = new KeyboardEvent('keydown', {
-      bubbles: true,
-      code: '9',
-      key: 'Tab',
-    });
-
-    return new Promise((resolve) => {
-      resolve(fireEvent(input, tabEvent));
-    });
-  };
-
   describe('general', (): void => {
     test('tab without space for target should do nothing', async (): Promise<
       void
@@ -844,6 +846,11 @@ describe('help', (): void => {
     const history = await findByLabelText(container, 'terminal-history');
 
     expect(history.innerHTML).toMatchSnapshot();
+    Object.keys(commands).forEach((service): void => {
+      if (service.indexOf('AutoComplete') === -1) {
+        expect(container.innerHTML).toContain(service);
+      }
+    });
   });
 });
 
@@ -1291,5 +1298,137 @@ describe('history', (): void => {
     await waitFor(() => {
       expect(input.value).toBe('');
     });
+  });
+});
+
+describe('custom commands', (): void => {
+  test('should allow custom command to be passed as prop and used', async (): Promise<
+    void
+  > => {
+    const hello = {
+      hello: {
+        handler: function hello(): Promise<CommandResponse> {
+          return new Promise((resolve): void => {
+            resolve({
+              commandResult: 'world',
+            });
+          });
+        },
+      },
+    };
+
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} customCommands={hello} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'hello' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toContain('world');
+  });
+
+  test('should allow for commands to be added to help result with a description', async (): Promise<
+    void
+  > => {
+    const hello = {
+      hello: {
+        handler: function hello(): Promise<CommandResponse> {
+          return new Promise((resolve): void => {
+            resolve({
+              commandResult: 'world',
+            });
+          });
+        },
+        description: "don't panic",
+      },
+    };
+
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} customCommands={hello} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'help' } });
+    fireEvent.submit(input);
+
+    const history = await findByLabelText(container, 'terminal-history');
+
+    expect(history.innerHTML).toMatchSnapshot();
+    expect(history.innerHTML).toContain("don't panic");
+    expect(history.innerHTML).toContain('hello');
+  });
+
+  test('should use custom autoComplete method', async (): Promise<void> => {
+    const hello = {
+      hello: {
+        handler: function hello(): Promise<CommandResponse> {
+          return new Promise((resolve): void => {
+            resolve({
+              commandResult: 'world',
+            });
+          });
+        },
+        autoCompleteHandler: autoComplete,
+      },
+    };
+
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} customCommands={hello} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    await userEvent.type(input, 'hello fi');
+    await fireTabInput(input);
+    await fireTabInput(input);
+
+    const autoCompleteContent = await findByLabelText(
+      container,
+      'autocomplete-preview',
+    );
+    expect(autoCompleteContent.innerHTML).toContain('file3.txt');
+    expect(autoCompleteContent.innerHTML).toContain('file4.txt');
+    expect(input.value).toBe('hello file3.txt');
+
+    await fireTabInput(input);
+    expect(input.value).toBe('hello file4.txt');
+
+    await fireTabInput(input);
+    expect(input.value).toBe('hello file3.txt');
+  });
+
+  test('should do nothing for autocomplete on custom command if not defined', async (): Promise<
+    void
+  > => {
+    const hello = {
+      hello: {
+        handler: function hello(): Promise<CommandResponse> {
+          return new Promise((resolve): void => {
+            resolve({
+              commandResult: 'world',
+            });
+          });
+        },
+      },
+    };
+
+    const { container, getByLabelText } = render(
+      <Terminal fileSystem={exampleFileSystem} customCommands={hello} />,
+    );
+    const input = getByLabelText('terminal-input') as HTMLInputElement;
+
+    await userEvent.type(input, 'hello ');
+    await fireTabInput(input);
+
+    const autoCompleteContent = await findByLabelText(
+      container,
+      'autocomplete-preview',
+    );
+
+    expect(autoCompleteContent.innerHTML).toBe('');
+    expect(input.value).toBe('hello ');
   });
 });

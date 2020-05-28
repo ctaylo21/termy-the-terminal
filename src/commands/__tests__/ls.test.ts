@@ -1,10 +1,11 @@
-import { ls, lsAutoComplete } from '../ls';
+import ls from '../ls';
+const { handler, autoCompleteHandler } = ls;
 import exampleFileSystem from '../../data/exampleFileSystem';
 import { render } from '@testing-library/react';
 
 describe('ls suite', (): void => {
   test('root with no directory', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/');
+    const lsResult = await handler(exampleFileSystem, '/');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('docs');
@@ -12,7 +13,7 @@ describe('ls suite', (): void => {
   });
 
   test('nested path with no directory', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/home');
+    const lsResult = await handler(exampleFileSystem, '/home');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('user');
@@ -21,7 +22,7 @@ describe('ls suite', (): void => {
   });
 
   test('relative path from root', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/', '/home');
+    const lsResult = await handler(exampleFileSystem, '/', '/home');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('user');
@@ -30,14 +31,14 @@ describe('ls suite', (): void => {
   });
 
   test('relative path from nested path', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/home', 'user');
+    const lsResult = await handler(exampleFileSystem, '/home', 'user');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('test');
   });
 
   test('root with dotdot', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/', '..');
+    const lsResult = await handler(exampleFileSystem, '/', '..');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('home');
@@ -45,7 +46,11 @@ describe('ls suite', (): void => {
   });
 
   test('nestd path with dotdot', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/home', '../home/user/..');
+    const lsResult = await handler(
+      exampleFileSystem,
+      '/home',
+      '../home/user/..',
+    );
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('user');
@@ -54,18 +59,20 @@ describe('ls suite', (): void => {
   });
 
   test('should reject if invalid target given', async (): Promise<void> => {
-    return expect(ls(exampleFileSystem, '/invalid')).rejects.toMatchSnapshot();
+    return expect(
+      handler(exampleFileSystem, '/invalid'),
+    ).rejects.toMatchSnapshot();
   });
 
   test('empty path from nested location', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/home/user', '');
+    const lsResult = await handler(exampleFileSystem, '/home/user', '');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('test');
   });
 
   test('should return file if given', async (): Promise<void> => {
-    const lsResult = await ls(exampleFileSystem, '/', 'file4.txt');
+    const lsResult = await handler(exampleFileSystem, '/', 'file4.txt');
     const { container } = render(lsResult.commandResult as JSX.Element);
 
     expect(container.innerHTML).toContain('file4.txt');
@@ -75,13 +82,13 @@ describe('ls suite', (): void => {
     void
   > => {
     return expect(
-      ls(exampleFileSystem, '/home', 'user/test'),
+      handler(exampleFileSystem, '/home', 'user/test'),
     ).rejects.toMatchSnapshot();
   });
 
   describe('auto complete', (): void => {
     test('empty value', async (): Promise<void> => {
-      const { commandResult } = await lsAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/home/user',
         '',
@@ -92,7 +99,7 @@ describe('ls suite', (): void => {
     });
 
     test('should filter single level target', async (): Promise<void> => {
-      const { commandResult } = await lsAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'fi',
@@ -109,13 +116,17 @@ describe('ls suite', (): void => {
     });
 
     test('invalid path should return nothing', async (): Promise<void> => {
-      const lsResult = await lsAutoComplete(exampleFileSystem, '/bad/path', '');
+      const lsResult = await autoCompleteHandler(
+        exampleFileSystem,
+        '/bad/path',
+        '',
+      );
 
       expect(lsResult.commandResult).toBeUndefined();
     });
 
     test('relative path', async (): Promise<void> => {
-      const { commandResult } = await lsAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/fi',
@@ -131,7 +142,7 @@ describe('ls suite', (): void => {
     });
 
     test('relative path with dotdot', async (): Promise<void> => {
-      const { commandResult } = await lsAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/../home/fi',
@@ -147,7 +158,7 @@ describe('ls suite', (): void => {
     });
 
     test('absolute path', async (): Promise<void> => {
-      const { commandResult } = await lsAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/d',
@@ -163,7 +174,7 @@ describe('ls suite', (): void => {
     });
 
     test('absolute path with ..', async (): Promise<void> => {
-      const { commandResult } = await lsAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/user/../d',

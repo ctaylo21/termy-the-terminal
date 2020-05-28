@@ -20,7 +20,7 @@ import autoComplete from './autoComplete';
  * @param folderPath  {string} - folder path to create
  * @returns Promise<object> - resolves with new path created if successful, rejects if not
  */
-export default function mkdir(
+function mkdir(
   fileSystem: FileSystem,
   currentPath: string,
   folderPath: string,
@@ -67,4 +67,8 @@ function mkdirAutoComplete(
   return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 }
 
-export { mkdir, mkdirAutoComplete };
+export default {
+  autoCompleteHandler: mkdirAutoComplete,
+  description: 'Creates a folder for a given path in the filesystem',
+  handler: mkdir,
+};

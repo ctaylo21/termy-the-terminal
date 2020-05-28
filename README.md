@@ -50,6 +50,7 @@ A web-based terminal powered by React. Check out the [demo](https://ctaylo21.git
   - [General](#general)
     - [Command History](#command-history)
     - [Auto Complete](#auto-complete)
+    - [Custom Commands](#custom-commands)
   - [Commands](#commands)
     - [cd [DIRECTORY]](#cd-directory)
     - [pwd](#pwd)
@@ -84,10 +85,11 @@ ReactDOM.render(
 
 ### Terminal Props
 
-| Prop Name   | Description                                                              | Required |
-| ----------- | ------------------------------------------------------------------------ | -------- |
-| fileSystem  | A properly formatted (see below) JSON object representing the filesystem | Yes      |
-| inputPrompt | String to use as input prompt (default is `$>`)                          | No       |
+| Prop Name      | Description                                                              | Required |
+| -------------- | ------------------------------------------------------------------------ | -------- |
+| fileSystem     | A properly formatted (see below) JSON object representing the filesystem | Yes      |
+| inputPrompt    | String to use as input prompt (default is `$>`)                          | No       |
+| customCommands | Custom commands to add to the terminal                                   | No       |
 
 The `fileSystem` prop needs to be a particular format ([code example](src/data/exampleFileSystem.ts)):
 
@@ -146,6 +148,110 @@ Termy supports using the arrow keys (up and down) to move through the command hi
 ### Auto Complete
 
 Termy supports using the `tab` key to trigger autocomplete for commands to complete a target path. This includes using multiple `tab` presses to cycle through the possible auto-complete options for a given command.
+
+### Custom Commands
+
+You can add custom commands to Termy by passing in your commands as the `customCommands` prop. Here is an example command "hello" that just prints "world" when executed:
+
+```jsx
+const hello = {
+  hello: {
+    // Function that handles command execution
+    handler: function hello(): Promise<CommandResponse> {
+      return new Promise((resolve): void => {
+        resolve({
+          commandResult: 'world',
+        });
+      });
+    },
+  },
+};
+
+ReactDOM.render(
+  <Terminal fileSystem={exampleFileSystem} customCommands={hello} />,
+  document.getElementById('terminal-container'),
+);
+```
+
+You can also make a more complex command that acts upon the files and folders of the filesystem. Here is an example
+that will print the length of contents of a file, but only if it is a `.txt` file and the content is a simple string.
+It also supports autocomplete by using default `autoComplete` method and some utility functions exported from the base file.
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {
+  autoComplete,
+  CommandResponse,
+  FileSystem,
+  Terminal,
+  utilities
+} from 'termy-the-terminal';
+const { getInternalPath, stripFileExtension } = utilities;
+import exampleFileSystem from './data/exampleFileSystem';
+
+const lengthCommand = {
+  length: {
+    handler: function length(
+      fileSystem: FileSystem,
+      currentPath: string,
+      targetPath: string,
+    ): Promise<CommandResponse> {
+      return new Promise((resolve, reject): void => {
+        if (!targetPath) {
+          reject('Invalid target path');
+        }
+
+        const pathWithoutExtension = stripFileExtension(targetPath);
+        const file = get(
+          fileSystem,
+          getInternalPath(currentPath, pathWithoutExtension),
+        );
+
+        if (!file) {
+          reject('Invalid target path');
+        }
+
+        if (file.extension !== 'txt') {
+          reject('Target is not a .txt file');
+        }
+
+        let fileLength = 'Unknown length';
+        if (typeof file.content === 'string') {
+          fileLength = '' + file.content.length;
+        }
+
+        resolve({
+          commandResult: fileLength,
+        });
+      });
+    },
+    autoCompleteHandler: autoComplete,  // Function that returns results for autocomplete for given command
+    description: 'Calculates the length of a given text file' // Description that will be show from "help" command
+  },
+};
+
+ReactDOM.render(
+  <Terminal fileSystem={exampleFileSystem} customCommands={lengthCommand} />,
+  document.getElementById('terminal-container'),
+```
+
+You can add multiple commands to your `customCommands` prop as each command name is just defined by its key in the object you pass in.
+
+```jsx
+// Create two custom commands, "hello" and "length"
+const customCommands = {
+  hello: {
+    handler: // hello handler defined here
+    // No autoCompleteHandler function defined so auto complete isn't supported for this command
+  },
+  length: {
+    handler: // length handler defined here
+    autoCompleteHandler: // autocomplete handler defined here for length command
+    description: 'Some description' // include a description if you want command to appear when "help" is executed
+  }
+};
+```
 
 ## Commands
 

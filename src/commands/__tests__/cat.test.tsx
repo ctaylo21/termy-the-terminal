@@ -1,5 +1,6 @@
 import React from 'react';
-import { cat, catAutoComplete } from '../cat';
+import cat from '../cat';
+const { handler, autoCompleteHandler } = cat;
 import exampleFileSystem, { BlogPost } from '../../data/exampleFileSystem';
 import { render } from '@testing-library/react';
 jest.mock('../../images/dog.png', () => 'abc/dog.png');
@@ -11,7 +12,7 @@ afterAll(() => {
 describe('cat suite', (): void => {
   it('should print contents of file with no path', async (): Promise<void> => {
     return expect(
-      cat(exampleFileSystem, '/home', 'file1.txt'),
+      handler(exampleFileSystem, '/home', 'file1.txt'),
     ).resolves.toStrictEqual({
       commandResult: 'Contents of file 1',
     });
@@ -21,14 +22,18 @@ describe('cat suite', (): void => {
     void
   > => {
     return expect(
-      cat(exampleFileSystem, '/', 'home/videos/file2.txt'),
+      handler(exampleFileSystem, '/', 'home/videos/file2.txt'),
     ).resolves.toStrictEqual({
       commandResult: 'Contents of file 2',
     });
   });
 
   it('should handle image extension', async (): Promise<void> => {
-    const { commandResult } = await cat(exampleFileSystem, '/', 'home/dog.png');
+    const { commandResult } = await handler(
+      exampleFileSystem,
+      '/',
+      'home/dog.png',
+    );
 
     const { container } = render(commandResult as JSX.Element);
 
@@ -40,7 +45,7 @@ describe('cat suite', (): void => {
 
   it('should print contents of file that contans react component', () => {
     return expect(
-      cat(exampleFileSystem, '/', 'blog.txt'),
+      handler(exampleFileSystem, '/', 'blog.txt'),
     ).resolves.toStrictEqual({
       commandResult: <BlogPost content="Today is a good day" date="3/22" />,
     });
@@ -50,7 +55,7 @@ describe('cat suite', (): void => {
     void
   > => {
     return expect(
-      cat(exampleFileSystem, '/home', 'videos/file2.txt'),
+      handler(exampleFileSystem, '/home', 'videos/file2.txt'),
     ).resolves.toStrictEqual({
       commandResult: 'Contents of file 2',
     });
@@ -58,19 +63,19 @@ describe('cat suite', (): void => {
 
   it('should reject if target is not a file', async (): Promise<void> => {
     return expect(
-      cat(exampleFileSystem, 'home', 'videos'),
+      handler(exampleFileSystem, 'home', 'videos'),
     ).rejects.toMatchSnapshot();
   });
 
   it('should reject if target is not a valid path', async (): Promise<void> => {
     return expect(
-      cat(exampleFileSystem, '/', 'invalid'),
+      handler(exampleFileSystem, '/', 'invalid'),
     ).rejects.toMatchSnapshot();
   });
 
   describe('auto complete', (): void => {
     test('empty value', async (): Promise<void> => {
-      const { commandResult } = await catAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/home/user',
         '',
@@ -81,7 +86,7 @@ describe('cat suite', (): void => {
     });
 
     test('should filter single level target', async (): Promise<void> => {
-      const { commandResult } = await catAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'fi',
@@ -98,7 +103,7 @@ describe('cat suite', (): void => {
     });
 
     test('invalid path should return nothing', async (): Promise<void> => {
-      const lsResult = await catAutoComplete(
+      const lsResult = await autoCompleteHandler(
         exampleFileSystem,
         '/bad/path',
         '',
@@ -108,7 +113,7 @@ describe('cat suite', (): void => {
     });
 
     test('relative path', async (): Promise<void> => {
-      const { commandResult } = await catAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/fi',
@@ -124,7 +129,7 @@ describe('cat suite', (): void => {
     });
 
     test('relative path with dotdot', async (): Promise<void> => {
-      const { commandResult } = await catAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         'home/../home/fi',
@@ -140,7 +145,7 @@ describe('cat suite', (): void => {
     });
 
     test('absolute path', async (): Promise<void> => {
-      const { commandResult } = await catAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/d',
@@ -156,7 +161,7 @@ describe('cat suite', (): void => {
     });
 
     test('absolute path with ..', async (): Promise<void> => {
-      const { commandResult } = await catAutoComplete(
+      const { commandResult } = await autoCompleteHandler(
         exampleFileSystem,
         '/',
         '/home/user/../d',

@@ -35,7 +35,7 @@ function handleDelete(
  * @param folderPath  {string} - path of object to remove
  * @returns Promise<object> - resolves if rm was successful, rejects if not
  */
-export default function rm(
+function rm(
   fileSystem: FileSystem,
   currentPath: string,
   targetPath: string,
@@ -83,4 +83,8 @@ function rmAutoComplete(
   return autoComplete(fileSystem, currentPath, target);
 }
 
-export { rm, rmAutoComplete };
+export default {
+  autoCompleteHandler: rmAutoComplete,
+  description: 'Removes a file or directory',
+  handler: rm,
+};
