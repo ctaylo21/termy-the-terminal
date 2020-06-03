@@ -180,6 +180,7 @@ It also supports autocomplete by using default `autoComplete` method and some ut
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
+import get from 'lodash/get';
 import {
   autoComplete,
   CommandResponse,
