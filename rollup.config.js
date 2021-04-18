@@ -7,6 +7,8 @@ import svgr from '@svgr/rollup';
 import typescript from 'rollup-plugin-typescript2';
 import url from '@rollup/plugin-url';
 import pkg from './package.json';
+import react from 'react';
+import reactDom from 'react-dom';
 
 export const getBasePlugins = (targetFolder) => [
   cleaner({ targets: [targetFolder] }),
@@ -41,7 +43,13 @@ export default {
       rollupCommonJSResolveHack: true,
       clean: true,
     }),
-    commonjs(),
+    commonjs({
+      include: 'node_modules/**',
+      namedExports: {
+        react: Object.keys(react),
+        'react-dom': Object.keys(reactDom),
+      },
+    }),
     external(),
   ],
 };

@@ -18,7 +18,7 @@
 	*/
 	/* eslint-disable no-unused-vars */
 	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var hasOwnProperty$b = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
 	function toObject(val) {
@@ -82,7 +82,7 @@
 			from = Object(arguments[s]);
 
 			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
+				if (hasOwnProperty$b.call(from, key)) {
 					to[key] = from[key];
 				}
 			}
@@ -101,8 +101,8 @@
 	};
 
 	function A(a){for(var b=a.message,d="https://reactjs.org/docs/error-decoder.html?invariant="+b,c=1;c<arguments.length;c++)d+="&args[]="+encodeURIComponent(arguments[c]);a.message="Minified React error #"+b+"; visit "+d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings. ";return a}var B={isMounted:function(){return !1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},C={};
-	function D(a,b,d){this.props=a;this.context=b;this.refs=C;this.updater=d||B;}D.prototype.isReactComponent={};D.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw A(Error(85));this.updater.enqueueSetState(this,a,b,"setState");};D.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate");};function E(){}E.prototype=D.prototype;function F(a,b,d){this.props=a;this.context=b;this.refs=C;this.updater=d||B;}var G=F.prototype=new E;
-	G.constructor=F;objectAssign(G,D.prototype);G.isPureReactComponent=!0;
+	function D$1(a,b,d){this.props=a;this.context=b;this.refs=C;this.updater=d||B;}D$1.prototype.isReactComponent={};D$1.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw A(Error(85));this.updater.enqueueSetState(this,a,b,"setState");};D$1.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate");};function E(){}E.prototype=D$1.prototype;function F$1(a,b,d){this.props=a;this.context=b;this.refs=C;this.updater=d||B;}var G=F$1.prototype=new E;
+	G.constructor=F$1;objectAssign(G,D$1.prototype);G.isPureReactComponent=!0;
 
 	/**
 	 * Copyright (c) 2013-present, Facebook, Inc.
@@ -111,16 +111,16 @@
 	 * LICENSE file in the root directory of this source tree.
 	 */
 
-	var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+	var ReactPropTypesSecret$1 = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
-	var ReactPropTypesSecret_1 = ReactPropTypesSecret;
+	var ReactPropTypesSecret_1 = ReactPropTypesSecret$1;
 
 	var printWarning = function() {};
 
 	{
-	  var ReactPropTypesSecret$1 = ReactPropTypesSecret_1;
+	  var ReactPropTypesSecret = ReactPropTypesSecret_1;
 	  var loggedTypeFailures = {};
-	  var has = Function.call.bind(Object.prototype.hasOwnProperty);
+	  var has$1 = Function.call.bind(Object.prototype.hasOwnProperty);
 
 	  printWarning = function(text) {
 	    var message = 'Warning: ' + text;
@@ -150,7 +150,7 @@
 	function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 	  {
 	    for (var typeSpecName in typeSpecs) {
-	      if (has(typeSpecs, typeSpecName)) {
+	      if (has$1(typeSpecs, typeSpecName)) {
 	        var error;
 	        // Prop type validation may throw. In case they do, we don't want to
 	        // fail the render phase where it didn't fail before. So we log it.
@@ -166,7 +166,7 @@
 	            err.name = 'Invariant Violation';
 	            throw err;
 	          }
-	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret$1);
+	          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
 	        } catch (ex) {
 	          error = ex;
 	        }
@@ -2146,9 +2146,9 @@
 	  module.exports = react_development;
 	}
 	});
-	var react_1 = react.Children;
+	react.Children;
 	var react_2 = react.Component;
-	var react_3 = react.PropTypes;
+	react.PropTypes;
 	var react_4 = react.createElement;
 
 	var scheduler_production_min = createCommonjsModule(function (module, exports) {
@@ -2169,24 +2169,24 @@
 	});
 
 	unwrapExports(scheduler_production_min);
-	var scheduler_production_min_1 = scheduler_production_min.unstable_now;
-	var scheduler_production_min_2 = scheduler_production_min.unstable_forceFrameRate;
-	var scheduler_production_min_3 = scheduler_production_min.unstable_ImmediatePriority;
-	var scheduler_production_min_4 = scheduler_production_min.unstable_UserBlockingPriority;
-	var scheduler_production_min_5 = scheduler_production_min.unstable_NormalPriority;
-	var scheduler_production_min_6 = scheduler_production_min.unstable_IdlePriority;
-	var scheduler_production_min_7 = scheduler_production_min.unstable_LowPriority;
-	var scheduler_production_min_8 = scheduler_production_min.unstable_runWithPriority;
-	var scheduler_production_min_9 = scheduler_production_min.unstable_next;
-	var scheduler_production_min_10 = scheduler_production_min.unstable_scheduleCallback;
-	var scheduler_production_min_11 = scheduler_production_min.unstable_cancelCallback;
-	var scheduler_production_min_12 = scheduler_production_min.unstable_wrapCallback;
-	var scheduler_production_min_13 = scheduler_production_min.unstable_getCurrentPriorityLevel;
-	var scheduler_production_min_14 = scheduler_production_min.unstable_shouldYield;
-	var scheduler_production_min_15 = scheduler_production_min.unstable_requestPaint;
-	var scheduler_production_min_16 = scheduler_production_min.unstable_continueExecution;
-	var scheduler_production_min_17 = scheduler_production_min.unstable_pauseExecution;
-	var scheduler_production_min_18 = scheduler_production_min.unstable_getFirstCallbackNode;
+	scheduler_production_min.unstable_now;
+	scheduler_production_min.unstable_forceFrameRate;
+	scheduler_production_min.unstable_ImmediatePriority;
+	scheduler_production_min.unstable_UserBlockingPriority;
+	scheduler_production_min.unstable_NormalPriority;
+	scheduler_production_min.unstable_IdlePriority;
+	scheduler_production_min.unstable_LowPriority;
+	scheduler_production_min.unstable_runWithPriority;
+	scheduler_production_min.unstable_next;
+	scheduler_production_min.unstable_scheduleCallback;
+	scheduler_production_min.unstable_cancelCallback;
+	scheduler_production_min.unstable_wrapCallback;
+	scheduler_production_min.unstable_getCurrentPriorityLevel;
+	scheduler_production_min.unstable_shouldYield;
+	scheduler_production_min.unstable_requestPaint;
+	scheduler_production_min.unstable_continueExecution;
+	scheduler_production_min.unstable_pauseExecution;
+	scheduler_production_min.unstable_getFirstCallbackNode;
 
 	var scheduler_development = createCommonjsModule(function (module, exports) {
 
@@ -2295,7 +2295,7 @@
 	  var rAFTimeoutID = -1;
 	  var taskTimeoutID = -1;
 
-	  var frameLength =  // Use a heuristic to measure the frame rate and yield at the end of the
+	  var frameLength = // Use a heuristic to measure the frame rate and yield at the end of the
 	  // frame. We start out assuming that we run at 30fps but then the
 	  // heuristic tracking will adjust this value to a faster fps if we get
 	  // more frequent animation frames.
@@ -2980,24 +2980,24 @@
 	});
 
 	unwrapExports(scheduler_development);
-	var scheduler_development_1 = scheduler_development.unstable_now;
-	var scheduler_development_2 = scheduler_development.unstable_forceFrameRate;
-	var scheduler_development_3 = scheduler_development.unstable_ImmediatePriority;
-	var scheduler_development_4 = scheduler_development.unstable_UserBlockingPriority;
-	var scheduler_development_5 = scheduler_development.unstable_NormalPriority;
-	var scheduler_development_6 = scheduler_development.unstable_IdlePriority;
-	var scheduler_development_7 = scheduler_development.unstable_LowPriority;
-	var scheduler_development_8 = scheduler_development.unstable_runWithPriority;
-	var scheduler_development_9 = scheduler_development.unstable_next;
-	var scheduler_development_10 = scheduler_development.unstable_scheduleCallback;
-	var scheduler_development_11 = scheduler_development.unstable_cancelCallback;
-	var scheduler_development_12 = scheduler_development.unstable_wrapCallback;
-	var scheduler_development_13 = scheduler_development.unstable_getCurrentPriorityLevel;
-	var scheduler_development_14 = scheduler_development.unstable_shouldYield;
-	var scheduler_development_15 = scheduler_development.unstable_requestPaint;
-	var scheduler_development_16 = scheduler_development.unstable_continueExecution;
-	var scheduler_development_17 = scheduler_development.unstable_pauseExecution;
-	var scheduler_development_18 = scheduler_development.unstable_getFirstCallbackNode;
+	scheduler_development.unstable_now;
+	scheduler_development.unstable_forceFrameRate;
+	scheduler_development.unstable_ImmediatePriority;
+	scheduler_development.unstable_UserBlockingPriority;
+	scheduler_development.unstable_NormalPriority;
+	scheduler_development.unstable_IdlePriority;
+	scheduler_development.unstable_LowPriority;
+	scheduler_development.unstable_runWithPriority;
+	scheduler_development.unstable_next;
+	scheduler_development.unstable_scheduleCallback;
+	scheduler_development.unstable_cancelCallback;
+	scheduler_development.unstable_wrapCallback;
+	scheduler_development.unstable_getCurrentPriorityLevel;
+	scheduler_development.unstable_shouldYield;
+	scheduler_development.unstable_requestPaint;
+	scheduler_development.unstable_continueExecution;
+	scheduler_development.unstable_pauseExecution;
+	scheduler_development.unstable_getFirstCallbackNode;
 
 	var scheduler = createCommonjsModule(function (module) {
 
@@ -3036,14 +3036,14 @@
 	function Wb(a){if(!a)return !1;var b=a._valueTracker;if(!b)return !0;var c=b.getValue();var d="";a&&(d=Tb(a)?a.checked?"true":"false":a.value);a=d;return a!==c?(b.setValue(a),!0):!1}var Xb=react.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;Xb.hasOwnProperty("ReactCurrentDispatcher")||(Xb.ReactCurrentDispatcher={current:null});Xb.hasOwnProperty("ReactCurrentBatchConfig")||(Xb.ReactCurrentBatchConfig={suspense:null});
 	var qc=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,rc=Object.prototype.hasOwnProperty,sc={},tc={};
 	function uc(a){if(rc.call(tc,a))return !0;if(rc.call(sc,a))return !1;if(qc.test(a))return tc[a]=!0;sc[a]=!0;return !1}function vc(a,b,c,d){if(null!==c&&0===c.type)return !1;switch(typeof b){case "function":case "symbol":return !0;case "boolean":if(d)return !1;if(null!==c)return !c.acceptsBooleans;a=a.toLowerCase().slice(0,5);return "data-"!==a&&"aria-"!==a;default:return !1}}
-	function wc(a,b,c,d){if(null===b||"undefined"===typeof b||vc(a,b,c,d))return !0;if(d)return !1;if(null!==c)switch(c.type){case 3:return !b;case 4:return !1===b;case 5:return isNaN(b);case 6:return isNaN(b)||1>b}return !1}function D$1(a,b,c,d,e,f){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=e;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=f;}var F$1={};
-	"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(a){F$1[a]=new D$1(a,0,!1,a,null,!1);});[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(a){var b=a[0];F$1[b]=new D$1(b,1,!1,a[1],null,!1);});["contentEditable","draggable","spellCheck","value"].forEach(function(a){F$1[a]=new D$1(a,2,!1,a.toLowerCase(),null,!1);});
-	["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(a){F$1[a]=new D$1(a,2,!1,a,null,!1);});"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(a){F$1[a]=new D$1(a,3,!1,a.toLowerCase(),null,!1);});
-	["checked","multiple","muted","selected"].forEach(function(a){F$1[a]=new D$1(a,3,!0,a,null,!1);});["capture","download"].forEach(function(a){F$1[a]=new D$1(a,4,!1,a,null,!1);});["cols","rows","size","span"].forEach(function(a){F$1[a]=new D$1(a,6,!1,a,null,!1);});["rowSpan","start"].forEach(function(a){F$1[a]=new D$1(a,5,!1,a.toLowerCase(),null,!1);});var xc=/[\-:]([a-z])/g;function yc(a){return a[1].toUpperCase()}
+	function wc(a,b,c,d){if(null===b||"undefined"===typeof b||vc(a,b,c,d))return !0;if(d)return !1;if(null!==c)switch(c.type){case 3:return !b;case 4:return !1===b;case 5:return isNaN(b);case 6:return isNaN(b)||1>b}return !1}function D(a,b,c,d,e,f){this.acceptsBooleans=2===b||3===b||4===b;this.attributeName=d;this.attributeNamespace=e;this.mustUseProperty=c;this.propertyName=a;this.type=b;this.sanitizeURL=f;}var F={};
+	"children dangerouslySetInnerHTML defaultValue defaultChecked innerHTML suppressContentEditableWarning suppressHydrationWarning style".split(" ").forEach(function(a){F[a]=new D(a,0,!1,a,null,!1);});[["acceptCharset","accept-charset"],["className","class"],["htmlFor","for"],["httpEquiv","http-equiv"]].forEach(function(a){var b=a[0];F[b]=new D(b,1,!1,a[1],null,!1);});["contentEditable","draggable","spellCheck","value"].forEach(function(a){F[a]=new D(a,2,!1,a.toLowerCase(),null,!1);});
+	["autoReverse","externalResourcesRequired","focusable","preserveAlpha"].forEach(function(a){F[a]=new D(a,2,!1,a,null,!1);});"allowFullScreen async autoFocus autoPlay controls default defer disabled disablePictureInPicture formNoValidate hidden loop noModule noValidate open playsInline readOnly required reversed scoped seamless itemScope".split(" ").forEach(function(a){F[a]=new D(a,3,!1,a.toLowerCase(),null,!1);});
+	["checked","multiple","muted","selected"].forEach(function(a){F[a]=new D(a,3,!0,a,null,!1);});["capture","download"].forEach(function(a){F[a]=new D(a,4,!1,a,null,!1);});["cols","rows","size","span"].forEach(function(a){F[a]=new D(a,6,!1,a,null,!1);});["rowSpan","start"].forEach(function(a){F[a]=new D(a,5,!1,a.toLowerCase(),null,!1);});var xc=/[\-:]([a-z])/g;function yc(a){return a[1].toUpperCase()}
 	"accent-height alignment-baseline arabic-form baseline-shift cap-height clip-path clip-rule color-interpolation color-interpolation-filters color-profile color-rendering dominant-baseline enable-background fill-opacity fill-rule flood-color flood-opacity font-family font-size font-size-adjust font-stretch font-style font-variant font-weight glyph-name glyph-orientation-horizontal glyph-orientation-vertical horiz-adv-x horiz-origin-x image-rendering letter-spacing lighting-color marker-end marker-mid marker-start overline-position overline-thickness paint-order panose-1 pointer-events rendering-intent shape-rendering stop-color stop-opacity strikethrough-position strikethrough-thickness stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-miterlimit stroke-opacity stroke-width text-anchor text-decoration text-rendering underline-position underline-thickness unicode-bidi unicode-range units-per-em v-alphabetic v-hanging v-ideographic v-mathematical vector-effect vert-adv-y vert-origin-x vert-origin-y word-spacing writing-mode xmlns:xlink x-height".split(" ").forEach(function(a){var b=a.replace(xc,
-	yc);F$1[b]=new D$1(b,1,!1,a,null,!1);});"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(a){var b=a.replace(xc,yc);F$1[b]=new D$1(b,1,!1,a,"http://www.w3.org/1999/xlink",!1);});["xml:base","xml:lang","xml:space"].forEach(function(a){var b=a.replace(xc,yc);F$1[b]=new D$1(b,1,!1,a,"http://www.w3.org/XML/1998/namespace",!1);});["tabIndex","crossOrigin"].forEach(function(a){F$1[a]=new D$1(a,1,!1,a.toLowerCase(),null,!1);});
-	F$1.xlinkHref=new D$1("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0);["src","href","action","formAction"].forEach(function(a){F$1[a]=new D$1(a,1,!1,a.toLowerCase(),null,!0);});
-	function zc(a,b,c,d){var e=F$1.hasOwnProperty(b)?F$1[b]:null;var f=null!==e?0===e.type:d?!1:!(2<b.length)||"o"!==b[0]&&"O"!==b[0]||"n"!==b[1]&&"N"!==b[1]?!1:!0;f||(wc(b,c,e,d)&&(c=null),d||null===e?uc(b)&&(null===c?a.removeAttribute(b):a.setAttribute(b,""+c)):e.mustUseProperty?a[e.propertyName]=null===c?3===e.type?!1:"":c:(b=e.attributeName,d=e.attributeNamespace,null===c?a.removeAttribute(b):(e=e.type,c=3===e||4===e&&!0===c?"":""+c,d?a.setAttributeNS(d,b,c):a.setAttribute(b,c))));}
+	yc);F[b]=new D(b,1,!1,a,null,!1);});"xlink:actuate xlink:arcrole xlink:role xlink:show xlink:title xlink:type".split(" ").forEach(function(a){var b=a.replace(xc,yc);F[b]=new D(b,1,!1,a,"http://www.w3.org/1999/xlink",!1);});["xml:base","xml:lang","xml:space"].forEach(function(a){var b=a.replace(xc,yc);F[b]=new D(b,1,!1,a,"http://www.w3.org/XML/1998/namespace",!1);});["tabIndex","crossOrigin"].forEach(function(a){F[a]=new D(a,1,!1,a.toLowerCase(),null,!1);});
+	F.xlinkHref=new D("xlinkHref",1,!1,"xlink:href","http://www.w3.org/1999/xlink",!0);["src","href","action","formAction"].forEach(function(a){F[a]=new D(a,1,!1,a.toLowerCase(),null,!0);});
+	function zc(a,b,c,d){var e=F.hasOwnProperty(b)?F[b]:null;var f=null!==e?0===e.type:d?!1:!(2<b.length)||"o"!==b[0]&&"O"!==b[0]||"n"!==b[1]&&"N"!==b[1]?!1:!0;f||(wc(b,c,e,d)&&(c=null),d||null===e?uc(b)&&(null===c?a.removeAttribute(b):a.setAttribute(b,""+c)):e.mustUseProperty?a[e.propertyName]=null===c?3===e.type?!1:"":c:(b=e.attributeName,d=e.attributeNamespace,null===c?a.removeAttribute(b):(e=e.type,c=3===e||4===e&&!0===c?"":""+c,d?a.setAttributeNS(d,b,c):a.setAttribute(b,c))));}
 	function Ac(a){switch(typeof a){case "boolean":case "number":case "object":case "string":case "undefined":return a;default:return ""}}function Dc(a,b){b=b.checked;null!=b&&zc(a,"checked",b,!1);}
 	function Ec(a,b){Dc(a,b);var c=Ac(b.value),d=b.type;if(null!=c)if("number"===d){if(0===c&&""===a.value||a.value!=c)a.value=""+c;}else a.value!==""+c&&(a.value=""+c);else if("submit"===d||"reset"===d){a.removeAttribute("value");return}b.hasOwnProperty("value")?Fc(a,b.type,c):b.hasOwnProperty("defaultValue")&&Fc(a,b.type,Ac(b.defaultValue));null==b.checked&&null!=b.defaultChecked&&(a.defaultChecked=!!b.defaultChecked);}
 	function Fc(a,b,c){if("number"!==b||a.ownerDocument.activeElement!==a)null==c?a.defaultValue=""+a._wrapperState.initialValue:a.defaultValue!==""+c&&(a.defaultValue=""+c);}var Hc={change:{phasedRegistrationNames:{bubbled:"onChange",captured:"onChangeCapture"},dependencies:"blur change click focus input keydown keyup selectionchange".split(" ")}};function Ic(a,b,c){a=y.getPooled(Hc.change,a,b,c);a.type="change";Hb(c);Qa(a);return a}var Jc=null,Kc=null;function Lc(a){Ba(a);}
@@ -3051,8 +3051,8 @@
 	function Sc(a){if("selectionchange"===a||"keyup"===a||"keydown"===a)return Mc(Kc)}function Tc(a,b){if("click"===a)return Mc(b)}function Uc(a,b){if("input"===a||"change"===a)return Mc(b)}
 	var Vc={eventTypes:Hc,_isInputEventSupported:Oc,extractEvents:function(a,b,c,d){var e=b?Ja(b):window,f=void 0,h=void 0,g=e.nodeName&&e.nodeName.toLowerCase();"select"===g||"input"===g&&"file"===e.type?f=Nc:Qb(e)?Oc?f=Uc:(f=Sc,h=Rc):(g=e.nodeName)&&"input"===g.toLowerCase()&&("checkbox"===e.type||"radio"===e.type)&&(f=Tc);if(f&&(f=f(a,b)))return Ic(f,c,d);h&&h(a,e,b);"blur"===a&&(a=e._wrapperState)&&a.controlled&&"number"===e.type&&Fc(e,"number",e.value);}},Wc=y.extend({view:null,detail:null}),Xc={Alt:"altKey",
 	Control:"ctrlKey",Meta:"metaKey",Shift:"shiftKey"};function Yc(a){var b=this.nativeEvent;return b.getModifierState?b.getModifierState(a):(a=Xc[a])?!!b[a]:!1}function Zc(){return Yc}
-	var $c=0,ad=0,bd=!1,cd=!1,dd=Wc.extend({screenX:null,screenY:null,clientX:null,clientY:null,pageX:null,pageY:null,ctrlKey:null,shiftKey:null,altKey:null,metaKey:null,getModifierState:Zc,button:null,buttons:null,relatedTarget:function(a){return a.relatedTarget||(a.fromElement===a.srcElement?a.toElement:a.fromElement)},movementX:function(a){if("movementX"in a)return a.movementX;var b=$c;$c=a.screenX;return bd?"mousemove"===a.type?a.screenX-b:0:(bd=!0,0)},movementY:function(a){if("movementY"in a)return a.movementY;
-	var b=ad;ad=a.screenY;return cd?"mousemove"===a.type?a.screenY-b:0:(cd=!0,0)}}),ed=dd.extend({pointerId:null,width:null,height:null,pressure:null,tangentialPressure:null,tiltX:null,tiltY:null,twist:null,pointerType:null,isPrimary:null}),fd={mouseEnter:{registrationName:"onMouseEnter",dependencies:["mouseout","mouseover"]},mouseLeave:{registrationName:"onMouseLeave",dependencies:["mouseout","mouseover"]},pointerEnter:{registrationName:"onPointerEnter",dependencies:["pointerout","pointerover"]},pointerLeave:{registrationName:"onPointerLeave",
+	var $c=0,ad=0,bd=!1,cd$2=!1,dd=Wc.extend({screenX:null,screenY:null,clientX:null,clientY:null,pageX:null,pageY:null,ctrlKey:null,shiftKey:null,altKey:null,metaKey:null,getModifierState:Zc,button:null,buttons:null,relatedTarget:function(a){return a.relatedTarget||(a.fromElement===a.srcElement?a.toElement:a.fromElement)},movementX:function(a){if("movementX"in a)return a.movementX;var b=$c;$c=a.screenX;return bd?"mousemove"===a.type?a.screenX-b:0:(bd=!0,0)},movementY:function(a){if("movementY"in a)return a.movementY;
+	var b=ad;ad=a.screenY;return cd$2?"mousemove"===a.type?a.screenY-b:0:(cd$2=!0,0)}}),ed=dd.extend({pointerId:null,width:null,height:null,pressure:null,tangentialPressure:null,tiltX:null,tiltY:null,twist:null,pointerType:null,isPrimary:null}),fd={mouseEnter:{registrationName:"onMouseEnter",dependencies:["mouseout","mouseover"]},mouseLeave:{registrationName:"onMouseLeave",dependencies:["mouseout","mouseover"]},pointerEnter:{registrationName:"onPointerEnter",dependencies:["pointerout","pointerover"]},pointerLeave:{registrationName:"onPointerLeave",
 	dependencies:["pointerout","pointerover"]}},gd={eventTypes:fd,extractEvents:function(a,b,c,d){var e="mouseover"===a||"pointerover"===a,f="mouseout"===a||"pointerout"===a;if(e&&(c.relatedTarget||c.fromElement)||!f&&!e)return null;e=d.window===d?d:(e=d.ownerDocument)?e.defaultView||e.parentWindow:window;f?(f=b,b=(b=c.relatedTarget||c.toElement)?Ha(b):null):f=null;if(f===b)return null;var h=void 0,g=void 0,k=void 0,l=void 0;if("mouseout"===a||"mouseover"===a)h=dd,g=fd.mouseLeave,k=fd.mouseEnter,l="mouse";
 	else if("pointerout"===a||"pointerover"===a)h=ed,g=fd.pointerLeave,k=fd.pointerEnter,l="pointer";var n=null==f?e:Ja(f);e=null==b?e:Ja(b);a=h.getPooled(g,f,c,d);a.type=l+"leave";a.target=n;a.relatedTarget=e;c=h.getPooled(k,b,c,d);c.type=l+"enter";c.target=e;c.relatedTarget=n;d=b;if(f&&d)a:{b=f;e=d;l=0;for(h=b;h;h=La(h))l++;h=0;for(k=e;k;k=La(k))h++;for(;0<l-h;)b=La(b),l--;for(;0<h-l;)e=La(e),h--;for(;l--;){if(b===e||b===e.alternate)break a;b=La(b);e=La(e);}b=null;}else b=null;e=b;for(b=[];f&&f!==e;){l=
 	f.alternate;if(null!==l&&l===e)break;b.push(f);f=La(f);}for(f=[];d&&d!==e;){l=d.alternate;if(null!==l&&l===e)break;f.push(d);d=La(d);}for(d=0;d<b.length;d++)Oa(b[d],"bubbled",a);for(d=f.length;0<d--;)Oa(f[d],"captured",c);return [a,c]}};function hd(a,b){return a===b&&(0!==a||1/a===1/b)||a!==a&&b!==b}var id=Object.prototype.hasOwnProperty;
@@ -3077,11 +3077,11 @@
 	var je={eventTypes:de,extractEvents:function(a,b,c,d){var e=d.window===d?d.document:9===d.nodeType?d:d.ownerDocument,f;if(!(f=!e)){a:{e=Wd(e);f=ja.onSelect;for(var h=0;h<f.length;h++)if(!e.has(f[h])){e=!1;break a}e=!0;}f=!e;}if(f)return null;e=b?Ja(b):window;switch(a){case "focus":if(Qb(e)||"true"===e.contentEditable)ee=e,fe=b,ge=null;break;case "blur":ge=fe=ee=null;break;case "mousedown":he=!0;break;case "contextmenu":case "mouseup":case "dragend":return he=!1,ie(c,d);case "selectionchange":if(ce)break;
 	case "keydown":case "keyup":return ie(c,d)}return null}};Ca.injectEventPluginOrder("ResponderEventPlugin SimpleEventPlugin EnterLeaveEventPlugin ChangeEventPlugin SelectEventPlugin BeforeInputEventPlugin".split(" "));sa=Ka;ta=Ia;va=Ja;Ca.injectEventPluginsByName({SimpleEventPlugin:Md,EnterLeaveEventPlugin:gd,ChangeEventPlugin:Vc,SelectEventPlugin:je,BeforeInputEventPlugin:Cb});function me(a,b,c,d){a=a.options;if(b){b={};for(var e=0;e<c.length;e++)b["$"+c[e]]=!0;for(c=0;c<a.length;c++)e=b.hasOwnProperty("$"+a[c].value),a[c].selected!==e&&(a[c].selected=e),e&&d&&(a[c].defaultSelected=!0);}else {c=""+Ac(c);b=null;for(e=0;e<a.length;e++){if(a[e].value===c){a[e].selected=!0;d&&(a[e].defaultSelected=!0);return}null!==b||a[e].disabled||(b=a[e]);}null!==b&&(b.selected=!0);}}
 	function pe(a,b){var c=Ac(b.value),d=Ac(b.defaultValue);null!=c&&(c=""+c,c!==a.value&&(a.value=c),null==b.defaultValue&&a.defaultValue!==c&&(a.defaultValue=c));null!=d&&(a.defaultValue=""+d);}var re={html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"};
-	var ue=void 0,ve=function(a){return "undefined"!==typeof MSApp&&MSApp.execUnsafeLocalFunction?function(b,c,d,e){MSApp.execUnsafeLocalFunction(function(){return a(b,c,d,e)});}:a}(function(a,b){if(a.namespaceURI!==re.svg||"innerHTML"in a)a.innerHTML=b;else {ue=ue||document.createElement("div");ue.innerHTML="<svg>"+b+"</svg>";for(b=ue.firstChild;a.firstChild;)a.removeChild(a.firstChild);for(;b.firstChild;)a.appendChild(b.firstChild);}});
+	var ue=void 0;(function(a){return "undefined"!==typeof MSApp&&MSApp.execUnsafeLocalFunction?function(b,c,d,e){MSApp.execUnsafeLocalFunction(function(){return a(b,c,d,e)});}:a})(function(a,b){if(a.namespaceURI!==re.svg||"innerHTML"in a)a.innerHTML=b;else {ue=ue||document.createElement("div");ue.innerHTML="<svg>"+b+"</svg>";for(b=ue.firstChild;a.firstChild;)a.removeChild(a.firstChild);for(;b.firstChild;)a.appendChild(b.firstChild);}});
 	var xe={animationIterationCount:!0,borderImageOutset:!0,borderImageSlice:!0,borderImageWidth:!0,boxFlex:!0,boxFlexGroup:!0,boxOrdinalGroup:!0,columnCount:!0,columns:!0,flex:!0,flexGrow:!0,flexPositive:!0,flexShrink:!0,flexNegative:!0,flexOrder:!0,gridArea:!0,gridRow:!0,gridRowEnd:!0,gridRowSpan:!0,gridRowStart:!0,gridColumn:!0,gridColumnEnd:!0,gridColumnSpan:!0,gridColumnStart:!0,fontWeight:!0,lineClamp:!0,lineHeight:!0,opacity:!0,order:!0,orphans:!0,tabSize:!0,widows:!0,zIndex:!0,zoom:!0,fillOpacity:!0,
-	floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},ye=["Webkit","ms","Moz","O"];Object.keys(xe).forEach(function(a){ye.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);xe[b]=xe[a];});});var Ce=objectAssign({menuitem:!0},{area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0});
-	var Ze=scheduler.unstable_runWithPriority,$e=scheduler.unstable_scheduleCallback,af=scheduler.unstable_cancelCallback,bf=scheduler.unstable_shouldYield,cf=scheduler.unstable_requestPaint,df=scheduler.unstable_now,ef=scheduler.unstable_getCurrentPriorityLevel,ff=scheduler.unstable_ImmediatePriority,hf=scheduler.unstable_UserBlockingPriority,jf=scheduler.unstable_NormalPriority,kf=scheduler.unstable_LowPriority,lf=scheduler.unstable_IdlePriority,rf=df();
-	var $f=Xb.ReactCurrentBatchConfig,ag=(new react.Component).refs;var Qg=Xb.ReactCurrentDispatcher;var Dh=Xb.ReactCurrentOwner;var zi=Xb.ReactCurrentDispatcher,Ai=Xb.ReactCurrentOwner;function aj(){}function ej(a,b){try{return a(b)}finally{}}var pj=null,ji=null;
+	floodOpacity:!0,stopOpacity:!0,strokeDasharray:!0,strokeDashoffset:!0,strokeMiterlimit:!0,strokeOpacity:!0,strokeWidth:!0},ye=["Webkit","ms","Moz","O"];Object.keys(xe).forEach(function(a){ye.forEach(function(b){b=b+a.charAt(0).toUpperCase()+a.substring(1);xe[b]=xe[a];});});objectAssign({menuitem:!0},{area:!0,base:!0,br:!0,col:!0,embed:!0,hr:!0,img:!0,input:!0,keygen:!0,link:!0,meta:!0,param:!0,source:!0,track:!0,wbr:!0});
+	scheduler.unstable_runWithPriority;scheduler.unstable_scheduleCallback;scheduler.unstable_cancelCallback;scheduler.unstable_shouldYield;scheduler.unstable_requestPaint;var df=scheduler.unstable_now;scheduler.unstable_getCurrentPriorityLevel;scheduler.unstable_ImmediatePriority;scheduler.unstable_UserBlockingPriority;scheduler.unstable_NormalPriority;scheduler.unstable_LowPriority;scheduler.unstable_IdlePriority;df();
+	Xb.ReactCurrentBatchConfig;(new react.Component).refs;Xb.ReactCurrentDispatcher;Xb.ReactCurrentOwner;Xb.ReactCurrentDispatcher;Xb.ReactCurrentOwner;function aj(){}function ej(a,b){try{return a(b)}finally{}}var pj=null,ji=null;
 	function tj(a){if("undefined"===typeof __REACT_DEVTOOLS_GLOBAL_HOOK__)return !1;var b=__REACT_DEVTOOLS_GLOBAL_HOOK__;if(b.isDisabled||!b.supportsFiber)return !0;try{var c=b.inject(a);pj=function(a){try{b.onCommitFiberRoot(c,a,void 0,64===(a.current.effectTag&64));}catch(e){}};ji=function(a){try{b.onCommitFiberUnmount(c,a);}catch(e){}};}catch(d){}return !0}
 	Db=function(a,b,c){switch(b){case "input":Ec(a,c);b=c.name;if("radio"===c.type&&null!=b){for(c=a;c.parentNode;)c=c.parentNode;c=c.querySelectorAll("input[name="+JSON.stringify(""+b)+'][type="radio"]');for(b=0;b<c.length;b++){var d=c[b];if(d!==a&&d.form===a.form){var e=Ka(d);if(!e)throw t(Error(90));Wb(d);Ec(d,e);}}}break;case "textarea":pe(a,c);break;case "select":b=c.value,null!=b&&me(a,!!c.multiple,b,!1);}};
 	Jb=ej;Lb=aj;(function(a){var b=a.findFiberByHostInstance;return tj(objectAssign({},a,{overrideHookState:null,overrideProps:null,setSuspenseHandler:null,scheduleUpdate:null,currentDispatcherRef:Xb.ReactCurrentDispatcher,findHostInstanceByFiber:function(a){a=qd(a);return null===a?null:a.stateNode},findFiberByHostInstance:function(a){return b?b(a):null},findHostInstancesForRefresh:null,scheduleRefresh:null,scheduleRoot:null,setRefreshHandler:null,getCurrentFiber:null}))})({findFiberByHostInstance:Ha,bundleType:0,version:"16.9.0",
@@ -3092,15 +3092,15 @@
 	});
 
 	unwrapExports(schedulerTracing_production_min);
-	var schedulerTracing_production_min_1 = schedulerTracing_production_min.__interactionsRef;
-	var schedulerTracing_production_min_2 = schedulerTracing_production_min.__subscriberRef;
-	var schedulerTracing_production_min_3 = schedulerTracing_production_min.unstable_clear;
-	var schedulerTracing_production_min_4 = schedulerTracing_production_min.unstable_getCurrent;
-	var schedulerTracing_production_min_5 = schedulerTracing_production_min.unstable_getThreadID;
-	var schedulerTracing_production_min_6 = schedulerTracing_production_min.unstable_trace;
-	var schedulerTracing_production_min_7 = schedulerTracing_production_min.unstable_wrap;
-	var schedulerTracing_production_min_8 = schedulerTracing_production_min.unstable_subscribe;
-	var schedulerTracing_production_min_9 = schedulerTracing_production_min.unstable_unsubscribe;
+	schedulerTracing_production_min.__interactionsRef;
+	schedulerTracing_production_min.__subscriberRef;
+	schedulerTracing_production_min.unstable_clear;
+	schedulerTracing_production_min.unstable_getCurrent;
+	schedulerTracing_production_min.unstable_getThreadID;
+	schedulerTracing_production_min.unstable_trace;
+	schedulerTracing_production_min.unstable_wrap;
+	schedulerTracing_production_min.unstable_subscribe;
+	schedulerTracing_production_min.unstable_unsubscribe;
 
 	var schedulerTracing_development = createCommonjsModule(function (module, exports) {
 
@@ -3526,15 +3526,15 @@
 	});
 
 	unwrapExports(schedulerTracing_development);
-	var schedulerTracing_development_1 = schedulerTracing_development.__interactionsRef;
-	var schedulerTracing_development_2 = schedulerTracing_development.__subscriberRef;
-	var schedulerTracing_development_3 = schedulerTracing_development.unstable_clear;
-	var schedulerTracing_development_4 = schedulerTracing_development.unstable_getCurrent;
-	var schedulerTracing_development_5 = schedulerTracing_development.unstable_getThreadID;
-	var schedulerTracing_development_6 = schedulerTracing_development.unstable_trace;
-	var schedulerTracing_development_7 = schedulerTracing_development.unstable_wrap;
-	var schedulerTracing_development_8 = schedulerTracing_development.unstable_subscribe;
-	var schedulerTracing_development_9 = schedulerTracing_development.unstable_unsubscribe;
+	schedulerTracing_development.__interactionsRef;
+	schedulerTracing_development.__subscriberRef;
+	schedulerTracing_development.unstable_clear;
+	schedulerTracing_development.unstable_getCurrent;
+	schedulerTracing_development.unstable_getThreadID;
+	schedulerTracing_development.unstable_trace;
+	schedulerTracing_development.unstable_wrap;
+	schedulerTracing_development.unstable_subscribe;
+	schedulerTracing_development.unstable_unsubscribe;
 
 	var tracing = createCommonjsModule(function (module) {
 
@@ -5230,7 +5230,7 @@
 	  }
 
 	  function warn(action, result) {
-	     warningWithoutStack$1(false, "This synthetic event is reused for performance reasons. If you're seeing this, " + "you're %s `%s` on a released/nullified synthetic event. %s. " + 'If you must keep the original synthetic event around, use event.persist(). ' + 'See https://fb.me/react-event-pooling for more information.', action, propName, result) ;
+	    warningWithoutStack$1(false, "This synthetic event is reused for performance reasons. If you're seeing this, " + "you're %s `%s` on a released/nullified synthetic event. %s. " + 'If you must keep the original synthetic event around, use event.persist(). ' + 'See https://fb.me/react-event-pooling for more information.', action, propName, result) ;
 	  }
 	}
 
@@ -6616,10 +6616,8 @@
 	  true);
 	} // sanitizeURL
 	);
-
-	var ReactDebugCurrentFrame$1 = null;
 	{
-	  ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+	  ReactSharedInternals.ReactDebugCurrentFrame;
 	}
 
 	// A javascript: URL can contain leading C0 control or \u0020 SPACE,
@@ -6637,7 +6635,7 @@
 	var didWarn = false;
 
 	function sanitizeURL(url) {
-	  if ( !didWarn && isJavaScriptProtocol.test(url)) {
+	  if (!didWarn && isJavaScriptProtocol.test(url)) {
 	    didWarn = true;
 	    warning$1(false, 'A future version of React will block javascript: URLs as a security precaution. ' + 'Use event handlers instead if you can. If you need to generate unsafe HTML try ' + 'using dangerouslySetInnerHTML instead. React was passed %s.', JSON.stringify(url));
 	  }
@@ -6655,7 +6653,7 @@
 
 	      return node[propertyName];
 	    } else {
-	      if ( propertyInfo.sanitizeURL) {
+	      if (propertyInfo.sanitizeURL) {
 	        // If we haven't fully disabled javascript: URLs, and if
 	        // the hydration is successful of a javascript: URL, we
 	        // still want to warn on the client.
@@ -7668,8 +7666,8 @@
 
 	// Intentionally not named imports because Rollup would use dynamic dispatch for
 	// CommonJS interop named imports.
-	var UserBlockingPriority$1 = Scheduler.unstable_UserBlockingPriority;
-	var runWithPriority$1 = Scheduler.unstable_runWithPriority;
+	Scheduler.unstable_UserBlockingPriority;
+	Scheduler.unstable_runWithPriority;
 
 	/**
 	 * `ReactInstanceMap` maintains a mapping from a public facing stateful
@@ -8468,8 +8466,8 @@
 
 	// Intentionally not named imports because Rollup would use dynamic dispatch for
 	// CommonJS interop named imports.
-	var UserBlockingPriority = Scheduler.unstable_UserBlockingPriority;
-	var runWithPriority = Scheduler.unstable_runWithPriority;
+	Scheduler.unstable_UserBlockingPriority;
+	Scheduler.unstable_runWithPriority;
 	var getEventPriority = SimpleEventPlugin.getEventPriority;
 
 
@@ -11246,9 +11244,9 @@
 	      } else if (typeof nextProp === 'number') {
 	        setTextContent(domElement, '' + nextProp);
 	      }
-	    } else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
+	    } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      if (nextProp != null) {
-	        if ( typeof nextProp !== 'function') {
+	        if (typeof nextProp !== 'function') {
 	          warnForInvalidEventListener(propKey, nextProp);
 	        }
 	        ensureListeningTo(rootContainerElement, propKey);
@@ -11523,7 +11521,7 @@
 	          styleUpdates[styleName] = '';
 	        }
 	      }
-	    } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) ; else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
+	    } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) ; else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (propKey === AUTOFOCUS) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      // This is a special case. If any listener updates we need to ensure
 	      // that the "current" fiber pointer gets updated so we need a commit
 	      // to update this element.
@@ -11591,10 +11589,10 @@
 	      if (lastProp !== nextProp && (typeof nextProp === 'string' || typeof nextProp === 'number')) {
 	        (updatePayload = updatePayload || []).push(propKey, '' + nextProp);
 	      }
-	    } else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
+	    } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1) ; else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      if (nextProp != null) {
 	        // We eagerly listen to this even though we haven't committed yet.
-	        if ( typeof nextProp !== 'function') {
+	        if (typeof nextProp !== 'function') {
 	          warnForInvalidEventListener(propKey, nextProp);
 	        }
 	        ensureListeningTo(rootContainerElement, propKey);
@@ -11779,14 +11777,14 @@
 	      // TODO: Should we use domElement.firstChild.nodeValue to compare?
 	      if (typeof nextProp === 'string') {
 	        if (domElement.textContent !== nextProp) {
-	          if ( !suppressHydrationWarning) {
+	          if (!suppressHydrationWarning) {
 	            warnForTextDifference(domElement.textContent, nextProp);
 	          }
 	          updatePayload = [CHILDREN, nextProp];
 	        }
 	      } else if (typeof nextProp === 'number') {
 	        if (domElement.textContent !== '' + nextProp) {
-	          if ( !suppressHydrationWarning) {
+	          if (!suppressHydrationWarning) {
 	            warnForTextDifference(domElement.textContent, nextProp);
 	          }
 	          updatePayload = [CHILDREN, '' + nextProp];
@@ -11794,18 +11792,17 @@
 	      }
 	    } else if (registrationNameModules.hasOwnProperty(propKey)) {
 	      if (nextProp != null) {
-	        if ( typeof nextProp !== 'function') {
+	        if (typeof nextProp !== 'function') {
 	          warnForInvalidEventListener(propKey, nextProp);
 	        }
 	        ensureListeningTo(rootContainerElement, propKey);
 	      }
-	    } else if (
-	    // Convince Flow we've calculated it (it's DEV-only in this method.)
+	    } else if (// Convince Flow we've calculated it (it's DEV-only in this method.)
 	    typeof isCustomComponentTag === 'boolean') {
 	      // Validate that the properties correspond to their expected values.
 	      var serverValue = void 0;
 	      var propertyInfo = getPropertyInfo(propKey);
-	      if (suppressHydrationWarning) ; else if ( propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1 ||
+	      if (suppressHydrationWarning) ; else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING$1 ||
 	      // Controlled attributes are not validated
 	      // TODO: Only ignore them on controlled tags.
 	      propKey === 'value' || propKey === 'checked' || propKey === 'selected') ; else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
@@ -12592,7 +12589,7 @@
 	}
 
 	function didNotMatchHydratedTextInstance(parentType, parentProps, parentInstance, textInstance, text) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    warnForUnmatchedText(textInstance, text);
 	  }
 	}
@@ -12608,7 +12605,7 @@
 	}
 
 	function didNotHydrateInstance(parentType, parentProps, parentInstance, instance) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    if (instance.nodeType === ELEMENT_NODE) {
 	      warnForDeletedHydratableElement(parentInstance, instance);
 	    } else if (instance.nodeType === COMMENT_NODE) ; else {
@@ -12632,19 +12629,19 @@
 
 
 	function didNotFindHydratableInstance(parentType, parentProps, parentInstance, type, props) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    warnForInsertedHydratedElement(parentInstance, type);
 	  }
 	}
 
 	function didNotFindHydratableTextInstance(parentType, parentProps, parentInstance, text) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) {
 	    warnForInsertedHydratedText(parentInstance, text);
 	  }
 	}
 
 	function didNotFindHydratableSuspenseInstance(parentType, parentProps, parentInstance) {
-	  if ( parentProps[SUPPRESS_HYDRATION_WARNING] !== true) ;
+	  if (parentProps[SUPPRESS_HYDRATION_WARNING] !== true) ;
 	}
 
 	// Prefix measurements so that it's possible to filter them.
@@ -14617,7 +14614,7 @@
 	      lastContextDependency = lastContextDependency.next = contextItem;
 	    }
 	  }
-	  return  context._currentValue ;
+	  return context._currentValue ;
 	}
 
 	// UpdateQueue is a linked list of prioritized updates.
@@ -14884,7 +14881,7 @@
 	          // Updater function
 	          {
 	            enterDisallowedContextReadInDEV();
-	            if (  workInProgress.mode & StrictMode) {
+	            if (workInProgress.mode & StrictMode) {
 	              _payload.call(instance, prevState, nextProps);
 	            }
 	          }
@@ -14910,7 +14907,7 @@
 	          // Updater function
 	          {
 	            enterDisallowedContextReadInDEV();
-	            if (  workInProgress.mode & StrictMode) {
+	            if (workInProgress.mode & StrictMode) {
 	              _payload2.call(instance, prevState, nextProps);
 	            }
 	          }
@@ -15212,7 +15209,7 @@
 	  var prevState = workInProgress.memoizedState;
 
 	  {
-	    if (  workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      // Invoke the function an extra time to help detect side-effects.
 	      getDerivedStateFromProps(nextProps, prevState);
 	    }
@@ -15440,7 +15437,7 @@
 
 	  // Instantiate twice to help detect side-effects.
 	  {
-	    if (  workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      new ctor(props, context); // eslint-disable-line no-new
 	    }
 	  }
@@ -16878,7 +16875,7 @@
 	}
 
 	function pushHostContext(fiber) {
-	  var rootInstance = requiredContext(rootInstanceStackCursor.current);
+	  requiredContext(rootInstanceStackCursor.current);
 	  var context = requiredContext(contextStackCursor$1.current);
 	  var nextContext = getChildHostContext(context, fiber.type);
 
@@ -18502,7 +18499,7 @@
 	          switch (fiber.tag) {
 	            case HostComponent:
 	              var type = fiber.type;
-	              var props = fiber.pendingProps;
+	              fiber.pendingProps;
 	              didNotFindHydratableContainerInstance(parentContainer, type);
 	              break;
 	            case HostText:
@@ -18520,7 +18517,7 @@
 	          switch (fiber.tag) {
 	            case HostComponent:
 	              var _type = fiber.type;
-	              var _props = fiber.pendingProps;
+	              fiber.pendingProps;
 	              didNotFindHydratableInstance(parentType, parentProps, parentInstance, _type);
 	              break;
 	            case HostText:
@@ -18544,7 +18541,7 @@
 	    case HostComponent:
 	      {
 	        var type = fiber.type;
-	        var props = fiber.pendingProps;
+	        fiber.pendingProps;
 	        var instance = canHydrateInstance(nextInstance, type);
 	        if (instance !== null) {
 	          fiber.stateNode = instance;
@@ -18791,7 +18788,7 @@
 	    ReactCurrentOwner$3.current = workInProgress;
 	    setCurrentPhase('render');
 	    nextChildren = renderWithHooks(current$$1, workInProgress, render, nextProps, ref, renderExpirationTime);
-	    if (  workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      // Only double-render components with Hooks
 	      if (workInProgress.memoizedState !== null) {
 	        nextChildren = renderWithHooks(current$$1, workInProgress, render, nextProps, ref, renderExpirationTime);
@@ -18970,7 +18967,7 @@
 	    ReactCurrentOwner$3.current = workInProgress;
 	    setCurrentPhase('render');
 	    nextChildren = renderWithHooks(current$$1, workInProgress, Component, nextProps, context, renderExpirationTime);
-	    if (  workInProgress.mode & StrictMode) {
+	    if (workInProgress.mode & StrictMode) {
 	      // Only double-render components with Hooks
 	      if (workInProgress.memoizedState !== null) {
 	        nextChildren = renderWithHooks(current$$1, workInProgress, Component, nextProps, context, renderExpirationTime);
@@ -19084,7 +19081,7 @@
 	    {
 	      setCurrentPhase('render');
 	      nextChildren = instance.render();
-	      if (  workInProgress.mode & StrictMode) {
+	      if (workInProgress.mode & StrictMode) {
 	        instance.render();
 	      }
 	      setCurrentPhase(null);
@@ -19432,7 +19429,7 @@
 	    workInProgress.tag = FunctionComponent;
 	    {
 
-	      if (  workInProgress.mode & StrictMode) {
+	      if (workInProgress.mode & StrictMode) {
 	        // Only double-render components with Hooks
 	        if (workInProgress.memoizedState !== null) {
 	          value = renderWithHooks(null, workInProgress, Component, props, context, renderExpirationTime);
@@ -19643,7 +19640,7 @@
 
 	        // Because primaryChildFragment is a new fiber that we're inserting as the
 	        // parent of a new tree, we need to set its treeBaseDuration.
-	        if ( workInProgress.mode & ProfileMode) {
+	        if (workInProgress.mode & ProfileMode) {
 	          // treeBaseDuration is the sum of all the child tree base durations.
 	          var treeBaseDuration = 0;
 	          var hiddenChild = _primaryChildFragment.child;
@@ -19717,7 +19714,7 @@
 
 	        // Because primaryChildFragment is a new fiber that we're inserting as the
 	        // parent of a new tree, we need to set its treeBaseDuration.
-	        if ( workInProgress.mode & ProfileMode) {
+	        if (workInProgress.mode & ProfileMode) {
 	          // treeBaseDuration is the sum of all the child tree base durations.
 	          var _treeBaseDuration = 0;
 	          var _hiddenChild = _primaryChildFragment2.child;
@@ -21729,7 +21726,7 @@
 	    if (node.child !== null && (
 	    // If we use mutation we drill down into portals using commitUnmount above.
 	    // If we don't use mutation we drill down into portals here instead.
-	     node.tag !== HostPortal)) {
+	    node.tag !== HostPortal)) {
 	      node.child.return = node;
 	      node = node.child;
 	      continue;
@@ -22130,7 +22127,7 @@
 	    markCommitTimeOfFallback();
 	  }
 
-	  if ( primaryChildParent !== null) {
+	  if (primaryChildParent !== null) {
 	    hideOrUnhideAllChildren(primaryChildParent, newDidTimeout);
 	  }
 	}
@@ -22745,13 +22742,13 @@
 	      root.callbackNode = scheduleSyncCallback(runRootCallback.bind(null, root, renderRoot.bind(null, root, expirationTime)));
 	    } else {
 	      var options = null;
-	      if ( expirationTime !== Never) {
+	      if (expirationTime !== Never) {
 	        var timeout = expirationTimeToMs(expirationTime) - now();
 	        options = { timeout: timeout };
 	      }
 
 	      root.callbackNode = scheduleCallback(priorityLevel, runRootCallback.bind(null, root, renderRoot.bind(null, root, expirationTime)), options);
-	      if ( expirationTime !== Sync && (executionContext & (RenderContext | CommitContext)) === NoContext) {
+	      if (expirationTime !== Sync && (executionContext & (RenderContext | CommitContext)) === NoContext) {
 	        // Scheduled an async callback, and we're not already working. Add an
 	        // entry to the flamegraph that shows we're waiting for a callback
 	        // to fire.
@@ -22806,7 +22803,7 @@
 	  // those two cases. Need to fix this before exposing flushDiscreteUpdates
 	  // as a public API.
 	  if ((executionContext & (BatchedContext | RenderContext | CommitContext)) !== NoContext) {
-	    if ( (executionContext & RenderContext) !== NoContext) {
+	    if ((executionContext & RenderContext) !== NoContext) {
 	      warning$1(false, 'unstable_flushDiscreteUpdates: Cannot flush updates when React is ' + 'already rendering.');
 	    }
 	    // We're already rendering, so we can't synchronously flush pending work.
@@ -22996,7 +22993,7 @@
 	    }
 	  })();
 
-	  if ( expirationTime !== Sync) {
+	  if (expirationTime !== Sync) {
 	    var didExpire = isSync;
 	    stopRequestCallbackTimer(didExpire);
 	  }
@@ -23113,7 +23110,7 @@
 	          throw thrownValue;
 	        }
 
-	        if ( sourceFiber.mode & ProfileMode) {
+	        if (sourceFiber.mode & ProfileMode) {
 	          // Record the time spent rendering before an error was thrown. This
 	          // avoids inaccurate Profiler durations in the case of a
 	          // suspended render.
@@ -23211,7 +23208,7 @@
 	        var hasNotProcessedNewUpdates = workInProgressRootLatestProcessedExpirationTime === Sync;
 	        if (hasNotProcessedNewUpdates && !isSync &&
 	        // do not delay if we're inside an act() scope
-	        !( IsThisRendererActing.current)) {
+	        !(IsThisRendererActing.current)) {
 	          // If we have not processed any new updates during this pass, then this is
 	          // either a retry of an existing fallback state or a hidden tree.
 	          // Hidden trees shouldn't be batched with other work and after that's
@@ -23249,7 +23246,7 @@
 
 	        if (!isSync &&
 	        // do not delay if we're inside an act() scope
-	        !( IsThisRendererActing.current)) {
+	        !(IsThisRendererActing.current)) {
 	          // We're suspended in a state that should be avoided. We'll try to avoid committing
 	          // it for as long as the timeouts let us.
 	          if (workInProgressRootHasPendingPing) {
@@ -23313,7 +23310,7 @@
 	        // The work completed. Ready to commit.
 	        if (!isSync &&
 	        // do not delay if we're inside an act() scope
-	        !( IsThisRendererActing.current) && workInProgressRootLatestProcessedExpirationTime !== Sync && workInProgressRootCanSuspendUsingConfig !== null) {
+	        !(IsThisRendererActing.current) && workInProgressRootLatestProcessedExpirationTime !== Sync && workInProgressRootCanSuspendUsingConfig !== null) {
 	          // If we have exceeded the minimum loading delay, which probably
 	          // means we have shown a spinner already, we might have to suspend
 	          // a bit longer to ensure that the spinner is shown for enough time.
@@ -23420,7 +23417,7 @@
 	  setCurrentFiber(unitOfWork);
 
 	  var next = void 0;
-	  if ( (unitOfWork.mode & ProfileMode) !== NoMode) {
+	  if ((unitOfWork.mode & ProfileMode) !== NoMode) {
 	    startProfilerTimer(unitOfWork);
 	    next = beginWork$$1(current$$1, unitOfWork, renderExpirationTime);
 	    stopProfilerTimerIfRunningAndRecordDelta(unitOfWork, true);
@@ -23454,7 +23451,7 @@
 	    if ((workInProgress.effectTag & Incomplete) === NoEffect) {
 	      setCurrentFiber(workInProgress);
 	      var next = void 0;
-	      if ( (workInProgress.mode & ProfileMode) === NoMode) {
+	      if ((workInProgress.mode & ProfileMode) === NoMode) {
 	        next = completeWork(current$$1, workInProgress, renderExpirationTime);
 	      } else {
 	        startProfilerTimer(workInProgress);
@@ -23515,7 +23512,7 @@
 
 	      // Because this fiber did not complete, don't reset its expiration time.
 
-	      if ( (workInProgress.mode & ProfileMode) !== NoMode) {
+	      if ((workInProgress.mode & ProfileMode) !== NoMode) {
 	        // Record the render duration for the fiber that errored.
 	        stopProfilerTimerIfRunningAndRecordDelta(workInProgress, false);
 
@@ -23575,7 +23572,7 @@
 	  var newChildExpirationTime = NoWork;
 
 	  // Bubble up the earliest expiration time.
-	  if ( (completedWork.mode & ProfileMode) !== NoMode) {
+	  if ((completedWork.mode & ProfileMode) !== NoMode) {
 	    // In profiling mode, resetChildExpirationTime is also used to reset
 	    // profiler durations.
 	    var actualDuration = completedWork.actualDuration;
@@ -24350,7 +24347,7 @@
 	}
 
 	function checkForInterruption(fiberThatReceivedUpdate, updateExpirationTime) {
-	  if ( workInProgressRoot !== null && updateExpirationTime > renderExpirationTime) {
+	  if (workInProgressRoot !== null && updateExpirationTime > renderExpirationTime) {
 	    interruptedBy = fiberThatReceivedUpdate;
 	  }
 	}
@@ -24408,7 +24405,7 @@
 	      // Restore the original properties of the fiber.
 	      assignFiberPropertiesInDEV(unitOfWork, originalWorkInProgressCopy);
 
-	      if ( unitOfWork.mode & ProfileMode) {
+	      if (unitOfWork.mode & ProfileMode) {
 	        // Reset the profiler timer.
 	        startProfilerTimer(unitOfWork);
 	      }
@@ -24459,7 +24456,7 @@
 
 	function warnIfNotScopedWithMatchingAct(fiber) {
 	  {
-	    if ( IsSomeRendererActing.current === true && IsThisRendererActing.current !== true) {
+	    if (IsSomeRendererActing.current === true && IsThisRendererActing.current !== true) {
 	      warningWithoutStack$1(false, "It looks like you're using the wrong act() around your test interactions.\n" + 'Be sure to use the matching version of act() corresponding to your renderer:\n\n' + '// for react-dom:\n' + "import {act} from 'react-dom/test-utils';\n" + '//...\n' + 'act(() => ...);\n\n' + '// for react-test-renderer:\n' + "import TestRenderer from 'react-test-renderer';\n" + 'const {act} = TestRenderer;\n' + '//...\n' + 'act(() => ...);' + '%s', getStackByFiberInDevAndProd(fiber));
 	    }
 	  }
@@ -24467,7 +24464,7 @@
 
 	function warnIfNotCurrentlyActingEffectsInDEV(fiber) {
 	  {
-	    if ( (fiber.mode & StrictMode) !== NoMode && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
+	    if ((fiber.mode & StrictMode) !== NoMode && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
 	      warningWithoutStack$1(false, 'An update to %s ran an effect, but was not wrapped in act(...).\n\n' + 'When testing, code that causes React state updates should be ' + 'wrapped into act(...):\n\n' + 'act(() => {\n' + '  /* fire events that update state */\n' + '});\n' + '/* assert on the output */\n\n' + "This ensures that you're testing the behavior the user would see " + 'in the browser.' + ' Learn more at https://fb.me/react-wrap-tests-with-act' + '%s', getComponentName(fiber.type), getStackByFiberInDevAndProd(fiber));
 	    }
 	  }
@@ -24475,7 +24472,7 @@
 
 	function warnIfNotCurrentlyActingUpdatesInDEV(fiber) {
 	  {
-	    if ( executionContext === NoContext && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
+	    if (executionContext === NoContext && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
 	      warningWithoutStack$1(false, 'An update to %s inside a test was not wrapped in act(...).\n\n' + 'When testing, code that causes React state updates should be ' + 'wrapped into act(...):\n\n' + 'act(() => {\n' + '  /* fire events that update state */\n' + '});\n' + '/* assert on the output */\n\n' + "This ensures that you're testing the behavior the user would see " + 'in the browser.' + ' Learn more at https://fb.me/react-wrap-tests-with-act' + '%s', getComponentName(fiber.type), getStackByFiberInDevAndProd(fiber));
 	    }
 	  }
@@ -24753,8 +24750,6 @@
 	          var currentTime = requestCurrentTime();
 	          var priorityLevel = inferPriorityFromExpirationTime(currentTime, expirationTime);
 	          hook.onCommitFiberRoot(rendererID, root, priorityLevel, didError);
-	        } else {
-	          hook.onCommitFiberRoot(rendererID, root, undefined, didError);
 	        }
 	      } catch (err) {
 	        if (true && !hasLoggedError) {
@@ -25113,7 +25108,7 @@
 	    mode = NoMode;
 	  }
 
-	  if ( isDevToolsPresent) {
+	  if (isDevToolsPresent) {
 	    // Always collect profile timings when DevTools are present.
 	    // This enables DevTools to start capturing timing at any point–
 	    // Without some nodes in the tree having empty base times.
@@ -26117,7 +26112,7 @@
 	      }
 	    })();
 	    {
-	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.hydrate() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. ' + 'Did you mean to call createRoot(container, {hydrate: true}).render(element)?',  'unstable_createRoot') : void 0;
+	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.hydrate() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. ' + 'Did you mean to call createRoot(container, {hydrate: true}).render(element)?', 'unstable_createRoot') : void 0;
 	    }
 	    // TODO: throw or warn if we couldn't hydrate?
 	    return legacyRenderSubtreeIntoContainer(null, element, container, true, callback);
@@ -26131,7 +26126,7 @@
 	      }
 	    })();
 	    {
-	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.render() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. ' + 'Did you mean to call root.render(element)?',  'unstable_createRoot') : void 0;
+	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.render() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. ' + 'Did you mean to call root.render(element)?', 'unstable_createRoot') : void 0;
 	    }
 	    return legacyRenderSubtreeIntoContainer(null, element, container, false, callback);
 	  },
@@ -26162,7 +26157,7 @@
 	    })();
 
 	    {
-	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.unmountComponentAtNode() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. Did you mean to call root.unmount()?',  'unstable_createRoot') : void 0;
+	      !!container._reactHasBeenPassedToCreateRootDEV ? warningWithoutStack$1(false, 'You are calling ReactDOM.unmountComponentAtNode() on a container that was previously ' + 'passed to ReactDOM.%s(). This is not supported. Did you mean to call root.unmount()?', 'unstable_createRoot') : void 0;
 	    }
 
 	    if (container._reactRootContainer) {
@@ -26233,7 +26228,7 @@
 	};
 
 	function createRoot(container, options) {
-	  var functionName =  'unstable_createRoot';
+	  var functionName = 'unstable_createRoot';
 	  (function () {
 	    if (!isValidContainer(container)) {
 	      {
@@ -26247,7 +26242,7 @@
 	}
 
 	function createSyncRoot(container, options) {
-	  var functionName =  'unstable_createRoot';
+	  var functionName = 'unstable_createRoot';
 	  (function () {
 	    if (!isValidContainer(container)) {
 	      {
@@ -26262,7 +26257,7 @@
 
 	function warnIfReactDOMContainerInDEV(container) {
 	  {
-	    !!container._reactRootContainer ? warningWithoutStack$1(false, 'You are calling ReactDOM.%s() on a container that was previously ' + 'passed to ReactDOM.render(). This is not supported.',  'unstable_createRoot') : void 0;
+	    !!container._reactRootContainer ? warningWithoutStack$1(false, 'You are calling ReactDOM.%s() on a container that was previously ' + 'passed to ReactDOM.render(). This is not supported.', 'unstable_createRoot') : void 0;
 	    container._reactHasBeenPassedToCreateRootDEV = true;
 	  }
 	}
@@ -26310,7 +26305,7 @@
 	  module.exports = reactDom_development;
 	}
 	});
-	var reactDom_1 = reactDom.render;
+	reactDom.render;
 
 	/**
 	 * Checks if `value` is classified as an `Array` object.
@@ -26358,20 +26353,20 @@
 	var _Symbol = Symbol$1;
 
 	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
+	var objectProto$d = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$1 = objectProto.hasOwnProperty;
+	var hasOwnProperty$a = objectProto$d.hasOwnProperty;
 
 	/**
 	 * Used to resolve the
 	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
-	var nativeObjectToString = objectProto.toString;
+	var nativeObjectToString$1 = objectProto$d.toString;
 
 	/** Built-in value references. */
-	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+	var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
 
 	/**
 	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
@@ -26381,20 +26376,20 @@
 	 * @returns {string} Returns the raw `toStringTag`.
 	 */
 	function getRawTag(value) {
-	  var isOwn = hasOwnProperty$1.call(value, symToStringTag),
-	      tag = value[symToStringTag];
+	  var isOwn = hasOwnProperty$a.call(value, symToStringTag$1),
+	      tag = value[symToStringTag$1];
 
 	  try {
-	    value[symToStringTag] = undefined;
+	    value[symToStringTag$1] = undefined;
 	    var unmasked = true;
 	  } catch (e) {}
 
-	  var result = nativeObjectToString.call(value);
+	  var result = nativeObjectToString$1.call(value);
 	  if (unmasked) {
 	    if (isOwn) {
-	      value[symToStringTag] = tag;
+	      value[symToStringTag$1] = tag;
 	    } else {
-	      delete value[symToStringTag];
+	      delete value[symToStringTag$1];
 	    }
 	  }
 	  return result;
@@ -26403,14 +26398,14 @@
 	var _getRawTag = getRawTag;
 
 	/** Used for built-in method references. */
-	var objectProto$1 = Object.prototype;
+	var objectProto$c = Object.prototype;
 
 	/**
 	 * Used to resolve the
 	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
 	 * of values.
 	 */
-	var nativeObjectToString$1 = objectProto$1.toString;
+	var nativeObjectToString = objectProto$c.toString;
 
 	/**
 	 * Converts `value` to a string using `Object.prototype.toString`.
@@ -26420,7 +26415,7 @@
 	 * @returns {string} Returns the converted string.
 	 */
 	function objectToString(value) {
-	  return nativeObjectToString$1.call(value);
+	  return nativeObjectToString.call(value);
 	}
 
 	var _objectToString = objectToString;
@@ -26430,7 +26425,7 @@
 	    undefinedTag = '[object Undefined]';
 
 	/** Built-in value references. */
-	var symToStringTag$1 = _Symbol ? _Symbol.toStringTag : undefined;
+	var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
 
 	/**
 	 * The base implementation of `getTag` without fallbacks for buggy environments.
@@ -26443,7 +26438,7 @@
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
-	  return (symToStringTag$1 && symToStringTag$1 in Object(value))
+	  return (symToStringTag && symToStringTag in Object(value))
 	    ? _getRawTag(value)
 	    : _objectToString(value);
 	}
@@ -26481,7 +26476,7 @@
 	var isObjectLike_1 = isObjectLike;
 
 	/** `Object#toString` result references. */
-	var symbolTag = '[object Symbol]';
+	var symbolTag$2 = '[object Symbol]';
 
 	/**
 	 * Checks if `value` is classified as a `Symbol` primitive or object.
@@ -26502,7 +26497,7 @@
 	 */
 	function isSymbol(value) {
 	  return typeof value == 'symbol' ||
-	    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag);
+	    (isObjectLike_1(value) && _baseGetTag(value) == symbolTag$2);
 	}
 
 	var isSymbol_1 = isSymbol;
@@ -26568,8 +26563,8 @@
 
 	/** `Object#toString` result references. */
 	var asyncTag = '[object AsyncFunction]',
-	    funcTag = '[object Function]',
-	    genTag = '[object GeneratorFunction]',
+	    funcTag$2 = '[object Function]',
+	    genTag$1 = '[object GeneratorFunction]',
 	    proxyTag = '[object Proxy]';
 
 	/**
@@ -26596,7 +26591,7 @@
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
 	  // in Safari 9 which returns 'object' for typed arrays and other constructors.
 	  var tag = _baseGetTag(value);
-	  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+	  return tag == funcTag$2 || tag == genTag$1 || tag == asyncTag || tag == proxyTag;
 	}
 
 	var isFunction_1 = isFunction;
@@ -26626,10 +26621,10 @@
 	var _isMasked = isMasked;
 
 	/** Used for built-in method references. */
-	var funcProto = Function.prototype;
+	var funcProto$1 = Function.prototype;
 
 	/** Used to resolve the decompiled source of functions. */
-	var funcToString = funcProto.toString;
+	var funcToString$1 = funcProto$1.toString;
 
 	/**
 	 * Converts `func` to its source code.
@@ -26641,7 +26636,7 @@
 	function toSource(func) {
 	  if (func != null) {
 	    try {
-	      return funcToString.call(func);
+	      return funcToString$1.call(func);
 	    } catch (e) {}
 	    try {
 	      return (func + '');
@@ -26662,18 +26657,18 @@
 	var reIsHostCtor = /^\[object .+?Constructor\]$/;
 
 	/** Used for built-in method references. */
-	var funcProto$1 = Function.prototype,
-	    objectProto$2 = Object.prototype;
+	var funcProto = Function.prototype,
+	    objectProto$b = Object.prototype;
 
 	/** Used to resolve the decompiled source of functions. */
-	var funcToString$1 = funcProto$1.toString;
+	var funcToString = funcProto.toString;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$2 = objectProto$2.hasOwnProperty;
+	var hasOwnProperty$9 = objectProto$b.hasOwnProperty;
 
 	/** Used to detect if a method is native. */
 	var reIsNative = RegExp('^' +
-	  funcToString$1.call(hasOwnProperty$2).replace(reRegExpChar, '\\$&')
+	  funcToString.call(hasOwnProperty$9).replace(reRegExpChar, '\\$&')
 	  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
 	);
 
@@ -26762,13 +26757,13 @@
 	var _hashDelete = hashDelete;
 
 	/** Used to stand-in for `undefined` hash values. */
-	var HASH_UNDEFINED = '__lodash_hash_undefined__';
+	var HASH_UNDEFINED$1 = '__lodash_hash_undefined__';
 
 	/** Used for built-in method references. */
-	var objectProto$3 = Object.prototype;
+	var objectProto$a = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$3 = objectProto$3.hasOwnProperty;
+	var hasOwnProperty$8 = objectProto$a.hasOwnProperty;
 
 	/**
 	 * Gets the hash value for `key`.
@@ -26783,18 +26778,18 @@
 	  var data = this.__data__;
 	  if (_nativeCreate) {
 	    var result = data[key];
-	    return result === HASH_UNDEFINED ? undefined : result;
+	    return result === HASH_UNDEFINED$1 ? undefined : result;
 	  }
-	  return hasOwnProperty$3.call(data, key) ? data[key] : undefined;
+	  return hasOwnProperty$8.call(data, key) ? data[key] : undefined;
 	}
 
 	var _hashGet = hashGet;
 
 	/** Used for built-in method references. */
-	var objectProto$4 = Object.prototype;
+	var objectProto$9 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$4 = objectProto$4.hasOwnProperty;
+	var hasOwnProperty$7 = objectProto$9.hasOwnProperty;
 
 	/**
 	 * Checks if a hash value for `key` exists.
@@ -26807,13 +26802,13 @@
 	 */
 	function hashHas(key) {
 	  var data = this.__data__;
-	  return _nativeCreate ? (data[key] !== undefined) : hasOwnProperty$4.call(data, key);
+	  return _nativeCreate ? (data[key] !== undefined) : hasOwnProperty$7.call(data, key);
 	}
 
 	var _hashHas = hashHas;
 
 	/** Used to stand-in for `undefined` hash values. */
-	var HASH_UNDEFINED$1 = '__lodash_hash_undefined__';
+	var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
 	/**
 	 * Sets the hash `key` to `value`.
@@ -26828,7 +26823,7 @@
 	function hashSet(key, value) {
 	  var data = this.__data__;
 	  this.size += this.has(key) ? 0 : 1;
-	  data[key] = (_nativeCreate && value === undefined) ? HASH_UNDEFINED$1 : value;
+	  data[key] = (_nativeCreate && value === undefined) ? HASH_UNDEFINED : value;
 	  return this;
 	}
 
@@ -27349,11 +27344,11 @@
 	var _arrayMap = arrayMap;
 
 	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0;
+	var INFINITY$1 = 1 / 0;
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
-	    symbolToString = symbolProto ? symbolProto.toString : undefined;
+	var symbolProto$1 = _Symbol ? _Symbol.prototype : undefined,
+	    symbolToString = symbolProto$1 ? symbolProto$1.toString : undefined;
 
 	/**
 	 * The base implementation of `_.toString` which doesn't convert nullish
@@ -27376,7 +27371,7 @@
 	    return symbolToString ? symbolToString.call(value) : '';
 	  }
 	  var result = (value + '');
-	  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+	  return (result == '0' && (1 / value) == -INFINITY$1) ? '-0' : result;
 	}
 
 	var _baseToString = baseToString;
@@ -27426,7 +27421,7 @@
 	var _castPath = castPath;
 
 	/** Used as references for various `Number` constants. */
-	var INFINITY$1 = 1 / 0;
+	var INFINITY = 1 / 0;
 
 	/**
 	 * Converts `value` to a string key if it's not a string or symbol.
@@ -27440,7 +27435,7 @@
 	    return value;
 	  }
 	  var result = (value + '');
-	  return (result == '0' && (1 / value) == -INFINITY$1) ? '-0' : result;
+	  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
 	}
 
 	var _toKey = toKey;
@@ -27500,18 +27495,18 @@
 	var get_1 = get;
 
 	/*! *****************************************************************************
-	Copyright (c) Microsoft Corporation. All rights reserved.
-	Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-	this file except in compliance with the License. You may obtain a copy of the
-	License at http://www.apache.org/licenses/LICENSE-2.0
+	Copyright (c) Microsoft Corporation.
 
-	THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-	KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-	WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-	MERCHANTABLITY OR NON-INFRINGEMENT.
+	Permission to use, copy, modify, and/or distribute this software for any
+	purpose with or without fee is hereby granted.
 
-	See the Apache Version 2.0 License for specific language governing permissions
-	and limitations under the License.
+	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+	REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+	AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+	INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+	LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+	OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+	PERFORMANCE OF THIS SOFTWARE.
 	***************************************************************************** */
 	/* global Reflect, Promise */
 
@@ -27529,10 +27524,11 @@
 	}
 
 	function __awaiter(thisArg, _arguments, P, generator) {
+	    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 	    return new (P || (P = Promise))(function (resolve, reject) {
 	        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
 	        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-	        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+	        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
 	        step((generator = generator.apply(thisArg, _arguments || [])).next());
 	    });
 	}
@@ -27616,10 +27612,10 @@
 	});
 
 	/** Used for built-in method references. */
-	var objectProto$5 = Object.prototype;
+	var objectProto$8 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$5 = objectProto$5.hasOwnProperty;
+	var hasOwnProperty$6 = objectProto$8.hasOwnProperty;
 
 	/**
 	 * The base implementation of `_.has` without support for deep paths.
@@ -27630,13 +27626,13 @@
 	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
 	 */
 	function baseHas(object, key) {
-	  return object != null && hasOwnProperty$5.call(object, key);
+	  return object != null && hasOwnProperty$6.call(object, key);
 	}
 
 	var _baseHas = baseHas;
 
 	/** `Object#toString` result references. */
-	var argsTag = '[object Arguments]';
+	var argsTag$2 = '[object Arguments]';
 
 	/**
 	 * The base implementation of `_.isArguments`.
@@ -27646,19 +27642,19 @@
 	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
 	 */
 	function baseIsArguments(value) {
-	  return isObjectLike_1(value) && _baseGetTag(value) == argsTag;
+	  return isObjectLike_1(value) && _baseGetTag(value) == argsTag$2;
 	}
 
 	var _baseIsArguments = baseIsArguments;
 
 	/** Used for built-in method references. */
-	var objectProto$6 = Object.prototype;
+	var objectProto$7 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$6 = objectProto$6.hasOwnProperty;
+	var hasOwnProperty$5 = objectProto$7.hasOwnProperty;
 
 	/** Built-in value references. */
-	var propertyIsEnumerable = objectProto$6.propertyIsEnumerable;
+	var propertyIsEnumerable$1 = objectProto$7.propertyIsEnumerable;
 
 	/**
 	 * Checks if `value` is likely an `arguments` object.
@@ -27679,14 +27675,14 @@
 	 * // => false
 	 */
 	var isArguments = _baseIsArguments(function() { return arguments; }()) ? _baseIsArguments : function(value) {
-	  return isObjectLike_1(value) && hasOwnProperty$6.call(value, 'callee') &&
-	    !propertyIsEnumerable.call(value, 'callee');
+	  return isObjectLike_1(value) && hasOwnProperty$5.call(value, 'callee') &&
+	    !propertyIsEnumerable$1.call(value, 'callee');
 	};
 
 	var isArguments_1 = isArguments;
 
 	/** Used as references for various `Number` constants. */
-	var MAX_SAFE_INTEGER = 9007199254740991;
+	var MAX_SAFE_INTEGER$1 = 9007199254740991;
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^(?:0|[1-9]\d*)$/;
@@ -27701,7 +27697,7 @@
 	 */
 	function isIndex(value, length) {
 	  var type = typeof value;
-	  length = length == null ? MAX_SAFE_INTEGER : length;
+	  length = length == null ? MAX_SAFE_INTEGER$1 : length;
 
 	  return !!length &&
 	    (type == 'number' ||
@@ -27712,7 +27708,7 @@
 	var _isIndex = isIndex;
 
 	/** Used as references for various `Number` constants. */
-	var MAX_SAFE_INTEGER$1 = 9007199254740991;
+	var MAX_SAFE_INTEGER = 9007199254740991;
 
 	/**
 	 * Checks if `value` is a valid array-like length.
@@ -27742,7 +27738,7 @@
 	 */
 	function isLength(value) {
 	  return typeof value == 'number' &&
-	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER$1;
+	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
 	}
 
 	var isLength_1 = isLength;
@@ -27807,11 +27803,11 @@
 	 * _.has(other, 'a');
 	 * // => false
 	 */
-	function has$1(object, path) {
+	function has(object, path) {
 	  return object != null && _hasPath(object, path, _baseHas);
 	}
 
-	var has_1 = has$1;
+	var has_1 = has;
 
 	/**
 	 * Takes a valid Unix path and converts it into a format
@@ -27882,7 +27878,7 @@
 	 * @param filePath {string} - filePath to trim extension from
 	 * @returns {string} - file path without file extension
 	 */
-	function stripFileExtension(filePath) {
+	function stripFileExtension$1(filePath) {
 	    return filePath.replace(/\.[^/.]+$/, '');
 	}
 	/**
@@ -27892,7 +27888,7 @@
 	 * @param currentPath {string} - current path in system
 	 * @param targetPath {string} - target path in system
 	 */
-	function getInternalPath(currentPath, targetPath) {
+	function getInternalPath$1(currentPath, targetPath) {
 	    if (!targetPath) {
 	        return convertPathToInternalFormat(currentPath.replace(/^\/+/g, ''));
 	    }
@@ -27901,7 +27897,7 @@
 	        : currentPath === '/'
 	            ? "/" + targetPath // eslint-disable-line indent
 	            : currentPath + "/" + targetPath; // eslint-disable-line indent
-	    return convertPathToInternalFormat(handleDotDotInPath(stripFileExtension(normalizedPath)));
+	    return convertPathToInternalFormat(handleDotDotInPath(stripFileExtension$1(normalizedPath)));
 	}
 	/**
 	 * Checks if a file extension is a valid image file extension
@@ -27942,7 +27938,7 @@
 	 */
 	function getTarget(fileSystem, currentPath, targetPath) {
 	    var _a;
-	    var internalPath = getInternalPath(currentPath, targetPath);
+	    var internalPath = getInternalPath$1(currentPath, targetPath);
 	    if (internalPath === '/' || !internalPath) {
 	        return fileSystem;
 	    }
@@ -28056,12 +28052,12 @@
 	 * @param targetPath  {string} - path to change to
 	 * @returns Promise<object> - resolves with new path if successful, rejects if not
 	 */
-	function cd$1(fileSystem, currentPath, targetPath) {
+	function cd(fileSystem, currentPath, targetPath) {
 	    return new Promise(function (resolve, reject) {
 	        if (!targetPath) {
 	            reject('path can not be empty.');
 	        }
-	        var internalCdPath = getInternalPath(currentPath, targetPath);
+	        var internalCdPath = getInternalPath$1(currentPath, targetPath);
 	        if (!internalCdPath) {
 	            resolve({
 	                updatedState: {
@@ -28095,34 +28091,36 @@
 	    };
 	    return autoComplete(fileSystem, currentPath, target, filterNonFilesFn);
 	}
-	var cd$2 = {
+	var cd$1 = {
 	    autoCompleteHandler: cdAutoComplete,
 	    description: 'Changes the current working directory',
-	    handler: cd$1,
+	    handler: cd,
 	};
 
-	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-	var _ref = /*#__PURE__*/react_4("path", {
-	  d: "M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"
-	});
-
-	function SvgFolder(props) {
-	  return /*#__PURE__*/react_4("svg", _extends({
-	    viewBox: "0 0 24 24"
-	  }, props), _ref);
-	}
+	var _path$1;
 
 	function _extends$1() { _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends$1.apply(this, arguments); }
 
-	var _ref$1 = /*#__PURE__*/react_4("path", {
-	  d: "M20.266 4.207c-.243-.238-.493-.484-.739-.73-.25-.247-.492-.497-.734-.743C17.082.988 16.063 0 15 0H7C4.797 0 3 1.797 3 4v18c0 2.203 1.797 4 4 4h12c2.203 0 4-1.797 4-4V8c0-1.063-.988-2.082-2.734-3.793zM21 22c0 1.105-.895 2-2 2H7c-1.105 0-2-.895-2-2V4c0-1.105.895-2 2-2l7.29-.004c.722.184.71 1.07.71 1.957V7c0 .55.45 1 1 1h3c.996 0 2 .004 2 1z"
-	});
+	function SvgFolder(props) {
+	  return /*#__PURE__*/react_4("svg", _extends$1({
+	    xmlns: "http://www.w3.org/2000/svg",
+	    viewBox: "0 0 24 24"
+	  }, props), _path$1 || (_path$1 = /*#__PURE__*/react_4("path", {
+	    d: "M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"
+	  })));
+	}
+
+	var _path;
+
+	function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 	function SvgFile(props) {
-	  return /*#__PURE__*/react_4("svg", _extends$1({
+	  return /*#__PURE__*/react_4("svg", _extends({
+	    xmlns: "http://www.w3.org/2000/svg",
 	    viewBox: "0 0 26 26"
-	  }, props), _ref$1);
+	  }, props), _path || (_path = /*#__PURE__*/react_4("path", {
+	    d: "M20.266 4.207c-.243-.238-.493-.484-.739-.73-.25-.247-.492-.497-.734-.743C17.082.988 16.063 0 15 0H7C4.797 0 3 1.797 3 4v18c0 2.203 1.797 4 4 4h12c2.203 0 4-1.797 4-4V8c0-1.063-.988-2.082-2.734-3.793zM21 22c0 1.105-.895 2-2 2H7c-1.105 0-2-.895-2-2V4c0-1.105.895-2 2-2l7.29-.004c.722.184.71 1.07.71 1.957V7c0 .55.45 1 1 1h3c.996 0 2 .004 2 1z"
+	  })));
 	}
 
 	var LsResult = function (props) {
@@ -28356,10 +28354,10 @@
 	var _baseAssignValue = baseAssignValue;
 
 	/** Used for built-in method references. */
-	var objectProto$7 = Object.prototype;
+	var objectProto$6 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$7 = objectProto$7.hasOwnProperty;
+	var hasOwnProperty$4 = objectProto$6.hasOwnProperty;
 
 	/**
 	 * Assigns `value` to `key` of `object` if the existing value is not equivalent
@@ -28373,7 +28371,7 @@
 	 */
 	function assignValue(object, key, value) {
 	  var objValue = object[key];
-	  if (!(hasOwnProperty$7.call(object, key) && eq_1(objValue, value)) ||
+	  if (!(hasOwnProperty$4.call(object, key) && eq_1(objValue, value)) ||
 	      (value === undefined && !(key in object))) {
 	    _baseAssignValue(object, key, value);
 	  }
@@ -28461,7 +28459,7 @@
 
 	var isBuffer_1 = createCommonjsModule(function (module, exports) {
 	/** Detect free variable `exports`. */
-	var freeExports =  exports && !exports.nodeType && exports;
+	var freeExports = exports && !exports.nodeType && exports;
 
 	/** Detect free variable `module`. */
 	var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -28499,46 +28497,46 @@
 
 	/** `Object#toString` result references. */
 	var argsTag$1 = '[object Arguments]',
-	    arrayTag = '[object Array]',
-	    boolTag = '[object Boolean]',
-	    dateTag = '[object Date]',
-	    errorTag = '[object Error]',
+	    arrayTag$1 = '[object Array]',
+	    boolTag$2 = '[object Boolean]',
+	    dateTag$2 = '[object Date]',
+	    errorTag$1 = '[object Error]',
 	    funcTag$1 = '[object Function]',
-	    mapTag = '[object Map]',
-	    numberTag = '[object Number]',
-	    objectTag = '[object Object]',
-	    regexpTag = '[object RegExp]',
-	    setTag = '[object Set]',
-	    stringTag = '[object String]',
-	    weakMapTag = '[object WeakMap]';
+	    mapTag$4 = '[object Map]',
+	    numberTag$2 = '[object Number]',
+	    objectTag$2 = '[object Object]',
+	    regexpTag$2 = '[object RegExp]',
+	    setTag$4 = '[object Set]',
+	    stringTag$2 = '[object String]',
+	    weakMapTag$2 = '[object WeakMap]';
 
-	var arrayBufferTag = '[object ArrayBuffer]',
-	    dataViewTag = '[object DataView]',
-	    float32Tag = '[object Float32Array]',
-	    float64Tag = '[object Float64Array]',
-	    int8Tag = '[object Int8Array]',
-	    int16Tag = '[object Int16Array]',
-	    int32Tag = '[object Int32Array]',
-	    uint8Tag = '[object Uint8Array]',
-	    uint8ClampedTag = '[object Uint8ClampedArray]',
-	    uint16Tag = '[object Uint16Array]',
-	    uint32Tag = '[object Uint32Array]';
+	var arrayBufferTag$2 = '[object ArrayBuffer]',
+	    dataViewTag$3 = '[object DataView]',
+	    float32Tag$2 = '[object Float32Array]',
+	    float64Tag$2 = '[object Float64Array]',
+	    int8Tag$2 = '[object Int8Array]',
+	    int16Tag$2 = '[object Int16Array]',
+	    int32Tag$2 = '[object Int32Array]',
+	    uint8Tag$2 = '[object Uint8Array]',
+	    uint8ClampedTag$2 = '[object Uint8ClampedArray]',
+	    uint16Tag$2 = '[object Uint16Array]',
+	    uint32Tag$2 = '[object Uint32Array]';
 
 	/** Used to identify `toStringTag` values of typed arrays. */
 	var typedArrayTags = {};
-	typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
-	typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
-	typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
-	typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
-	typedArrayTags[uint32Tag] = true;
-	typedArrayTags[argsTag$1] = typedArrayTags[arrayTag] =
-	typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
-	typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
-	typedArrayTags[errorTag] = typedArrayTags[funcTag$1] =
-	typedArrayTags[mapTag] = typedArrayTags[numberTag] =
-	typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
-	typedArrayTags[setTag] = typedArrayTags[stringTag] =
-	typedArrayTags[weakMapTag] = false;
+	typedArrayTags[float32Tag$2] = typedArrayTags[float64Tag$2] =
+	typedArrayTags[int8Tag$2] = typedArrayTags[int16Tag$2] =
+	typedArrayTags[int32Tag$2] = typedArrayTags[uint8Tag$2] =
+	typedArrayTags[uint8ClampedTag$2] = typedArrayTags[uint16Tag$2] =
+	typedArrayTags[uint32Tag$2] = true;
+	typedArrayTags[argsTag$1] = typedArrayTags[arrayTag$1] =
+	typedArrayTags[arrayBufferTag$2] = typedArrayTags[boolTag$2] =
+	typedArrayTags[dataViewTag$3] = typedArrayTags[dateTag$2] =
+	typedArrayTags[errorTag$1] = typedArrayTags[funcTag$1] =
+	typedArrayTags[mapTag$4] = typedArrayTags[numberTag$2] =
+	typedArrayTags[objectTag$2] = typedArrayTags[regexpTag$2] =
+	typedArrayTags[setTag$4] = typedArrayTags[stringTag$2] =
+	typedArrayTags[weakMapTag$2] = false;
 
 	/**
 	 * The base implementation of `_.isTypedArray` without Node.js optimizations.
@@ -28571,7 +28569,7 @@
 
 	var _nodeUtil = createCommonjsModule(function (module, exports) {
 	/** Detect free variable `exports`. */
-	var freeExports =  exports && !exports.nodeType && exports;
+	var freeExports = exports && !exports.nodeType && exports;
 
 	/** Detect free variable `module`. */
 	var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -28625,10 +28623,10 @@
 	var isTypedArray_1 = isTypedArray;
 
 	/** Used for built-in method references. */
-	var objectProto$8 = Object.prototype;
+	var objectProto$5 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$8 = objectProto$8.hasOwnProperty;
+	var hasOwnProperty$3 = objectProto$5.hasOwnProperty;
 
 	/**
 	 * Creates an array of the enumerable property names of the array-like `value`.
@@ -28648,7 +28646,7 @@
 	      length = result.length;
 
 	  for (var key in value) {
-	    if ((inherited || hasOwnProperty$8.call(value, key)) &&
+	    if ((inherited || hasOwnProperty$3.call(value, key)) &&
 	        !(skipIndexes && (
 	           // Safari 9 has enumerable `arguments.length` in strict mode.
 	           key == 'length' ||
@@ -28668,7 +28666,7 @@
 	var _arrayLikeKeys = arrayLikeKeys;
 
 	/** Used for built-in method references. */
-	var objectProto$9 = Object.prototype;
+	var objectProto$4 = Object.prototype;
 
 	/**
 	 * Checks if `value` is likely a prototype object.
@@ -28679,7 +28677,7 @@
 	 */
 	function isPrototype(value) {
 	  var Ctor = value && value.constructor,
-	      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$9;
+	      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$4;
 
 	  return value === proto;
 	}
@@ -28708,10 +28706,10 @@
 	var _nativeKeys = nativeKeys;
 
 	/** Used for built-in method references. */
-	var objectProto$a = Object.prototype;
+	var objectProto$3 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$9 = objectProto$a.hasOwnProperty;
+	var hasOwnProperty$2 = objectProto$3.hasOwnProperty;
 
 	/**
 	 * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
@@ -28726,7 +28724,7 @@
 	  }
 	  var result = [];
 	  for (var key in Object(object)) {
-	    if (hasOwnProperty$9.call(object, key) && key != 'constructor') {
+	    if (hasOwnProperty$2.call(object, key) && key != 'constructor') {
 	      result.push(key);
 	    }
 	  }
@@ -28837,10 +28835,10 @@
 	var _nativeKeysIn = nativeKeysIn;
 
 	/** Used for built-in method references. */
-	var objectProto$b = Object.prototype;
+	var objectProto$2 = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$a = objectProto$b.hasOwnProperty;
+	var hasOwnProperty$1 = objectProto$2.hasOwnProperty;
 
 	/**
 	 * The base implementation of `_.keysIn` which doesn't treat sparse arrays as dense.
@@ -28857,7 +28855,7 @@
 	      result = [];
 
 	  for (var key in object) {
-	    if (!(key == 'constructor' && (isProto || !hasOwnProperty$a.call(object, key)))) {
+	    if (!(key == 'constructor' && (isProto || !hasOwnProperty$1.call(object, key)))) {
 	      result.push(key);
 	    }
 	  }
@@ -28912,7 +28910,7 @@
 
 	var _cloneBuffer = createCommonjsModule(function (module, exports) {
 	/** Detect free variable `exports`. */
-	var freeExports =  exports && !exports.nodeType && exports;
+	var freeExports = exports && !exports.nodeType && exports;
 
 	/** Detect free variable `module`. */
 	var freeModule = freeExports && 'object' == 'object' && module && !module.nodeType && module;
@@ -29018,13 +29016,13 @@
 	var stubArray_1 = stubArray;
 
 	/** Used for built-in method references. */
-	var objectProto$c = Object.prototype;
+	var objectProto$1 = Object.prototype;
 
 	/** Built-in value references. */
-	var propertyIsEnumerable$1 = objectProto$c.propertyIsEnumerable;
+	var propertyIsEnumerable = objectProto$1.propertyIsEnumerable;
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeGetSymbols = Object.getOwnPropertySymbols;
+	var nativeGetSymbols$1 = Object.getOwnPropertySymbols;
 
 	/**
 	 * Creates an array of the own enumerable symbols of `object`.
@@ -29033,13 +29031,13 @@
 	 * @param {Object} object The object to query.
 	 * @returns {Array} Returns the array of symbols.
 	 */
-	var getSymbols = !nativeGetSymbols ? stubArray_1 : function(object) {
+	var getSymbols = !nativeGetSymbols$1 ? stubArray_1 : function(object) {
 	  if (object == null) {
 	    return [];
 	  }
 	  object = Object(object);
-	  return _arrayFilter(nativeGetSymbols(object), function(symbol) {
-	    return propertyIsEnumerable$1.call(object, symbol);
+	  return _arrayFilter(nativeGetSymbols$1(object), function(symbol) {
+	    return propertyIsEnumerable.call(object, symbol);
 	  });
 	};
 
@@ -29086,7 +29084,7 @@
 	var _getPrototype = getPrototype;
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeGetSymbols$1 = Object.getOwnPropertySymbols;
+	var nativeGetSymbols = Object.getOwnPropertySymbols;
 
 	/**
 	 * Creates an array of the own and inherited enumerable symbols of `object`.
@@ -29095,7 +29093,7 @@
 	 * @param {Object} object The object to query.
 	 * @returns {Array} Returns the array of symbols.
 	 */
-	var getSymbolsIn = !nativeGetSymbols$1 ? stubArray_1 : function(object) {
+	var getSymbolsIn = !nativeGetSymbols ? stubArray_1 : function(object) {
 	  var result = [];
 	  while (object) {
 	    _arrayPush(result, _getSymbols(object));
@@ -29186,13 +29184,13 @@
 	var _WeakMap = WeakMap$1;
 
 	/** `Object#toString` result references. */
-	var mapTag$1 = '[object Map]',
+	var mapTag$3 = '[object Map]',
 	    objectTag$1 = '[object Object]',
 	    promiseTag = '[object Promise]',
-	    setTag$1 = '[object Set]',
+	    setTag$3 = '[object Set]',
 	    weakMapTag$1 = '[object WeakMap]';
 
-	var dataViewTag$1 = '[object DataView]';
+	var dataViewTag$2 = '[object DataView]';
 
 	/** Used to detect maps, sets, and weakmaps. */
 	var dataViewCtorString = _toSource(_DataView),
@@ -29211,10 +29209,10 @@
 	var getTag = _baseGetTag;
 
 	// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
-	if ((_DataView && getTag(new _DataView(new ArrayBuffer(1))) != dataViewTag$1) ||
-	    (_Map && getTag(new _Map) != mapTag$1) ||
+	if ((_DataView && getTag(new _DataView(new ArrayBuffer(1))) != dataViewTag$2) ||
+	    (_Map && getTag(new _Map) != mapTag$3) ||
 	    (_Promise && getTag(_Promise.resolve()) != promiseTag) ||
-	    (_Set && getTag(new _Set) != setTag$1) ||
+	    (_Set && getTag(new _Set) != setTag$3) ||
 	    (_WeakMap && getTag(new _WeakMap) != weakMapTag$1)) {
 	  getTag = function(value) {
 	    var result = _baseGetTag(value),
@@ -29223,10 +29221,10 @@
 
 	    if (ctorString) {
 	      switch (ctorString) {
-	        case dataViewCtorString: return dataViewTag$1;
-	        case mapCtorString: return mapTag$1;
+	        case dataViewCtorString: return dataViewTag$2;
+	        case mapCtorString: return mapTag$3;
 	        case promiseCtorString: return promiseTag;
-	        case setCtorString: return setTag$1;
+	        case setCtorString: return setTag$3;
 	        case weakMapCtorString: return weakMapTag$1;
 	      }
 	    }
@@ -29237,10 +29235,10 @@
 	var _getTag = getTag;
 
 	/** Used for built-in method references. */
-	var objectProto$d = Object.prototype;
+	var objectProto = Object.prototype;
 
 	/** Used to check objects for own properties. */
-	var hasOwnProperty$b = objectProto$d.hasOwnProperty;
+	var hasOwnProperty = objectProto.hasOwnProperty;
 
 	/**
 	 * Initializes an array clone.
@@ -29254,7 +29252,7 @@
 	      result = new array.constructor(length);
 
 	  // Add properties assigned by `RegExp#exec`.
-	  if (length && typeof array[0] == 'string' && hasOwnProperty$b.call(array, 'index')) {
+	  if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
 	    result.index = array.index;
 	    result.input = array.input;
 	  }
@@ -29317,8 +29315,8 @@
 	var _cloneRegExp = cloneRegExp;
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto$1 = _Symbol ? _Symbol.prototype : undefined,
-	    symbolValueOf = symbolProto$1 ? symbolProto$1.valueOf : undefined;
+	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
+	    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
 
 	/**
 	 * Creates a clone of the `symbol` object.
@@ -29359,7 +29357,7 @@
 	    symbolTag$1 = '[object Symbol]';
 
 	var arrayBufferTag$1 = '[object ArrayBuffer]',
-	    dataViewTag$2 = '[object DataView]',
+	    dataViewTag$1 = '[object DataView]',
 	    float32Tag$1 = '[object Float32Array]',
 	    float64Tag$1 = '[object Float64Array]',
 	    int8Tag$1 = '[object Int8Array]',
@@ -29392,7 +29390,7 @@
 	    case dateTag$1:
 	      return new Ctor(+object);
 
-	    case dataViewTag$2:
+	    case dataViewTag$1:
 	      return _cloneDataView(object, isDeep);
 
 	    case float32Tag$1: case float64Tag$1:
@@ -29465,7 +29463,7 @@
 	var _initCloneObject = initCloneObject;
 
 	/** `Object#toString` result references. */
-	var mapTag$3 = '[object Map]';
+	var mapTag$1 = '[object Map]';
 
 	/**
 	 * The base implementation of `_.isMap` without Node.js optimizations.
@@ -29475,7 +29473,7 @@
 	 * @returns {boolean} Returns `true` if `value` is a map, else `false`.
 	 */
 	function baseIsMap(value) {
-	  return isObjectLike_1(value) && _getTag(value) == mapTag$3;
+	  return isObjectLike_1(value) && _getTag(value) == mapTag$1;
 	}
 
 	var _baseIsMap = baseIsMap;
@@ -29505,7 +29503,7 @@
 	var isMap_1 = isMap;
 
 	/** `Object#toString` result references. */
-	var setTag$3 = '[object Set]';
+	var setTag$1 = '[object Set]';
 
 	/**
 	 * The base implementation of `_.isSet` without Node.js optimizations.
@@ -29515,7 +29513,7 @@
 	 * @returns {boolean} Returns `true` if `value` is a set, else `false`.
 	 */
 	function baseIsSet(value) {
-	  return isObjectLike_1(value) && _getTag(value) == setTag$3;
+	  return isObjectLike_1(value) && _getTag(value) == setTag$1;
 	}
 
 	var _baseIsSet = baseIsSet;
@@ -29545,54 +29543,54 @@
 	var isSet_1 = isSet;
 
 	/** Used to compose bitmasks for cloning. */
-	var CLONE_DEEP_FLAG = 1,
+	var CLONE_DEEP_FLAG$1 = 1,
 	    CLONE_FLAT_FLAG = 2,
-	    CLONE_SYMBOLS_FLAG = 4;
+	    CLONE_SYMBOLS_FLAG$1 = 4;
 
 	/** `Object#toString` result references. */
-	var argsTag$2 = '[object Arguments]',
-	    arrayTag$1 = '[object Array]',
-	    boolTag$2 = '[object Boolean]',
-	    dateTag$2 = '[object Date]',
-	    errorTag$1 = '[object Error]',
-	    funcTag$2 = '[object Function]',
-	    genTag$1 = '[object GeneratorFunction]',
-	    mapTag$4 = '[object Map]',
-	    numberTag$2 = '[object Number]',
-	    objectTag$2 = '[object Object]',
-	    regexpTag$2 = '[object RegExp]',
-	    setTag$4 = '[object Set]',
-	    stringTag$2 = '[object String]',
-	    symbolTag$2 = '[object Symbol]',
-	    weakMapTag$2 = '[object WeakMap]';
+	var argsTag = '[object Arguments]',
+	    arrayTag = '[object Array]',
+	    boolTag = '[object Boolean]',
+	    dateTag = '[object Date]',
+	    errorTag = '[object Error]',
+	    funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]',
+	    mapTag = '[object Map]',
+	    numberTag = '[object Number]',
+	    objectTag = '[object Object]',
+	    regexpTag = '[object RegExp]',
+	    setTag = '[object Set]',
+	    stringTag = '[object String]',
+	    symbolTag = '[object Symbol]',
+	    weakMapTag = '[object WeakMap]';
 
-	var arrayBufferTag$2 = '[object ArrayBuffer]',
-	    dataViewTag$3 = '[object DataView]',
-	    float32Tag$2 = '[object Float32Array]',
-	    float64Tag$2 = '[object Float64Array]',
-	    int8Tag$2 = '[object Int8Array]',
-	    int16Tag$2 = '[object Int16Array]',
-	    int32Tag$2 = '[object Int32Array]',
-	    uint8Tag$2 = '[object Uint8Array]',
-	    uint8ClampedTag$2 = '[object Uint8ClampedArray]',
-	    uint16Tag$2 = '[object Uint16Array]',
-	    uint32Tag$2 = '[object Uint32Array]';
+	var arrayBufferTag = '[object ArrayBuffer]',
+	    dataViewTag = '[object DataView]',
+	    float32Tag = '[object Float32Array]',
+	    float64Tag = '[object Float64Array]',
+	    int8Tag = '[object Int8Array]',
+	    int16Tag = '[object Int16Array]',
+	    int32Tag = '[object Int32Array]',
+	    uint8Tag = '[object Uint8Array]',
+	    uint8ClampedTag = '[object Uint8ClampedArray]',
+	    uint16Tag = '[object Uint16Array]',
+	    uint32Tag = '[object Uint32Array]';
 
 	/** Used to identify `toStringTag` values supported by `_.clone`. */
 	var cloneableTags = {};
-	cloneableTags[argsTag$2] = cloneableTags[arrayTag$1] =
-	cloneableTags[arrayBufferTag$2] = cloneableTags[dataViewTag$3] =
-	cloneableTags[boolTag$2] = cloneableTags[dateTag$2] =
-	cloneableTags[float32Tag$2] = cloneableTags[float64Tag$2] =
-	cloneableTags[int8Tag$2] = cloneableTags[int16Tag$2] =
-	cloneableTags[int32Tag$2] = cloneableTags[mapTag$4] =
-	cloneableTags[numberTag$2] = cloneableTags[objectTag$2] =
-	cloneableTags[regexpTag$2] = cloneableTags[setTag$4] =
-	cloneableTags[stringTag$2] = cloneableTags[symbolTag$2] =
-	cloneableTags[uint8Tag$2] = cloneableTags[uint8ClampedTag$2] =
-	cloneableTags[uint16Tag$2] = cloneableTags[uint32Tag$2] = true;
-	cloneableTags[errorTag$1] = cloneableTags[funcTag$2] =
-	cloneableTags[weakMapTag$2] = false;
+	cloneableTags[argsTag] = cloneableTags[arrayTag] =
+	cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
+	cloneableTags[boolTag] = cloneableTags[dateTag] =
+	cloneableTags[float32Tag] = cloneableTags[float64Tag] =
+	cloneableTags[int8Tag] = cloneableTags[int16Tag] =
+	cloneableTags[int32Tag] = cloneableTags[mapTag] =
+	cloneableTags[numberTag] = cloneableTags[objectTag] =
+	cloneableTags[regexpTag] = cloneableTags[setTag] =
+	cloneableTags[stringTag] = cloneableTags[symbolTag] =
+	cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+	cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+	cloneableTags[errorTag] = cloneableTags[funcTag] =
+	cloneableTags[weakMapTag] = false;
 
 	/**
 	 * The base implementation of `_.clone` and `_.cloneDeep` which tracks
@@ -29612,9 +29610,9 @@
 	 */
 	function baseClone(value, bitmask, customizer, key, object, stack) {
 	  var result,
-	      isDeep = bitmask & CLONE_DEEP_FLAG,
+	      isDeep = bitmask & CLONE_DEEP_FLAG$1,
 	      isFlat = bitmask & CLONE_FLAT_FLAG,
-	      isFull = bitmask & CLONE_SYMBOLS_FLAG;
+	      isFull = bitmask & CLONE_SYMBOLS_FLAG$1;
 
 	  if (customizer) {
 	    result = object ? customizer(value, key, object, stack) : customizer(value);
@@ -29633,12 +29631,12 @@
 	    }
 	  } else {
 	    var tag = _getTag(value),
-	        isFunc = tag == funcTag$2 || tag == genTag$1;
+	        isFunc = tag == funcTag || tag == genTag;
 
 	    if (isBuffer_1(value)) {
 	      return _cloneBuffer(value, isDeep);
 	    }
-	    if (tag == objectTag$2 || tag == argsTag$2 || (isFunc && !object)) {
+	    if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
 	      result = (isFlat || isFunc) ? {} : _initCloneObject(value);
 	      if (!isDeep) {
 	        return isFlat
@@ -29689,8 +29687,8 @@
 	var _baseClone = baseClone;
 
 	/** Used to compose bitmasks for cloning. */
-	var CLONE_DEEP_FLAG$1 = 1,
-	    CLONE_SYMBOLS_FLAG$1 = 4;
+	var CLONE_DEEP_FLAG = 1,
+	    CLONE_SYMBOLS_FLAG = 4;
 
 	/**
 	 * This method is like `_.clone` except that it recursively clones `value`.
@@ -29711,7 +29709,7 @@
 	 * // => false
 	 */
 	function cloneDeep(value) {
-	  return _baseClone(value, CLONE_DEEP_FLAG$1 | CLONE_SYMBOLS_FLAG$1);
+	  return _baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
 	}
 
 	var cloneDeep_1 = cloneDeep;
@@ -29803,7 +29801,7 @@
 	 */
 	function mkdir(fileSystem, currentPath, folderPath) {
 	    return new Promise(function (resolve, reject) {
-	        if (has_1(fileSystem, getInternalPath(currentPath, folderPath))) {
+	        if (has_1(fileSystem, getInternalPath$1(currentPath, folderPath))) {
 	            reject('Path already exists');
 	        }
 	        var newFolder = {
@@ -29811,7 +29809,7 @@
 	            children: null,
 	        };
 	        var newFileSystem = cloneDeep_1(fileSystem);
-	        set_1(newFileSystem, getInternalPath(currentPath, folderPath), newFolder);
+	        set_1(newFileSystem, getInternalPath$1(currentPath, folderPath), newFolder);
 	        resolve({
 	            commandResult: "Folder created: " + folderPath,
 	            updatedState: {
@@ -29859,8 +29857,8 @@
 	        if (!targetPath) {
 	            reject('Invalid target path');
 	        }
-	        var pathWithoutExtension = stripFileExtension(targetPath);
-	        var file = get_1(fileSystem, getInternalPath(currentPath, pathWithoutExtension));
+	        var pathWithoutExtension = stripFileExtension$1(targetPath);
+	        var file = get_1(fileSystem, getInternalPath$1(currentPath, pathWithoutExtension));
 	        if (!file) {
 	            reject('Invalid target path');
 	        }
@@ -30116,7 +30114,7 @@
 	        if (!targetPath) {
 	            reject('Missing argument to rm');
 	        }
-	        var internalCdPath = getInternalPath(currentPath, targetPath);
+	        var internalCdPath = getInternalPath$1(currentPath, targetPath);
 	        if (has_1(fileSystem, internalCdPath)) {
 	            if (get_1(fileSystem, internalCdPath).type === 'FOLDER') {
 	                if (options === '-r') {
@@ -30153,7 +30151,7 @@
 
 	var commands = {
 	    cat: cat$1,
-	    cd: cd$2,
+	    cd: cd$1,
 	    help: help$1,
 	    ls: ls$1,
 	    mkdir: mkdir$1,
@@ -30524,7 +30522,7 @@
 	    },
 	};
 
-	var getInternalPath$1 = getInternalPath, stripFileExtension$1 = stripFileExtension;
+	var getInternalPath = getInternalPath$1, stripFileExtension = stripFileExtension$1;
 	var hello = {
 	    hello: {
 	        handler: function hello() {
@@ -30541,8 +30539,8 @@
 	                if (!targetPath) {
 	                    reject('Invalid target path');
 	                }
-	                var pathWithoutExtension = stripFileExtension$1(targetPath);
-	                var file = get_1(fileSystem, getInternalPath$1(currentPath, pathWithoutExtension));
+	                var pathWithoutExtension = stripFileExtension(targetPath);
+	                var file = get_1(fileSystem, getInternalPath(currentPath, pathWithoutExtension));
 	                if (!file) {
 	                    reject('Invalid target path');
 	                }

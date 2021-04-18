@@ -3,6 +3,8 @@ import copy from 'rollup-plugin-copy';
 import replace from 'rollup-plugin-replace';
 import serve from 'rollup-plugin-serve';
 import typescript from 'rollup-plugin-typescript2';
+import react from 'react';
+import reactDom from 'react-dom';
 
 import { getBasePlugins } from './rollup.config';
 
@@ -22,13 +24,8 @@ export default (commandLineArgs) => {
       commonjs({
         include: ['node_modules/**'],
         namedExports: {
-          'node_modules/react/index.js': [
-            'Children',
-            'Component',
-            'PropTypes',
-            'createElement',
-          ],
-          'node_modules/react-dom/index.js': ['render'],
+          react: Object.keys(react),
+          'react-dom': Object.keys(reactDom),
         },
       }),
       typescript({

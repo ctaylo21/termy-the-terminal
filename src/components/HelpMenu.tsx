@@ -1,7 +1,7 @@
 import React from 'react';
 import TerminalContext from '../context/TerminalContext';
 
-export const HelpMenu: React.FC<{}> = (): JSX.Element => {
+export const HelpMenu: React.FC<Record<string, unknown>> = (): JSX.Element => {
   return (
     <TerminalContext.Consumer>
       {(commands): JSX.Element => (

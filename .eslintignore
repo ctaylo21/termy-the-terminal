@@ -1,3 +1,6 @@
 node_modules
 dist
 docs
+.eslintrc.js
+rollup.config.js
+rollup.dev.config.js

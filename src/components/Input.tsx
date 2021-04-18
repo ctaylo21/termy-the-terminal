@@ -13,41 +13,40 @@ interface InputProps {
   ref?: RefObject<HTMLInputElement>;
 }
 
-export const Input: React.FC<InputProps> = React.forwardRef(function Input(
-  props,
-  ref,
-): JSX.Element {
-  const {
-    currentPath,
-    handleChange,
-    handleKeyDown,
-    handleKeyUp,
-    handleSubmit,
-    inputValue,
-    inputPrompt,
-    readOnly,
-  } = props;
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  function Input(props, ref): JSX.Element {
+    const {
+      currentPath,
+      handleChange,
+      handleKeyDown,
+      handleKeyUp,
+      handleSubmit,
+      inputValue,
+      inputPrompt,
+      readOnly,
+    } = props;
 
-  return (
-    <div id="input-container" spellCheck={false}>
-      <form onSubmit={handleSubmit}>
-        <InputPrompt path={currentPath} inputPrompt={inputPrompt} />
-        <input
-          aria-label="terminal-input"
-          autoComplete="none"
-          autoCapitalize="none"
-          autoCorrect="off"
-          type="text"
-          value={inputValue}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onKeyUp={handleKeyUp}
-          readOnly={readOnly}
-          ref={ref}
-        />
-      </form>
-    </div>
-  );
-});
+    return (
+      <div id="input-container" spellCheck={false}>
+        <form onSubmit={handleSubmit}>
+          <InputPrompt path={currentPath} inputPrompt={inputPrompt} />
+          <input
+            aria-label="terminal-input"
+            autoComplete="none"
+            autoCapitalize="none"
+            autoCorrect="off"
+            type="text"
+            value={inputValue}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+            readOnly={readOnly}
+            ref={ref}
+          />
+        </form>
+      </div>
+    );
+  },
+);
 
 export default Input;

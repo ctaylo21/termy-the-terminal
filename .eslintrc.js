@@ -22,7 +22,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   rules: {
-    indent: ['error', 2, { SwitchCase: 1 }],
+    '@typescript-eslint/indent': ['error', 2, { SwitchCase: 1 }],
     'react/prop-types': false,
     '@typescript-eslint/prefer-interface': 'off',
     '@typescript-eslint/explicit-member-accessibility': 'off',

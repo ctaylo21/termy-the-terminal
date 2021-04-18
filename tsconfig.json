@@ -22,7 +22,7 @@
     "types": ["jest", "node"]
   },
   "include": ["src/index.tsx", "./src/types.d.ts"],
-  "exclude": ["node_modules", "dist", "rollup.config.js"],
+  "exclude": ["node_modules", "dist"],
   "typeRoots": ["node_modules/@types", "types.d.ts"],
   "paths": {
     "lodash/*": ["node_modules/@types/lodash-es/*"]

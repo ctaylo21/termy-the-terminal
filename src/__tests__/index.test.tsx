@@ -97,9 +97,7 @@ describe('general', (): void => {
 
 describe('autocomplete with tab', (): void => {
   describe('general', (): void => {
-    test('tab without space for target should do nothing', async (): Promise<
-      void
-    > => {
+    test('tab without space for target should do nothing', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -117,9 +115,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('rm -r');
     });
 
-    test('should call "e.preventDefault" on tab key press', async (): Promise<
-      void
-    > => {
+    test('should call "e.preventDefault" on tab key press', async (): Promise<void> => {
       const { getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -139,9 +135,7 @@ describe('autocomplete with tab', (): void => {
       });
     });
 
-    test('should do nothing on tab with invalid command', async (): Promise<
-      void
-    > => {
+    test('should do nothing on tab with invalid command', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -162,9 +156,7 @@ describe('autocomplete with tab', (): void => {
   });
 
   describe('rm', (): void => {
-    test('rm tab with argument and relative nested path', async (): Promise<
-      void
-    > => {
+    test('rm tab with argument and relative nested path', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -184,9 +176,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('rm home/fi');
     });
 
-    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<
-      void
-    > => {
+    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -254,9 +244,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls ');
     });
 
-    test('ls tab with argument and relative nested path', async (): Promise<
-      void
-    > => {
+    test('ls tab with argument and relative nested path', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -276,9 +264,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls home/fi');
     });
 
-    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<
-      void
-    > => {
+    test('pressing tab with autocomplete menu visible should cycle through', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -302,9 +288,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls file3.txt');
     });
 
-    test('tab with no argument should correctly cycle with more tabs', async (): Promise<
-      void
-    > => {
+    test('tab with no argument should correctly cycle with more tabs', async (): Promise<void> => {
       const { getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -322,9 +306,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls file3.txt');
     });
 
-    test('should clear preview display once command is executed', async (): Promise<
-      void
-    > => {
+    test('should clear preview display once command is executed', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -351,9 +333,7 @@ describe('autocomplete with tab', (): void => {
       });
     });
 
-    test('tab when no autocomplete command exists should do nothing', async (): Promise<
-      void
-    > => {
+    test('tab when no autocomplete command exists should do nothing', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -371,9 +351,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('help');
     });
 
-    test('tab press with single item should autofill it', async (): Promise<
-      void
-    > => {
+    test('tab press with single item should autofill it', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -389,9 +367,7 @@ describe('autocomplete with tab', (): void => {
       expect(autoCompleteContent.innerHTML).toBe('');
     });
 
-    test('multiple tab presses with changing targets', async (): Promise<
-      void
-    > => {
+    test('multiple tab presses with changing targets', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -415,9 +391,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls home/');
     });
 
-    test('tab multiple times to complete a nested path single options', async (): Promise<
-      void
-    > => {
+    test('tab multiple times to complete a nested path single options', async (): Promise<void> => {
       const { getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -438,9 +412,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls home/videos/file2.txt');
     });
 
-    test('tab multiple times to complete a nested path multiple options', async (): Promise<
-      void
-    > => {
+    test('tab multiple times to complete a nested path multiple options', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -479,9 +451,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls home/videos/');
     });
 
-    test('tab with .. in the nested path with partial match', async (): Promise<
-      void
-    > => {
+    test('tab with .. in the nested path with partial match', async (): Promise<void> => {
       const { getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -492,9 +462,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toBe('ls home/user/../user/');
     });
 
-    test('tab with .. in the nested path from root', async (): Promise<
-      void
-    > => {
+    test('tab with .. in the nested path from root', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -555,9 +523,7 @@ describe('autocomplete with tab', (): void => {
       expect(input.value).toEqual('cd home/user/test/');
     });
 
-    test('tab press with single item should autofill it', async (): Promise<
-      void
-    > => {
+    test('tab press with single item should autofill it', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -573,9 +539,7 @@ describe('autocomplete with tab', (): void => {
       expect(autoCompleteContent.innerHTML).toBe('');
     });
 
-    test('multiple tab presses with changing targets', async (): Promise<
-      void
-    > => {
+    test('multiple tab presses with changing targets', async (): Promise<void> => {
       const { container, getByLabelText } = render(
         <Terminal fileSystem={exampleFileSystem} />,
       );
@@ -655,9 +619,7 @@ describe('cd', (): void => {
     expect(currentPath.innerHTML).toEqual('/home/user/test');
   });
 
-  test('should support cd with absolute path from nested path', async (): Promise<
-    void
-  > => {
+  test('should support cd with absolute path from nested path', async (): Promise<void> => {
     const { container, getByLabelText, getByTestId } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -703,9 +665,7 @@ describe('pwd', (): void => {
     expect(currentPath.innerHTML).toEqual('/');
   });
 
-  test('should correctly return directory after cd', async (): Promise<
-    void
-  > => {
+  test('should correctly return directory after cd', async (): Promise<void> => {
     const { container, getByLabelText, getByTestId } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -730,9 +690,7 @@ describe('pwd', (): void => {
 });
 
 describe('ls', (): void => {
-  test('should list all content from current directory', async (): Promise<
-    void
-  > => {
+  test('should list all content from current directory', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -753,9 +711,7 @@ describe('ls', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
-  test('should correctly return contents for given relative directory from root', async (): Promise<
-    void
-  > => {
+  test('should correctly return contents for given relative directory from root', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -770,9 +726,7 @@ describe('ls', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
-  test('should correctly return contents for given relative directory from nested path', async (): Promise<
-    void
-  > => {
+  test('should correctly return contents for given relative directory from nested path', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -793,9 +747,7 @@ describe('ls', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
-  test('should correctly return contents for absolute path from nested path', async (): Promise<
-    void
-  > => {
+  test('should correctly return contents for absolute path from nested path', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -879,9 +831,7 @@ describe('mkdir', (): void => {
     expect(currentPath.innerHTML).toEqual('/banana');
   });
 
-  test('should create new directory from nested path', async (): Promise<
-    void
-  > => {
+  test('should create new directory from nested path', async (): Promise<void> => {
     const { container, getByLabelText, getByTestId } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1033,9 +983,7 @@ describe('cat', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
-  test('should list contents of file that contains react component', async (): Promise<
-    void
-  > => {
+  test('should list contents of file that contains react component', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1068,9 +1016,7 @@ describe('cat', (): void => {
     expect(history.innerHTML).toMatchSnapshot();
   });
 
-  test('should show error when cat on invalid path', async (): Promise<
-    void
-  > => {
+  test('should show error when cat on invalid path', async (): Promise<void> => {
     const { container, getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1103,9 +1049,7 @@ describe('cat', (): void => {
 });
 
 describe('history', (): void => {
-  test('up key should auto-fill previous command into input', async (): Promise<
-    void
-  > => {
+  test('up key should auto-fill previous command into input', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1124,9 +1068,7 @@ describe('history', (): void => {
     });
   });
 
-  test('up key should do nothing if no history items', async (): Promise<
-    void
-  > => {
+  test('up key should do nothing if no history items', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1138,9 +1080,7 @@ describe('history', (): void => {
     });
   });
 
-  test('up key should handle multiple history items', async (): Promise<
-    void
-  > => {
+  test('up key should handle multiple history items', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1167,9 +1107,7 @@ describe('history', (): void => {
     });
   });
 
-  test('should handle pressing up with nothing left in history', async (): Promise<
-    void
-  > => {
+  test('should handle pressing up with nothing left in history', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1189,9 +1127,7 @@ describe('history', (): void => {
     });
   });
 
-  test('should call "e.preventDefault" on up arrow keyDown handler', async (): Promise<
-    void
-  > => {
+  test('should call "e.preventDefault" on up arrow keyDown handler', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1211,9 +1147,7 @@ describe('history', (): void => {
     });
   });
 
-  test('should not call "e.preventDefault" on up down keyDown handler', async (): Promise<
-    void
-  > => {
+  test('should not call "e.preventDefault" on up down keyDown handler', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1233,9 +1167,7 @@ describe('history', (): void => {
     });
   });
 
-  test('down key should let you go to more recent history items', async (): Promise<
-    void
-  > => {
+  test('down key should let you go to more recent history items', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1263,9 +1195,7 @@ describe('history', (): void => {
     });
   });
 
-  test('pressing down on most recent history item should make input empty', async (): Promise<
-    void
-  > => {
+  test('pressing down on most recent history item should make input empty', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1286,9 +1216,7 @@ describe('history', (): void => {
     });
   });
 
-  test('down key should do nothing if no history items', async (): Promise<
-    void
-  > => {
+  test('down key should do nothing if no history items', async (): Promise<void> => {
     const { getByLabelText } = render(
       <Terminal fileSystem={exampleFileSystem} />,
     );
@@ -1302,9 +1230,7 @@ describe('history', (): void => {
 });
 
 describe('custom commands', (): void => {
-  test('should allow custom command to be passed as prop and used', async (): Promise<
-    void
-  > => {
+  test('should allow custom command to be passed as prop and used', async (): Promise<void> => {
     const hello = {
       hello: {
         handler: function hello(): Promise<CommandResponse> {
@@ -1331,9 +1257,7 @@ describe('custom commands', (): void => {
     expect(history.innerHTML).toContain('world');
   });
 
-  test('should allow for commands to be added to help result with a description', async (): Promise<
-    void
-  > => {
+  test('should allow for commands to be added to help result with a description', async (): Promise<void> => {
     const hello = {
       hello: {
         handler: function hello(): Promise<CommandResponse> {
@@ -1400,9 +1324,7 @@ describe('custom commands', (): void => {
     expect(input.value).toBe('hello file3.txt');
   });
 
-  test('should do nothing for autocomplete on custom command if not defined', async (): Promise<
-    void
-  > => {
+  test('should do nothing for autocomplete on custom command if not defined', async (): Promise<void> => {
     const hello = {
       hello: {
         handler: function hello(): Promise<CommandResponse> {

@@ -31,6 +31,8 @@ export interface TerminalState {
   inputPrompt: string;
   inputValue: string;
   autoCompleteItems?: ItemListType;
+  paddingOffset: number;
+  lastHistoryDivOffset: number;
 }
 
 export interface HistoryItem {
@@ -50,9 +52,11 @@ export interface CommandHandler {
 }
 
 export interface CommandAutoCompleteHandler {
-  (fileSystem: FileSystem, currentPath: string, target: string): Promise<
-    AutoCompleteResponse
-  >;
+  (
+    fileSystem: FileSystem,
+    currentPath: string,
+    target: string,
+  ): Promise<AutoCompleteResponse>;
 }
 
 export interface Command {
@@ -121,11 +125,19 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     history: [],
     inputPrompt: this.props.inputPrompt || '$>',
     inputValue: '',
+    paddingOffset: 0,
+    lastHistoryDivOffset: 0,
   };
 
   private inputWrapper = React.createRef<HTMLDivElement>();
 
   private terminalInput = React.createRef<HTMLInputElement>();
+
+  public constructor(props: TerminalProps) {
+    super(props);
+
+    this.updatePaddingOffset = this.updatePaddingOffset.bind(this);
+  }
 
   public componentDidMount(): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -134,6 +146,47 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
     // Add custom user commands to command list
     const { customCommands = {} } = this.props;
     commandList = Object.assign({}, commandList, customCommands);
+    console.log('componentDidMountcalled');
+  }
+
+  /*
+   * Handles updating the "padding" div used to simulate screen clearing using the
+   * clear command.
+   **/
+  private updatePaddingOffset(historyDivOffset: number): void {
+    const { paddingOffset, lastHistoryDivOffset } = this.state;
+
+    if (paddingOffset <= 0) {
+      return;
+    }
+
+    this.setState({
+      paddingOffset: Math.max(
+        paddingOffset - (historyDivOffset - lastHistoryDivOffset),
+        0,
+      ),
+      lastHistoryDivOffset: historyDivOffset,
+    });
+  }
+
+  public clear(): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const currentHistoryDivOffset = document.getElementById(
+      'history-container',
+    )!.offsetHeight;
+
+    this.setState({
+      inputValue: '',
+      lastHistoryDivOffset: currentHistoryDivOffset,
+      paddingOffset:
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        document.getElementById('terminal-wrapper')!.offsetHeight -
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.inputWrapper.current!.offsetHeight,
+    });
+    document
+      .querySelector('#terminal-wrapper')
+      ?.scrollTo(0, currentHistoryDivOffset);
   }
 
   public componentDidUpdate(): void {
@@ -342,8 +395,14 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       inputValue,
     );
 
+    if (commandName == 'clear') {
+      this.clear();
+      return;
+    }
+
     let commandResult: CommandResponse['commandResult'];
     let updatedState: CommandResponse['updatedState'] = {};
+
     if (commandName in commandList) {
       try {
         ({ commandResult, updatedState = {} } = await commandList[
@@ -398,12 +457,16 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
       inputPrompt,
       inputValue,
       autoCompleteItems,
+      paddingOffset,
     } = this.state;
 
     return (
       <TerminalContext.Provider value={commandList}>
         <div id="terminal-wrapper">
-          <History history={history} />
+          <History
+            history={history}
+            updatePaddingOffset={this.updatePaddingOffset}
+          />
           <div ref={this.inputWrapper}>
             <Input
               currentPath={currentPath}
@@ -426,6 +489,9 @@ export class Terminal extends Component<TerminalProps, TerminalState> {
                 activeItemIndex={autoCompleteActiveItem}
               />
             )}
+          </div>
+          <div id="padding" style={{ height: paddingOffset }}>
+            &nbsp;
           </div>
         </div>
       </TerminalContext.Provider>
